@@ -22,9 +22,11 @@
   }
 }
 
+/* Starts at 0.01, not 0: browsers do not count text at opacity 0 as painted, so fading in from 0
+   would delay First and Largest Contentful Paint until long after the content is visible. */
 @keyframes step-in {
   from {
-    opacity: 0;
+    opacity: 0.01;
   }
   to {
     opacity: 1;

@@ -2,10 +2,11 @@
 
 import { usePathname } from 'next/navigation'
 import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from 'react'
-import type { ReactNode } from 'react'
 import { StepScreen } from '@/screens/StepScreen'
 import { Card, PageShell, StepTransition } from '@/ui'
+import { copy } from './copy'
 import { useFunnelState, useHydrated } from './FunnelProvider'
+import styles from './FunnelView.module.css'
 import { allowedStep, readQaBypass, stepIdFromPath } from './navigation'
 import { getStep } from './steps'
 import type { FunnelStep, StepId } from './steps'
@@ -27,11 +28,14 @@ export function frameFor(step: Step): 'card' | 'bare' {
     : 'bare'
 }
 
-function Frame({ step, children }: { step: Step; children?: ReactNode }) {
+/** The empty frame of a step, rendered on the server and until the stored answers are back. */
+function Frame({ step }: { step: Step }) {
   return (
     <PageShell theme={step.theme}>
       <Card variant={frameFor(step)} data-frame-step={step.id}>
-        {children}
+        <noscript>
+          <p className={styles.noscript}>{copy.common.noscript}</p>
+        </noscript>
       </Card>
     </PageShell>
   )
@@ -53,6 +57,7 @@ function useQaBypass(): boolean {
  *
  * The server renders the empty frame of the requested step (background, card) and the step itself
  * appears once the stored answers are back, so a reload never flashes unpersonalised content.
+ * The intro, which uses no stored answer, is rendered on the server in full.
  * A visitor who is further ahead than the furthest step they reached (a deep link, a stale tab)
  * is sent back there, unless the dev-tools ?qa bypass is on.
  */
@@ -69,7 +74,12 @@ export function FunnelView() {
     if (hydrated && !allowed) actions.goTo(step.id, { replace: true })
   }, [hydrated, allowed, step.id, actions])
 
-  if (!hydrated || !allowed) return <Frame step={hydrated ? step : requested} />
+  // The intro depends on no stored answer and is where visitors land, so it is rendered on the
+  // server too: it paints (FCP, LCP) before the JavaScript has even loaded.
+  const serverRenderable = requested.id === 'intro'
+  if (!allowed || !(hydrated || serverRenderable)) {
+    return <Frame step={hydrated ? step : requested} />
+  }
   return <FunnelStage step={step} />
 }
 

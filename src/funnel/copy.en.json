@@ -9,7 +9,8 @@
     "privacyPolicy": "Privacy Policy",
     "termsAndConditions": "Terms and Conditions",
     "subscriptionPolicy": "Subscription Policy",
-    "notMedicalAdvice": "This is not medical advice."
+    "notMedicalAdvice": "This is not medical advice.",
+    "noscript": "Bloom needs JavaScript to show this step. Please turn it on and reload the page."
   },
   "audience": {
     "men": "men",

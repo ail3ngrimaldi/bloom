@@ -72,25 +72,40 @@ that extends another is left alone, so `tsconfig.json` is never touched, whateve
 
 ### The funnel
 
+All 42 steps of the plan are built: intro, 28 questions, the magic wand, five interstitials, the
+wellbeing summary, the plan loader, email and name capture, a short brand loader, the paywall and
+the checkout modal. Every integration is a mock until real credentials and the open decisions of
+`docs/feature-parity/DECISIONS.md` exist: nothing is sent anywhere and nothing can be charged.
+
 `/` redirects to the first step, `/s/intro` (307, the query string is kept). Every step has its own
 URL, `/s/<stepId>` (ids in `src/funnel/steps.ts`), prerendered at build time; any other id is a 404.
 Moving between steps changes the URL with the History API (`pushState`), which Next.js syncs with
 `usePathname`, so there is no request per step, the browser's Back goes one step back and a reload
 resumes in place. Self-advancing steps (the plan loader, the pre-paywall loading screen) replace
-their history entry instead, so Back never lands on them.
+their history entry instead, so Back never lands on them. The checkout is the paywall with a modal
+on top; closing it returns to the paywall.
 
-- **State** (answers, lead, chosen plan, furthest step reached) lives in a small external store
-  persisted to `sessionStorage` (`bloom.funnel.v1`): it survives a reload, is gone when the tab
-  closes and is never sent anywhere. The step itself appears once the stored answers are back, so a
-  reload never flashes unpersonalised content; the server renders the empty frame of the step.
+- **State** (answers, lead, chosen plan, paywall start, furthest step reached) lives in a small
+  external store persisted to `sessionStorage` (`bloom.funnel.v1`): it survives a reload, is gone
+  when the tab closes and is never sent anywhere. Steps that read stored answers appear once those
+  are back (the server renders their empty frame); the intro, which reads none, is rendered on the
+  server in full so the landing page paints before the JavaScript loads.
 - **Guard.** A visitor can only be on a step up to the furthest one reached by moving forward; a
   deep link past it (shared URL, stale tab) is sent back there. `?qa` on any step URL skips the
   guard for QA, only where the dev tools are on (`next dev`, Vercel previews), never in production.
 - **Copy** is in `src/funnel/copy.en.json` (`{{brand}}`, `{{audience}}` placeholders), separate from
   the step structure in `src/funnel/steps.ts`. Claims that need evidence (user numbers, press,
-  universities, expert, testimonials) are off in `src/funnel/claims.ts` and never rendered.
-- **Analytics** is a stub adapter (`src/funnel/analytics.ts`): nothing is sent; with the dev tools on,
-  events are recorded in `window.__bloomEvents` for QA.
+  universities, expert, testimonials) are off in `src/funnel/claims.ts` and never rendered; the
+  screens use claim-free copy instead.
+- **Health data.** The ADHD question (#12) is optional ("I'd rather not say") with a privacy note;
+  its answer is never part of what the lead service receives (`src/services/lead/submission.ts`).
+- **Mocks.** `LeadService` (`src/services/lead`), `CheckoutProvider` (`src/services/checkout`) and
+  the analytics adapter (`src/funnel/analytics.ts`) are interfaces with mock defaults, injected
+  through `FunnelProvider`. With the dev tools on, analytics events are recorded in
+  `window.__bloomEvents` for QA.
+- **Prices** (`src/pricing/plans.ts`) are the reference's, as demo data, and the paywall says so.
+  The discount countdown only exists with `NEXT_PUBLIC_PAYWALL_COUNTDOWN=1` (or `?countdown` where
+  the dev tools are on): it must only be turned on for a discount that really ends.
 
 ### QA gallery and dev tools
 
@@ -108,7 +123,8 @@ and Vercel previews and never opens on Production.
    (`next build`) and output settings. No `vercel.json` is needed. Node 20, 22 or 24 all work.
 3. No environment variable is required. Nothing is deployed from this repository by itself, and the
    code holds no credentials: payments and every other integration are mocks until real
-   credentials are supplied.
+   credentials are supplied. `NEXT_PUBLIC_PAYWALL_COUNTDOWN=1` turns the paywall countdown on; leave
+   it off unless the discount really ends.
 4. **Pre-launch: the gallery is visible everywhere on Vercel.** Every deployment (Preview and
    Production) serves the funnel at `/` and the UI gallery at `/__gallery` (`next.config.ts` turns
    `NEXT_PUBLIC_SHOW_GALLERY` on for every Vercel build; nothing has to be configured). **At
@@ -130,7 +146,10 @@ only in `docs/`, the recording is ignored by git (see below).
 | `src/app/gallery/`     | QA gallery pages (served as `/__gallery` through a rewrite); 404 in production    |
 | `src/lib/`             | Small shared modules (`env.ts`: the two switches)                                 |
 | `src/funnel/`          | Funnel engine: step config and copy, store, navigation, progress, `FunnelView`    |
-| `src/screens/`         | One module per screen type (single, multi, intro, wand, paywall, ...)             |
+| `src/screens/`         | One module per screen type (single, multi, intro, wand, paywall, ...), `art/`     |
+| `src/profile/`         | Wellbeing profile of the summary (PLAN 6.5): `derive.ts`                          |
+| `src/pricing/`         | Paywall plans and their per-day prices and savings (demo data)                    |
+| `src/services/`        | `lead/` and `checkout/`: adapter interfaces with mock defaults                    |
 | `src/ui/`              | Design-system components (Button, OptionCard, Modal, ...) as CSS Modules          |
 | `src/styles/`          | Global design tokens (`tokens.css`) and base styles                               |
 | `src/assets/`          | Bloom's own images and illustrations (placeholders marked `TODO(content)`), fonts |

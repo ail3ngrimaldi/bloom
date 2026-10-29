@@ -19,8 +19,9 @@
 .input {
   display: block;
   width: 100%;
-  margin-top: -8px;
-  padding: 8px var(--title-inset);
+  min-height: 44px;
+  margin-top: -10px;
+  padding: 10px var(--title-inset) 11px;
   border: 0;
   border-bottom: 1px solid var(--progress-fill);
   border-radius: 0;

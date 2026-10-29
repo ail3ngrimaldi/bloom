@@ -61,7 +61,7 @@ Actualiza una fila por paso a medida que se implementa. **Estado:** `pendiente` 
 | 6 | Captura de lead + transición | 38, 39, 40 | listo |
 | 7 | Paywall y checkout (UI + mock) | 41, 42 | listo |
 | 8 | Integraciones reales | — | bloqueado (decisiones §9.1) |
-| 9 | QA, a11y, performance, responsive | todos | pendiente |
+| 9 | QA, a11y, performance, responsive | todos | listo (ver §8 abajo) |
 
 ## Decisiones (copiar a DECISIONS.md)
 
@@ -75,3 +75,32 @@ Actualiza una fila por paso a medida que se implementa. **Estado:** `pendiente` 
 | D6 | Idiomas | Inglés + i18n listo | Default adoptado: `src/funnel/copy.en.json` |
 | D7 | Temporizador de descuento | Detrás de flag, desactivado | Default adoptado |
 | D8 | Despliegue y privacidad | Sin despliegue; legales placeholder | Vercel (usuario); legales placeholder en `/legal/*` |
+
+## Verificación (PLAN §8)
+
+### §8.1 Checklist por pantalla
+
+- [x] **Shell/quiz**: card 375×(vh−62), radio 32, header, barra, opción 72 px, gap 9, label abajo-izquierda — `gallery.spec.ts`, `shots/02.png`
+- [x] **Single**: hover `#E4E1FD`, auto-avance a 150 ms, salida 400 / hueco 150 / entrada 300 ms, sin Next/Back — `funnel.spec.ts` (transición), `singleSelect.test.tsx`
+- [x] **Multi**: checkbox 24 px, fila seleccionada, CTA deshabilitado con 0, bloque centrado — `multiSelect.test.tsx`, `shots/21.png`
+- [x] **Intro**: sin card, reveal escalonado ≈ 1 s, CTA abajo — `funnel.spec.ts` (fase 3), `shots/01.png`
+- [x] **Wand**: 5 burbujas, deriva, 3 toques, estallido, contador, cierre con CTA blanco — `wand.test.tsx`, `funnel.spec.ts` (fase 4)
+- [x] **Intermedias**: CTA con delay de 0.5 s, flecha, layout por variante, match animado — `interstitials.test.tsx`, `funnel.spec.ts` (fase 3)
+- [x] **Resumen**: medidor, alerta, 4 tiles, CTA — `summary.test.tsx`, `shots/36.png`
+- [x] **Loader**: 3 barras eased, 2 modales bloqueantes, checks, auto-avance — `loader.test.tsx`, `funnel.spec.ts` (fase 5)
+- [x] **Captura**: email/nombre, validación, "Please wait…", precarga en checkout — `capture.test.tsx`, `funnel.spec.ts` (fase 6)
+- [x] **Paywall**: 3 planes, cálculos, selección, contador (flag), header sticky, legal dinámico — `paywall.test.tsx`, `pricing.test.ts`
+- [x] **Checkout**: total = plan elegido, botones asíncronos, cierre, legal — `paywall.test.tsx`, `funnel.spec.ts` (fase 7)
+
+### §8.3 Accesibilidad, responsive y rendimiento
+
+| Criterio | Resultado | Evidencia |
+|---|---|---|
+| Axe WCAG 2.1 A/AA en todas las pantallas | 0 violaciones en 16 pasos + galería | `funnel.spec.ts`, `gallery.spec.ts` (accessibility) |
+| Teclado completo y foco | Radiogroups con flechas, Space/Enter, foco al título (o al campo) tras cada paso, trampa de foco en modales | `funnel.spec.ts` (teclado), `quality.spec.ts` (planes) |
+| `prefers-reduced-motion` | Fundidos ≤ 100 ms, sin deriva en la wand, match sin desplazamiento | `gallery.spec.ts` (motion), `funnel.spec.ts` (wand) |
+| Móvil 360 / 390 / 430 px | Sin scroll horizontal; card a pantalla completa; todos los controles ≥ 44 px | `quality.spec.ts` |
+| Sin JavaScript | Intro completo desde el servidor; resto de pasos con aviso | `quality.spec.ts` |
+| CLS | 0.000–0.001 (recorrido intro → #04) | `quality.spec.ts` (< 0.1), medición manual |
+| LCP / FCP (build de producción, `next start` local) | Desktop 60–90 ms; móvil 4× CPU + 1.6 Mbps / 150 ms RTT: 0.87 s | Medición manual con PerformanceObserver (I-40) |
+

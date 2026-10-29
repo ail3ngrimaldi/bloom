@@ -13,12 +13,12 @@
 
 .close {
   position: absolute;
-  top: 14px;
-  right: 14px;
+  top: 8px;
+  right: 8px;
   display: grid;
   place-items: center;
-  width: 32px;
-  height: 32px;
+  width: 44px;
+  height: 44px;
   padding: 0;
   border: 0;
   border-radius: 50%;
@@ -36,6 +36,7 @@
 }
 
 .title {
+  padding: 0 28px;
   font: 700 20px / 26px var(--font-sans);
   color: var(--ink-900);
   text-align: center;

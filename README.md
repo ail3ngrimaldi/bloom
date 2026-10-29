@@ -43,7 +43,7 @@ Unit tests use Vitest, Testing Library and jsdom; e2e tests use Playwright (Chro
 | `npm test`             | Run unit and component tests once (Vitest + Testing Library + jsdom)       |
 | `npm run test:watch`   | Vitest in watch mode                                                       |
 | `npm run e2e`          | Playwright end-to-end tests against `next dev` (Chromium, 1280x720)        |
-| `npm run shots`        | Capture one screenshot per step for visual comparison (placeholder)        |
+| `npm run shots`        | One 1280x720 screenshot per step in `docs/feature-parity/shots/NN.png`     |
 
 ### Dev server, ports and `NEXT_DIST_DIR`
 
@@ -136,7 +136,7 @@ only in `docs/`, the recording is ignored by git (see below).
 | `src/assets/`          | Bloom's own images and illustrations (placeholders marked `TODO(content)`), fonts |
 | `tests/unit/`          | Unit and component tests (`*.test.ts(x)`), Vitest setup, `helpers/`               |
 | `tests/e2e/`           | Playwright specs                                                                  |
-| `scripts/`             | Node scripts (`shots.mjs`)                                                        |
+| `scripts/`             | `shots.spec.ts`: the screenshot runner (`playwright.shots.config.ts`)             |
 | `docs/feature-parity/` | Plan, reference step catalogue, status tracker, decisions, reference images       |
 
 Use the `@` alias for anything under `src` (`import { Button } from '@/ui/Button'`). It is

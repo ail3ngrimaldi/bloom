@@ -149,8 +149,12 @@ describe('design tokens (PLAN 4.1 to 4.4)', () => {
       '--lh-legal': '16px',
     }
     for (const [name, value] of Object.entries(type)) expect(tokens[name], name).toBe(value)
-    expect(tokens['--font-sans']).toContain('Inter Variable')
-    expect(tokens['--font-serif']).toContain('Source Serif 4 Variable')
+    // The families are the self-hosted files that next/font registers (src/app/fonts.ts), exposed
+    // as --font-inter and --font-source-serif; the rest of each stack is the fallback.
+    expect(tokens['--font-sans']).toMatch(
+      /^var\(--font-inter, [^)]+\), 'Inter Fallback', system-ui/,
+    )
+    expect(tokens['--font-serif']).toMatch(/^var\(--font-source-serif, [^)]+\), Georgia/)
   })
 
   it('names no token after the reference product', () => {

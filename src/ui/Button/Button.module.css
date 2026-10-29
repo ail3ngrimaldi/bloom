@@ -46,7 +46,7 @@
   min-width: 0;
 }
 
-/* Arrow: a 14px shaft with a chevron head. Hover, focus or press stretches the shaft by 10px
+/* Arrow: a 15px shaft with a chevron head. Hover, focus or press stretches the shaft by 10px
    (a short arrow becomes a long one) without moving the label: the extra length travels into the
    button's side padding. */
 .arrow {
@@ -60,10 +60,10 @@
 
 .arrowLine {
   position: absolute;
-  top: 7.75px;
+  top: 7.7px;
   left: 0;
-  width: calc(14px + var(--stretch));
-  height: 2.5px;
+  width: calc(15px + var(--stretch));
+  height: 2.6px;
   border-radius: 1px;
   background: currentColor;
   transition: width var(--motion-arrow) var(--ease-out);
@@ -71,14 +71,14 @@
 
 .arrowHead {
   position: absolute;
-  top: 4px;
+  top: 3.5px;
   left: 0;
-  width: 10px;
-  height: 10px;
-  border-top: 2.5px solid currentColor;
-  border-right: 2.5px solid currentColor;
+  width: 11px;
+  height: 11px;
+  border-top: 2.6px solid currentColor;
+  border-right: 2.6px solid currentColor;
   border-top-right-radius: 1px;
-  transform: translateX(calc(3.2px + var(--stretch))) rotate(45deg);
+  transform: translateX(calc(3px + var(--stretch))) rotate(45deg);
   transition: transform var(--motion-arrow) var(--ease-out);
 }
 

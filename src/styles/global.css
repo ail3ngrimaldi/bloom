@@ -16,6 +16,7 @@
   box-sizing: border-box;
 }
 
+/* The lilac page colour is on html and body so the very first paint is already lilac. */
 html {
   background: var(--bg-page-lilac);
   -webkit-text-size-adjust: 100%;
@@ -33,13 +34,8 @@ body {
   text-rendering: optimizeLegibility;
 }
 
-#root {
-  min-height: 100vh;
-}
-
 @supports (height: 100dvh) {
-  body,
-  #root {
+  body {
     min-height: 100dvh;
   }
 }

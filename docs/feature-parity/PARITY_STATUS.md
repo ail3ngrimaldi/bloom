@@ -67,7 +67,7 @@ Actualiza una fila por paso a medida que se implementa. **Estado:** `pendiente` 
 
 | ID | Tema | Default propuesto | Decisión final |
 |---|---|---|---|
-| D1 | Stack | Vite + React + TypeScript | |
+| D1 | Stack | Vite + React + TypeScript | **Next.js (App Router) + TypeScript, desplegado en Vercel** (decisión del usuario) |
 | D2 | Identidad de Bloom | Tokens de PLAN.md §4.1 con nombres neutros | |
 | D3 | Claims / credenciales / testimonios | No renderizar; contenido propio o flag | |
 | D4 | Pagos y precios | MockCheckoutProvider; precios sólo demo | |

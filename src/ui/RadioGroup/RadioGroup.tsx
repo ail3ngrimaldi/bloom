@@ -1,3 +1,5 @@
+'use client'
+
 import { useCallback, useLayoutEffect, useMemo, useRef } from 'react'
 import type { FocusEvent, HTMLAttributes, KeyboardEvent } from 'react'
 import { cx } from '../cx'

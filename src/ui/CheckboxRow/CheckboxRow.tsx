@@ -1,3 +1,5 @@
+'use client'
+
 import { forwardRef } from 'react'
 import type { ButtonHTMLAttributes, KeyboardEvent, MouseEvent, ReactNode } from 'react'
 import { cx } from '../cx'

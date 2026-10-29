@@ -1,10 +1,12 @@
 /// <reference types="node" />
 import { readFileSync } from 'node:fs'
-import { join } from 'node:path'
+import { dirname, join } from 'node:path'
+import { fileURLToPath } from 'node:url'
 
 /** Vitest replaces CSS imports with empty strings, so CSS-source tests read the files directly. */
 export function readSrc(path: string): string {
-  return readFileSync(join(import.meta.dirname, '../../../src', path), 'utf8')
+  const here = dirname(fileURLToPath(import.meta.url))
+  return readFileSync(join(here, '../../../src', path), 'utf8')
 }
 
 function stripComments(css: string): string {

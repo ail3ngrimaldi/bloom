@@ -19,6 +19,8 @@ const nextConfig: NextConfig = {
   // Dev only. Next blocks dev resources (HMR) requested from any origin but localhost, and the page
   // then never hydrates; scripts and tools that open http://127.0.0.1:<port> need this entry.
   allowedDevOrigins: ['127.0.0.1'],
+  // Keeps the "N" route badge out of dev-server screenshots (visual comparison); errors still show.
+  devIndicators: false,
   typescript: {
     // Next rewrites the tsconfig it type-checks with (it adds `<distDir>/types/**` to `include`,
     // which differs per NEXT_DIST_DIR). A config that extends another is left alone, so Next uses

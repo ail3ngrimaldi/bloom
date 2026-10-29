@@ -62,6 +62,10 @@ already answers at the base URL (`reuseExistingServer`).
 NEXT_DIST_DIR=.next-a E2E_PORT=5190 npm run e2e
 ```
 
+The dev server is reachable at `http://localhost:<port>` and `http://127.0.0.1:<port>`
+(`allowedDevOrigins` in `next.config.ts`). Any other host, such as a phone on the LAN, must be added
+there first: Next blocks its dev resources (HMR) and the page loads but never hydrates.
+
 `next.config.ts` points Next at `tsconfig.next.json` (a one-line shim that extends `tsconfig.json`).
 Next rewrites the tsconfig it type-checks with, adding `<distDir>/types/**` to `include`; a config
 that extends another is left alone, so `tsconfig.json` is never touched, whatever the distDir.

@@ -76,3 +76,20 @@ for (const step of STEPS) {
     await page.screenshot({ path: `${OUT}/${String(step.n).padStart(2, '0')}.png` })
   })
 }
+
+// Extra states of the reference images: the loader questions (15-loader-popups.png).
+test('#37b loader question', async ({ page }) => {
+  const answers: Record<string, unknown> = { ...DEMO_STATE.answers }
+  delete answers.rushed_mornings
+  delete answers.heard_habit_stacking
+  await page.addInitScript(
+    (state) => {
+      sessionStorage.setItem('bloom.funnel.v1', JSON.stringify(state))
+    },
+    { ...DEMO_STATE, answers },
+  )
+  await page.goto('/s/loader?qa')
+  await page.getByRole('dialog').waitFor({ timeout: 10_000 })
+  await page.waitForTimeout(400)
+  await page.screenshot({ path: `${OUT}/37b.png` })
+})

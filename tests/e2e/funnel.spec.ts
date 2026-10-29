@@ -265,10 +265,66 @@ test.describe('magic wand (phase 4)', () => {
   })
 })
 
+test.describe('summary and loader (phase 5)', () => {
+  test('the summary derives the profile and the loader asks twice, then moves on', async ({
+    page,
+  }) => {
+    test.setTimeout(60_000)
+    await page.addInitScript(() => {
+      sessionStorage.setItem(
+        'bloom.funnel.v1',
+        JSON.stringify({
+          answers: {
+            drained: 'often',
+            overthink: 'often',
+            juggling: 'yes',
+            procrastinate: 'always',
+            concentration: 'always',
+            adhd: 'diagnosed',
+            control_life: 'few_weeks',
+            wand: ['self_doubt', 'anxiety'],
+            gender: 'male',
+          },
+          lead: { email: '', name: '' },
+          selectedPlanId: null,
+          paywallStartedAt: null,
+          furthest: 36,
+        }),
+      )
+    })
+    await page.goto('/s/summary')
+    await waitForStep(page, 'summary')
+    await expect(page.getByText('HIGH level', { exact: true })).toBeVisible()
+    for (const value of ['Manage ADHD', 'Few weeks', 'Anxiety', 'Low'])
+      await expect(page.getByText(value, { exact: true })).toBeVisible()
+    await page.getByRole('button', { name: 'Continue' }).click()
+
+    await waitForStep(page, 'loader')
+    const first = page.getByRole('dialog', { name: 'Are you generally rushed in the mornings?' })
+    await expect(first).toBeVisible({ timeout: 8000 })
+    const paused = await page.getByRole('progressbar').first().getAttribute('aria-valuenow')
+    await page.waitForTimeout(700)
+    expect(await page.getByRole('progressbar').first().getAttribute('aria-valuenow')).toBe(paused)
+    await page.getByRole('button', { name: 'Yes' }).click()
+
+    await page
+      .getByRole('dialog', { name: 'Have you heard of habit stacking?' })
+      .waitFor({ timeout: 8000 })
+    await page.getByRole('button', { name: 'No' }).click()
+    await waitForStep(page, 'email')
+
+    // The loader replaced its own history entry: Back skips it.
+    await page.goBack()
+    await waitForStep(page, 'summary')
+  })
+})
+
 test.describe('accessibility (axe)', () => {
   for (const id of [
     'intro',
     'wand',
+    'summary',
+    'loader',
     'drained',
     'adhd',
     'sacrifice',

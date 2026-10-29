@@ -3,9 +3,11 @@
 import type { FunnelStep } from '@/funnel/steps'
 import { InterstitialScreen } from './inter'
 import { IntroScreen } from './intro'
+import { LoaderScreen } from './loader'
 import { MultiSelectScreen } from './multi'
 import { PendingScreen } from './pending'
 import { SingleSelectScreen } from './single'
+import { SummaryScreen } from './summary'
 import { WandScreen } from './wand'
 
 export interface StepScreenProps {
@@ -20,6 +22,10 @@ export function StepScreen({ step, onNext }: StepScreenProps) {
       return <IntroScreen step={step} onNext={onNext} />
     case 'wand':
       return <WandScreen step={step} onNext={onNext} />
+    case 'loader':
+      return <LoaderScreen step={step} onNext={onNext} />
+    case 'summary':
+      return <SummaryScreen step={step} onNext={onNext} />
     case 'inter':
       return <InterstitialScreen step={step} onNext={onNext} />
     case 'single':

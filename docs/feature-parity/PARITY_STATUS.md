@@ -40,8 +40,8 @@ Actualiza una fila por paso a medida que se implementa. **Estado:** `pendiente` 
 | 33 | `need_most` | single | 2 | listo | — | `shots/33.png` · e2e `funnel.spec.ts` (recorrido) | |
 | 34 | `success_30d` | multi | 2 | listo | — | `shots/34.png` · e2e `funnel.spec.ts` (recorrido) | CTA deshabilitado con 0 selecciones |
 | 35 | `biggest_motivation` | single | 2 | listo | — | `shots/35.png` · e2e `funnel.spec.ts` (recorrido) | |
-| 36 | `summary` | summary | 5 | en curso | `13-summary.png` | `shots/36.png` (placeholder) | Pantalla provisional con título + Continue hasta su fase |
-| 37 | `loader` | loader | 5 | en curso | `14-loader-states.png` | `shots/37.png` (placeholder) | Pantalla provisional con título + Continue hasta su fase |
+| 36 | `summary` | summary | 5 | listo | `13-summary.png` | `shots/36.png` · `summary.test.tsx`, `profile/derive.test.ts` · e2e `funnel.spec.ts` (fase 5, axe) | Reglas de §6.5; "Focus and attention" si sólo se sospecha TDAH; aviso "Not a medical assessment" · I-32 |
+| 37 | `loader` | loader | 5 | listo | `14-loader-states.png` | `shots/37.png`, `shots/37b.png` · `loader.test.tsx`, `loaderScript.test.ts` · e2e `funnel.spec.ts` (fase 5, axe) | 2 preguntas bloqueantes (50 %, 58 %); notas propias en vez de testimonios; texto oscuro sobre las barras (AA) · I-33 |
 | 38 | `email` | capture | 6 | en curso | `16-lead-capture.png` | `shots/38.png` (placeholder) | Pantalla provisional con título + Continue hasta su fase |
 | 39 | `name` | capture | 6 | en curso | — | `shots/39.png` (placeholder) | Pantalla provisional con título + Continue hasta su fase |
 | 40 | `loading` | loading | 6 | en curso | — | `shots/40.png` (placeholder) | Pantalla provisional con título + Continue hasta su fase |
@@ -57,7 +57,7 @@ Actualiza una fila por paso a medida que se implementa. **Estado:** `pendiente` 
 | 2 | Motor del funnel + 28 preguntas | 2, 3, 4, 5, 6, 7, 9, 10, 11, 12, 13, 14, 15, 16, 18, 19, 20, 21, 22, 23, 24, 27, 28, 29, 32, 33, 34, 35 | listo |
 | 3 | Intro e intermedias | 1, 17, 25, 26, 30, 31 | listo |
 | 4 | Wand interactivo | 8 | listo |
-| 5 | Resumen y loader | 36, 37 | pendiente |
+| 5 | Resumen y loader | 36, 37 | listo |
 | 6 | Captura de lead + transición | 38, 39, 40 | pendiente |
 | 7 | Paywall y checkout (UI + mock) | 41, 42 | pendiente |
 | 8 | Integraciones reales | — | bloqueado (decisiones §9.1) |

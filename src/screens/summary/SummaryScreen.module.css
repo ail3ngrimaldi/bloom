@@ -1,0 +1,285 @@
+/*
+ * Wellbeing summary (#36, PLAN 5.7), from 13-summary.png in CSS px: a 520 container, 22px title,
+ * a white card (radius 16) with the level row, the illustration, the meter and the alert, then
+ * 2 x 2 tiles of 256 x 46 and a 274 x 52 CTA.
+ */
+.screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1 1 auto;
+  width: 100%;
+  max-width: calc(var(--summary-width) + 2 * var(--card-gutter-cta));
+  margin: 0 auto;
+  padding: 18px var(--card-gutter-cta) 32px;
+}
+
+.title {
+  font: 400 22px / 28px var(--font-sans);
+  color: var(--ink-900);
+  text-align: center;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  margin-top: 10px;
+  padding: 12px 12px 12px;
+  border-radius: 16px;
+  background: var(--surface-option);
+}
+
+.levelRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  font: 500 15px / 20px var(--font-sans);
+  color: var(--ink-900);
+}
+
+.pill {
+  padding: 3px 12px;
+  border-radius: 4px;
+  font: 600 13px / 18px var(--font-sans);
+}
+
+.pill.high {
+  background: var(--alert-pill-bg);
+  color: #b3141f;
+}
+
+.pill.medium {
+  background: #fdebd3;
+  color: #8a4b0f;
+}
+
+.pill.low {
+  background: #d9f3ec;
+  color: #0b6b52;
+}
+
+.person {
+  width: 205px;
+  height: 216px;
+  margin-top: 4px;
+}
+
+/* ---- Meter: six segments from cyan to red on a light track, with a white knob ------------- */
+.meter {
+  position: relative;
+  width: 100%;
+  height: 26px;
+  margin-top: 4px;
+  padding: 5px;
+  border-radius: 13px;
+  background: var(--meter-track);
+}
+
+.segments {
+  display: flex;
+  gap: 3px;
+  height: 16px;
+}
+
+.segment {
+  flex: 1;
+  background: var(--segment-colour);
+}
+
+.segment:first-child {
+  border-radius: 8px 0 0 8px;
+}
+
+.segment:last-child {
+  border-radius: 0 8px 8px 0;
+}
+
+.segment[data-segment='1'] {
+  --segment-colour: linear-gradient(90deg, var(--meter-1), var(--meter-2));
+}
+.segment[data-segment='2'] {
+  --segment-colour: linear-gradient(90deg, var(--meter-2), var(--meter-3));
+}
+.segment[data-segment='3'] {
+  --segment-colour: var(--meter-3);
+}
+.segment[data-segment='4'] {
+  --segment-colour: linear-gradient(90deg, var(--meter-3), var(--meter-4));
+}
+.segment[data-segment='5'] {
+  --segment-colour: linear-gradient(90deg, var(--meter-4), var(--meter-5));
+}
+.segment[data-segment='6'] {
+  --segment-colour: linear-gradient(90deg, var(--meter-5), var(--meter-6));
+}
+
+.knob {
+  position: absolute;
+  top: 50%;
+  left: clamp(13px, var(--meter-value), calc(100% - 13px));
+  width: 30px;
+  height: 30px;
+  margin: -15px 0 0 -15px;
+  border: 3px solid var(--surface-option);
+  border-radius: 50%;
+  background: var(--meter-track);
+  box-shadow: 0 2px 8px rgba(19, 23, 27, 0.25);
+  animation: knob 600ms var(--ease-out) 300ms both;
+}
+
+@keyframes knob {
+  from {
+    left: 13px;
+  }
+}
+
+/* ---- Alert -------------------------------------------------------------------------------- */
+.alert {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  width: 100%;
+  margin-top: 12px;
+  padding: 12px;
+  border-radius: 8px;
+  text-align: left;
+}
+
+.alert.high {
+  background: var(--alert-bg);
+}
+
+.alert.medium {
+  background: #fdf0de;
+}
+
+.alert.low {
+  background: #e3f6f0;
+}
+
+.alertIcon {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 44px;
+  height: 44px;
+  border-radius: 8px;
+  background: var(--alert-icon-bg);
+  color: var(--alert-icon-fg);
+}
+
+.alert.medium .alertIcon {
+  background: #fbd7a8;
+  color: #c76a10;
+}
+
+.alert.low .alertIcon {
+  background: #b8ead9;
+  color: #1a8f6c;
+}
+
+.alertIcon svg {
+  width: 22px;
+  height: 22px;
+}
+
+.alertTitle {
+  display: block;
+  font: 700 15px / 20px var(--font-sans);
+  color: var(--ink-900);
+}
+
+.alertBody {
+  display: block;
+  margin-top: 2px;
+  font: 400 12.5px / 19px var(--font-sans);
+  color: var(--ink-700);
+}
+
+/* ---- Tiles -------------------------------------------------------------------------------- */
+.tiles {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, var(--summary-tile-width)));
+  justify-content: center;
+  gap: 7px 8px;
+  width: 100%;
+  margin: 10px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tile {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: var(--summary-tile-height);
+  padding: 5px 10px;
+  border-radius: 8px;
+  background: var(--surface-option);
+}
+
+.tileIcon {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  background: var(--bg-page-lilac);
+  color: var(--brand-violet);
+}
+
+.tileIcon svg {
+  width: 18px;
+  height: 18px;
+}
+
+.tileText {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.tileLabel {
+  font: 400 12px / 15px var(--font-sans);
+  color: var(--ink-600);
+}
+
+.tileValue {
+  font: 600 15px / 19px var(--font-sans);
+  color: var(--ink-900);
+}
+
+.disclaimer {
+  margin-top: 8px;
+  font: var(--type-legal);
+  color: var(--ink-600);
+  text-align: center;
+}
+
+.footer {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-top: 20px;
+}
+
+.cta {
+  max-width: var(--summary-cta-width);
+}
+
+/* Phones: one column of tiles. */
+@media (max-width: 479.98px) {
+  .tiles {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .knob {
+    animation: none;
+  }
+}

@@ -243,6 +243,57 @@
     },
     "summary": {
       "title": "Summary of your Well-being Profile",
+      "levelLabel": "Negative effects level",
+      "levels": { "low": "Low", "medium": "Medium", "high": "High" },
+      "alerts": {
+        "high": {
+          "title": "HIGH level",
+          "body": "High levels of negative effects can lead to constant procrastination, increased worrying, reduced energy and well-being"
+        },
+        "medium": {
+          "title": "MEDIUM level",
+          "body": "Moderate negative effects can make it harder to keep routines, stay focused and rest well"
+        },
+        "low": {
+          "title": "LOW level",
+          "body": "Your negative effects are low. A few small habits can help you keep it that way"
+        }
+      },
+      "tiles": {
+        "mainDifficulty": "Main difficulty:",
+        "challengingPeriod": "Challenging period:",
+        "trigger": "Trigger:",
+        "energyLevel": "Energy level:"
+      },
+      "mainDifficulty": {
+        "adhd": "Manage ADHD",
+        "attention": "Focus and attention",
+        "procrastination": "Procrastination",
+        "focus": "Staying focused",
+        "habits": "Sticking to habits"
+      },
+      "challengingPeriod": {
+        "days": "Few days",
+        "weeks": "Few weeks",
+        "months": "Several months",
+        "long": "A long time"
+      },
+      "trigger": {
+        "anxiety": "Anxiety",
+        "burnout": "Burnout",
+        "self_doubt": "Self-doubt",
+        "loneliness": "Loneliness",
+        "lack_of_motivation": "Lack of motivation",
+        "stress": "Everyday stress"
+      },
+      "energyLevel": {
+        "very_low": "Very low",
+        "low": "Low",
+        "moderate": "Moderate",
+        "good": "Good"
+      },
+      "meterLabel": "Negative effects level: {{level}}",
+      "disclaimer": "Based on your answers. Not a medical assessment.",
       "cta": "Continue"
     },
     "loader": {
@@ -256,7 +307,22 @@
         "rushed_mornings": "Are you generally rushed in the mornings?",
         "heard_habit_stacking": "Have you heard of habit stacking?"
       },
-      "options": { "yes": "Yes", "no": "No" }
+      "options": { "yes": "Yes", "no": "No" },
+      "tipsLabel": "While your plan is being created",
+      "tips": {
+        "small": {
+          "title": "Small steps, real change",
+          "body": "Your plan starts with habits that take a few minutes, so they fit even your busiest days."
+        },
+        "you": {
+          "title": "Built around you",
+          "body": "Each step follows what you told us about your energy, focus and goals."
+        },
+        "restart": {
+          "title": "Progress, not perfection",
+          "body": "Missing a day is part of the process. Your plan helps you pick up again without guilt."
+        }
+      }
     },
     "email": {
       "title": "Please enter your email",

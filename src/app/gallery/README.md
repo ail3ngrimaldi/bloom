@@ -5,9 +5,11 @@ Visual QA for the design system. The pages are `src/app/gallery/**`; `next.confi
 folder that starts with an underscore as private, which is why the real folder has no underscores).
 
 **They 404 in production.** Every gallery page calls `notFound()` unless `isDevToolsEnabled()`
-(`src/lib/env.ts`) is true: that is the case under `next dev`, and on a Vercel _preview_ deployment
-that sets `NEXT_PUBLIC_ENABLE_DEV_TOOLS=1` (with `NEXT_PUBLIC_VERCEL_ENV` exposed). The production
-environment never enables it. `tests/unit/pages/gallery.test.tsx` covers the matrix.
+(`src/lib/env.ts`) is true: that is the case under `next dev`, and on every Vercel _preview_
+deployment (`next.config.ts` derives the switch from `VERCEL_ENV`; set
+`NEXT_PUBLIC_ENABLE_DEV_TOOLS=0` on the Preview environment to hide it). The production environment
+never enables it. `tests/unit/pages/gallery.test.tsx`, `tests/unit/env.test.ts` and
+`tests/unit/nextConfig.test.ts` cover the matrix.
 
 | Route                    | Shows                                                                                                                 |
 | ------------------------ | --------------------------------------------------------------------------------------------------------------------- |

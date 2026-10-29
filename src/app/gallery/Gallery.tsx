@@ -1,5 +1,7 @@
+'use client'
+
+import Link from 'next/link'
 import { useId, useState } from 'react'
-import { Link } from 'react-router-dom'
 import { Button, CheckboxGroup, CheckboxRow, Header, OptionCard, PageShell, RadioGroup } from '@/ui'
 import type { PageTheme } from '@/ui'
 import { ModalDemo } from './ModalDemo'
@@ -60,15 +62,15 @@ function InteractiveCheckboxDemo() {
   )
 }
 
-/** Every component in every state. Dev and QA tooling: only registered in dev builds. */
+/** Every component in every state. Dev and QA tooling: see isDevToolsEnabled in src/lib/env.ts. */
 export function Gallery() {
   return (
     <main className={styles.page}>
       <h1 className={styles.pageTitle}>Bloom UI gallery</h1>
       <p className={styles.note}>
         Dev and QA tooling, not part of the funnel or of production builds. Layout twins of the
-        reference screens: <Link to="quiz-single">quiz-single</Link> (image 03) and{' '}
-        <Link to="quiz-multi">quiz-multi</Link> (image 06).
+        reference screens: <Link href="/__gallery/quiz-single">quiz-single</Link> (image 03) and{' '}
+        <Link href="/__gallery/quiz-multi">quiz-multi</Link> (image 06).
       </p>
 
       <Section title="Themes" note="PageShell backgrounds">

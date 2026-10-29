@@ -1,3 +1,5 @@
+'use client'
+
 import { useState } from 'react'
 import { Button, Modal } from '@/ui'
 import type { ModalSize } from '@/ui'

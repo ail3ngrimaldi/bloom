@@ -1,3 +1,5 @@
+'use client'
+
 import { useState } from 'react'
 import { Card, Header, OptionCard, PageShell, QuestionTitle, QuizLayout, RadioGroup } from '@/ui'
 

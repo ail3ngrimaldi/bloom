@@ -116,7 +116,7 @@ export function Gallery() {
           <Cell caption="interstitial size">
             <Button size="interstitial">Continue</Button>
           </Cell>
-          <Cell caption="white (wand finish)">
+          <Cell caption="white (wand finish)" width={389}>
             <div className={styles.darkBackdrop}>
               <Button variant="white">Continue</Button>
             </div>

@@ -111,7 +111,7 @@
 
   /* ---- 4.3 Measures ------------------------------------------------------------------------- */
   --card-width: 375px;
-  --card-height: calc(100vh - 62px);
+  --card-height: calc(100vh - var(--card-margin-top) - var(--card-margin-bottom));
   --card-margin-top: 32px;
   --card-margin-bottom: 30px;
   --card-gutter-option: 21px; /* side padding around options and the progress bar */
@@ -263,6 +263,6 @@
 /* 100vh is the fallback for browsers without dynamic viewport units. */
 @supports (height: 100dvh) {
   :root {
-    --card-height: calc(100dvh - 62px);
+    --card-height: calc(100dvh - var(--card-margin-top) - var(--card-margin-bottom));
   }
 }

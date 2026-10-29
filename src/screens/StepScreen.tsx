@@ -6,6 +6,7 @@ import { IntroScreen } from './intro'
 import { MultiSelectScreen } from './multi'
 import { PendingScreen } from './pending'
 import { SingleSelectScreen } from './single'
+import { WandScreen } from './wand'
 
 export interface StepScreenProps {
   step: FunnelStep
@@ -17,6 +18,8 @@ export function StepScreen({ step, onNext }: StepScreenProps) {
   switch (step.type) {
     case 'intro':
       return <IntroScreen step={step} onNext={onNext} />
+    case 'wand':
+      return <WandScreen step={step} onNext={onNext} />
     case 'inter':
       return <InterstitialScreen step={step} onNext={onNext} />
     case 'single':

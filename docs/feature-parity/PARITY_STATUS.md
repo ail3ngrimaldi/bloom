@@ -12,7 +12,7 @@ Actualiza una fila por paso a medida que se implementa. **Estado:** `pendiente` 
 | 05 | `selfcare` | single | 2 | listo | — | `shots/05.png` · e2e `funnel.spec.ts` (recorrido) | |
 | 06 | `phone` | single | 2 | listo | — | `shots/06.png` · e2e `funnel.spec.ts` (recorrido) | |
 | 07 | `juggling` | single | 2 | listo | — | `shots/07.png` · e2e `funnel.spec.ts` (recorrido) | |
-| 08 | `wand` | wand | 4 | en curso | `07-wand.png` | `shots/08.png` (placeholder) | Pantalla provisional con título + Continue hasta su fase |
+| 08 | `wand` | wand | 4 | listo | `07-wand.png` | `shots/08.png` · `wand.test.tsx`, `wandPhysics.test.ts` · e2e `funnel.spec.ts` (estallido, deriva, reduced motion, axe) | Deriva rAF ±8 px + colisión suave; guarda `answers.wand` en orden de toque · I-31 |
 | 09 | `procrastinate` | single | 2 | listo | — | `shots/09.png` · e2e `funnel.spec.ts` (recorrido) | |
 | 10 | `restart_habit` | single | 2 | listo | `05-quiz-variants.png` | `shots/10.png` · e2e `funnel.spec.ts` (recorrido) | |
 | 11 | `concentration` | single | 2 | listo | — | `shots/11.png` · e2e `funnel.spec.ts` (recorrido) | |
@@ -56,7 +56,7 @@ Actualiza una fila por paso a medida que se implementa. **Estado:** `pendiente` 
 | 1 | Design system y shell | base visual | listo (galería `/__gallery`, `tests/e2e/gallery.spec.ts`) |
 | 2 | Motor del funnel + 28 preguntas | 2, 3, 4, 5, 6, 7, 9, 10, 11, 12, 13, 14, 15, 16, 18, 19, 20, 21, 22, 23, 24, 27, 28, 29, 32, 33, 34, 35 | listo |
 | 3 | Intro e intermedias | 1, 17, 25, 26, 30, 31 | listo |
-| 4 | Wand interactivo | 8 | pendiente |
+| 4 | Wand interactivo | 8 | listo |
 | 5 | Resumen y loader | 36, 37 | pendiente |
 | 6 | Captura de lead + transición | 38, 39, 40 | pendiente |
 | 7 | Paywall y checkout (UI + mock) | 41, 42 | pendiente |

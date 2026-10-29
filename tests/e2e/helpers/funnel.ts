@@ -49,7 +49,8 @@ export async function answerStep(page: Page, choice = 0) {
     await textbox.first().fill(type === 'email' ? 'qa@example.com' : 'Sam')
     await page.getByRole('button', { name: 'Continue' }).click()
   } else if (await bubbles.count()) {
-    for (let i = 0; i < 3; i++) await bubbles.first().click()
+    // The bubbles drift on every frame, so they never pass Playwright's "stable" check.
+    for (let i = 0; i < 3; i++) await bubbles.first().click({ force: true })
     await page.getByRole('button', { name: 'Continue' }).click()
   } else {
     await page.getByRole('button', { name: 'Continue' }).click()

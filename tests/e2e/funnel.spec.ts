@@ -206,9 +206,69 @@ test.describe('intro and interstitials (phase 3)', () => {
   })
 })
 
+test.describe('magic wand (phase 4)', () => {
+  const bubble = (page: import('@playwright/test').Page, name: string) =>
+    page.getByRole('button', { name: `Release ${name}` })
+
+  test('three releases burst, count, store the order and finish with a white Continue', async ({
+    page,
+  }) => {
+    await page.goto('/s/wand?qa')
+    await waitForStep(page, 'wand')
+    await expect(page.getByText('0 / 3 released')).toBeVisible()
+
+    await bubble(page, 'Self-doubt').click({ force: true })
+    await expect(page.getByText('1 / 3 released')).toBeVisible()
+    await expect(page.locator('[data-burst="self_doubt"]')).toBeAttached()
+    await bubble(page, 'Anxiety').click({ force: true })
+    await bubble(page, 'Lack of motivation').click({ force: true })
+
+    await expect(page.getByRole('heading', { name: 'Feel that lightness' })).toBeVisible()
+    await expect(page.getByText("and know it's possible")).toBeVisible()
+    expect(
+      await page.evaluate(
+        () => JSON.parse(sessionStorage.getItem('bloom.funnel.v1')!).answers.wand,
+      ),
+    ).toEqual(['self_doubt', 'anxiety', 'lack_of_motivation'])
+
+    const cta = page.getByRole('button', { name: 'Continue' })
+    expect(await cta.evaluate((el) => getComputedStyle(el).backgroundColor)).toBe(
+      'rgb(255, 255, 255)',
+    )
+    await cta.click()
+    await waitForStep(page, 'procrastinate')
+  })
+
+  test('the bubbles drift slowly', async ({ page }) => {
+    await page.goto('/s/wand?qa')
+    await waitForStep(page, 'wand')
+    const target = bubble(page, 'Burnout')
+    const before = await target.boundingBox()
+    await page.waitForTimeout(1000)
+    const after = await target.boundingBox()
+    const moved = Math.hypot(after!.x - before!.x, after!.y - before!.y)
+    expect(moved).toBeGreaterThan(0.5)
+    expect(moved).toBeLessThan(20)
+  })
+
+  test.describe('with reduced motion', () => {
+    test.use({ reducedMotion: 'reduce' })
+
+    test('the bubbles stay still', async ({ page }) => {
+      await page.goto('/s/wand?qa')
+      await waitForStep(page, 'wand')
+      const target = bubble(page, 'Burnout')
+      const before = await target.boundingBox()
+      await page.waitForTimeout(600)
+      expect(await target.boundingBox()).toEqual(before)
+    })
+  })
+})
+
 test.describe('accessibility (axe)', () => {
   for (const id of [
     'intro',
+    'wand',
     'drained',
     'adhd',
     'sacrifice',

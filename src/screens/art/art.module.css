@@ -58,3 +58,9 @@
   width: 100%;
   height: auto;
 }
+
+.wand {
+  display: block;
+  width: 40px;
+  height: 40px;
+}

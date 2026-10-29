@@ -1,8 +1,13 @@
 # UI gallery (dev and QA tooling)
 
-Visual QA for the design system. **Only registered when `import.meta.env.DEV` is true**: the lazy
-import in `src/app/routes.tsx` is dropped from production builds, so none of this ships (checked: the
-built bundle contains no gallery code or CSS).
+Visual QA for the design system. The pages are `src/app/gallery/**`; `next.config.ts` rewrites
+`/__gallery/:path*` to `/gallery/:path*` so the URL stays the one of the plan (App Router treats a
+folder that starts with an underscore as private, which is why the real folder has no underscores).
+
+**They 404 in production.** Every gallery page calls `notFound()` unless `isDevToolsEnabled()`
+(`src/lib/env.ts`) is true: that is the case under `next dev`, and on a Vercel _preview_ deployment
+that sets `NEXT_PUBLIC_ENABLE_DEV_TOOLS=1` (with `NEXT_PUBLIC_VERCEL_ENV` exposed). The production
+environment never enables it. `tests/unit/pages/gallery.test.tsx` covers the matrix.
 
 | Route                    | Shows                                                                                                                 |
 | ------------------------ | --------------------------------------------------------------------------------------------------------------------- |

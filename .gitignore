@@ -10,5 +10,12 @@ test-results
 .DS_Store
 .env.local
 
+# Next.js and Vercel (distDir is .next, or .next-<tag> when NEXT_DIST_DIR is set)
+.next
+.next-*
+out
+.vercel
+next-env.d.ts
+
 # Screenshots produced by `npm run shots` (compared against docs/feature-parity/images)
 docs/feature-parity/shots/

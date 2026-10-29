@@ -6,5 +6,12 @@ test-results
 package-lock.json
 *.mkv
 
+# Next.js build output and generated files
+.next
+.next-*
+out
+.vercel
+next-env.d.ts
+
 # Plan documents and reference images are owned by the orchestrator, not formatted by tooling
 docs/

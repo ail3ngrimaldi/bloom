@@ -3,7 +3,7 @@ import { expect, test } from '@playwright/test'
 import type { Locator, Page } from '@playwright/test'
 
 /**
- * Phase 1 acceptance: the dev-only gallery twins of reference images 03 and 06 must keep the
+ * Phase 1 acceptance: the dev-tools-only gallery twins of reference images 03 and 06 must keep the
  * measures of PLAN 4.3 (1280x720 viewport => card 375 x 658). Positions are relative to the card.
  */
 
@@ -36,6 +36,32 @@ async function relative(page: Page, locator: Locator) {
 function near(actual: number, expected: number) {
   expect(Math.abs(actual - expected), `${actual} vs ${expected}`).toBeLessThanOrEqual(TOLERANCE)
 }
+
+test.describe('routing', () => {
+  test('the home link reaches /__gallery through the rewrite to src/app/gallery', async ({
+    page,
+  }) => {
+    await page.goto('/')
+    await page.getByRole('link', { name: 'Open the UI gallery' }).click()
+    await expect(page).toHaveURL(/\/__gallery$/)
+    await expect(page.getByRole('heading', { name: 'Bloom UI gallery' })).toBeVisible()
+
+    await page.getByRole('link', { name: 'quiz-multi' }).click()
+    await expect(page).toHaveURL(/\/__gallery\/quiz-multi$/)
+    await expect(page.getByRole('checkbox')).toHaveCount(5)
+  })
+
+  test('hydrates every gallery page without console errors', async ({ page }) => {
+    const consoleErrors: string[] = []
+    page.on('console', (message) => {
+      if (message.type() === 'error') consoleErrors.push(message.text())
+    })
+    for (const path of ['/__gallery', '/__gallery/quiz-single', '/__gallery/quiz-multi']) {
+      await open(page, path)
+    }
+    expect(consoleErrors).toEqual([])
+  })
+})
 
 test.describe('quiz-single (reference image 03)', () => {
   test.beforeEach(async ({ page }) => open(page, '/__gallery/quiz-single'))

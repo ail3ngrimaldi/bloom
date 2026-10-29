@@ -31,4 +31,10 @@ Import from the barrel (`import { Card, Button } from '@/ui'`). All values come 
   document. The screen that owns the step should move focus to its heading (for example from
   `onEntered`).
 - **Gallery.** `/__gallery`, `/__gallery/quiz-single` and `/__gallery/quiz-multi` show everything.
-  They exist only in dev builds (see `src/app/gallery`).
+  They 404 in production unless the dev-tools switch is on (see `src/app/gallery/README.md`).
+- **Server and client components.** Components that use hooks, context, effects, portals or define
+  event handlers start with `'use client'` (`Button`, `OptionCard`, `RadioGroup`, `RadioGroupContext`,
+  `CheckboxRow`, `Modal`, `StepTransition`); purely presentational ones (`Card`, `PageShell`,
+  `Header`, `Logo`, `ProgressBar`, `QuizLayout`, `QuestionTitle`, `CheckboxGroup`) work in server
+  components. Keep non-component values (constants, helpers) out of `'use client'` files so server
+  code can still import them, as `StepTransition/timing.ts` does.

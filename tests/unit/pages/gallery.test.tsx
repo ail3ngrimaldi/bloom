@@ -109,33 +109,34 @@ describe('gallery pages (dev tools on)', () => {
   })
 })
 
-describe('gallery pages in production', () => {
-  it.each(PAGES)('%s is a 404 in a production build', (_path, Page) => {
+describe('gallery pages in a production build', () => {
+  function stubBuild(showGallery: string) {
     vi.stubEnv('NODE_ENV', 'production')
-    vi.stubEnv('NEXT_PUBLIC_VERCEL_ENV', 'production')
-    vi.stubEnv('NEXT_PUBLIC_ENABLE_DEV_TOOLS', '')
-    expect(() => Page()).toThrow(NotFoundSignal)
-  })
+    vi.stubEnv('NEXT_PUBLIC_SHOW_GALLERY', showGallery)
+  }
 
-  it.each(PAGES)('%s stays a 404 on production even with the switch set', (_path, Page) => {
-    vi.stubEnv('NODE_ENV', 'production')
-    vi.stubEnv('NEXT_PUBLIC_VERCEL_ENV', 'production')
-    vi.stubEnv('NEXT_PUBLIC_ENABLE_DEV_TOOLS', '1')
-    expect(() => Page()).toThrow(NotFoundSignal)
-  })
+  it.each(PAGES)(
+    '%s is a 404 when the build has no gallery switch (local production build)',
+    (_path, Page) => {
+      stubBuild('')
+      expect(() => Page()).toThrow(NotFoundSignal)
+    },
+  )
 
-  it.each(PAGES)('%s is a 404 on a preview deployment without the switch', (_path, Page) => {
-    vi.stubEnv('NODE_ENV', 'production')
-    vi.stubEnv('NEXT_PUBLIC_VERCEL_ENV', 'preview')
-    vi.stubEnv('NEXT_PUBLIC_ENABLE_DEV_TOOLS', '')
-    expect(() => Page()).toThrow(NotFoundSignal)
-  })
+  it.each(PAGES)(
+    '%s renders when NEXT_PUBLIC_SHOW_GALLERY=1 (every Vercel deployment by default)',
+    (_path, Page) => {
+      stubBuild('1')
+      expect(() => render(<Page />)).not.toThrow()
+      expect(screen.getAllByRole('heading').length).toBeGreaterThan(0)
+    },
+  )
 
-  it.each(PAGES)('%s renders on a preview deployment with the switch on', (_path, Page) => {
-    vi.stubEnv('NODE_ENV', 'production')
-    vi.stubEnv('NEXT_PUBLIC_VERCEL_ENV', 'preview')
-    vi.stubEnv('NEXT_PUBLIC_ENABLE_DEV_TOOLS', '1')
-    expect(() => render(<Page />)).not.toThrow()
-    expect(screen.getAllByRole('heading').length).toBeGreaterThan(0)
-  })
+  it.each(PAGES)(
+    '%s is a 404 again when NEXT_PUBLIC_SHOW_GALLERY=0 (the switch used at launch)',
+    (_path, Page) => {
+      stubBuild('0')
+      expect(() => Page()).toThrow(NotFoundSignal)
+    },
+  )
 })

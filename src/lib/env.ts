@@ -1,12 +1,16 @@
 /**
- * QA tooling (the UI gallery, demo content) is on in `next dev` and 404s in production. The one
- * production-build exception is a Vercel PREVIEW deployment: next.config.ts derives
- * NEXT_PUBLIC_VERCEL_ENV from Vercel's VERCEL_ENV and turns NEXT_PUBLIC_ENABLE_DEV_TOOLS on by
- * default there, so whoever opens a preview sees the gallery with no configuration. Set
- * NEXT_PUBLIC_ENABLE_DEV_TOOLS=0 on the Preview environment to hide it again. The production
- * environment never qualifies, even with the variable set.
+ * Two build-time switches (Next inlines the literal `process.env.X` reads).
  *
- * Both variables are read as literal `process.env.X` so Next inlines them at build time.
+ * isDevToolsEnabled(): QA tooling that must never reach real users (demo content, the step-guard
+ * bypass, debug flags). On in `next dev` and on Vercel PREVIEW deployments: next.config.ts derives
+ * NEXT_PUBLIC_VERCEL_ENV from VERCEL_ENV and turns NEXT_PUBLIC_ENABLE_DEV_TOOLS on by default
+ * there (NEXT_PUBLIC_ENABLE_DEV_TOOLS=0 hides it). The production environment never qualifies,
+ * even with the variable set.
+ *
+ * isGalleryEnabled(): the UI gallery, which only holds design-system components. While the site is
+ * pre-launch it is also visible on the Vercel Production deployment so the owner can look at the
+ * work: next.config.ts turns NEXT_PUBLIC_SHOW_GALLERY on by default for every Vercel build. At
+ * launch, set NEXT_PUBLIC_SHOW_GALLERY=0 on the Production environment and redeploy.
  */
 export function isDevToolsEnabled(): boolean {
   if (process.env.NODE_ENV !== 'production') return true
@@ -14,4 +18,9 @@ export function isDevToolsEnabled(): boolean {
     process.env.NEXT_PUBLIC_VERCEL_ENV === 'preview' &&
     process.env.NEXT_PUBLIC_ENABLE_DEV_TOOLS === '1'
   )
+}
+
+export function isGalleryEnabled(): boolean {
+  if (process.env.NODE_ENV !== 'production') return true
+  return process.env.NEXT_PUBLIC_SHOW_GALLERY === '1'
 }

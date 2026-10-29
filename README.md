@@ -73,9 +73,11 @@ that extends another is left alone, so `tsconfig.json` is never touched, whateve
 ### QA gallery and dev tools
 
 `/__gallery` (and `/__gallery/quiz-single`, `/__gallery/quiz-multi`) show every design-system
-component. They exist only while `isDevToolsEnabled()` (`src/lib/env.ts`) is true: under
-`next dev`, and on every Vercel **preview** deployment (see "Deploy on Vercel"). In production they
-return 404.
+component. They exist while `isGalleryEnabled()` (`src/lib/env.ts`) is true: under `next dev` and on
+every Vercel deployment, Production included, while the site is pre-launch (see "Deploy on Vercel").
+A production build anywhere else returns 404. The riskier QA tooling (demo content, the step-guard
+bypass) follows the separate `isDevToolsEnabled()`, which is limited to `next dev` and Vercel
+previews and never opens on Production.
 
 ## Deploy on Vercel
 
@@ -85,13 +87,12 @@ return 404.
 3. No environment variable is required. Nothing is deployed from this repository by itself, and the
    code holds no credentials: payments and every other integration are mocks until real
    credentials are supplied.
-4. **Look at the Preview deployment, not Production.** Every branch and pull request gets a
-   Preview URL, and previews show the QA gallery by default (`next.config.ts` derives the switch
-   from `VERCEL_ENV`, so nothing has to be configured). Set `NEXT_PUBLIC_ENABLE_DEV_TOOLS=0` on the
-   Preview environment to hide it. The Production environment never shows the tools, whatever the
-   variables say, so a Production deployment of the current code only shows the placeholder home.
-   The repository's default branch (the Production branch Vercel proposes) holds only documents, so
-   its first deployment is expected to fail until this code is merged there.
+4. **Pre-launch: the gallery is visible everywhere on Vercel.** While there is no funnel to show,
+   every deployment (Preview and Production) serves the UI gallery, and the home page links to it
+   (`next.config.ts` turns `NEXT_PUBLIC_SHOW_GALLERY` on for every Vercel build; nothing has to be
+   configured). **At launch**, set `NEXT_PUBLIC_SHOW_GALLERY=0` on the Production environment and
+   redeploy so real users never see it. Demo content and the other QA tooling are stricter: previews
+   only (`NEXT_PUBLIC_ENABLE_DEV_TOOLS=0` hides them there too), never Production.
 
 The app is a normal Next.js server app (no `output: 'export'`), so route handlers such as
 `/api/leads` can be added later. Reference images and the `.mkv` recording never ship: images live
@@ -103,7 +104,7 @@ only in `docs/`, the recording is ignored by git (see below).
 | ---------------------- | --------------------------------------------------------------------------------- |
 | `src/app/`             | App Router: `layout.tsx` (fonts, metadata, global CSS), `page.tsx`, `icon.svg`    |
 | `src/app/gallery/`     | QA gallery pages (served as `/__gallery` through a rewrite); 404 in production    |
-| `src/lib/`             | Small shared modules (`env.ts`: `isDevToolsEnabled()`)                            |
+| `src/lib/`             | Small shared modules (`env.ts`: the two switches)                                 |
 | `src/funnel/`          | Funnel engine: step types, config and copy, store, navigation, progress           |
 | `src/screens/`         | One module per screen type (single, multi, intro, wand, paywall, ...)             |
 | `src/ui/`              | Design-system components (Button, OptionCard, Modal, ...) as CSS Modules          |

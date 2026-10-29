@@ -157,6 +157,31 @@ describe('StepTransition', () => {
     expect(screen.getByText('selected: often')).toBeInTheDocument()
   })
 
+  it('calls onSwap with the next key once the old content is gone, and again when it fades in', () => {
+    const onSwap = vi.fn()
+    const ui = (stepKey: string) => (
+      <StepTransition stepKey={stepKey} onSwap={onSwap}>
+        <p>content {stepKey}</p>
+      </StepTransition>
+    )
+    const { rerender } = render(ui('a'))
+    expect(onSwap).not.toHaveBeenCalled()
+
+    rerender(ui('b'))
+    advance(STEP_OUT_MS - 1)
+    expect(onSwap).not.toHaveBeenCalled()
+    advance(1)
+    expect(phase()).toBe('gap')
+    expect(onSwap).toHaveBeenLastCalledWith('b')
+
+    // The target changes during the gap: the second call reports the step that really fades in.
+    rerender(ui('c'))
+    advance(STEP_GAP_MS)
+    expect(screen.getByText('content c')).toBeInTheDocument()
+    expect(onSwap).toHaveBeenLastCalledWith('c')
+    expect(onSwap).toHaveBeenCalledTimes(2)
+  })
+
   it('can fade the very first content in', () => {
     const onEntered = vi.fn()
     renderStep('a', onEntered, true)

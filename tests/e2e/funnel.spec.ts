@@ -1,0 +1,468 @@
+import AxeBuilder from '@axe-core/playwright'
+import { expect, test } from '@playwright/test'
+import { REFERENCE, answerStep, stage, stepId, waitForStep, walkTo } from './helpers/funnel'
+
+/** Phase 2 acceptance (PLAN 7): the engine, the 28 questions, progress and transitions. */
+
+test.describe('entry and routing', () => {
+  test('the root redirects to the first step and keeps the campaign parameters', async ({
+    page,
+  }) => {
+    await page.goto('/?utm_source=ad')
+    await waitForStep(page, 'intro')
+    expect(new URL(page.url()).search).toBe('?utm_source=ad')
+
+    await answerStep(page)
+    await waitForStep(page, 'drained')
+    expect(new URL(page.url()).search).toBe('?utm_source=ad')
+  })
+
+  test('an unknown step is a 404', async ({ page }) => {
+    const response = await page.goto('/s/nope')
+    expect(response?.status()).toBe(404)
+  })
+
+  test('a deep link past the furthest step reached goes back to the start', async ({ page }) => {
+    await page.goto('/s/paywall')
+    await waitForStep(page, 'intro')
+  })
+
+  test('?qa skips that guard in development (QA only, never in production)', async ({ page }) => {
+    await page.goto('/s/age?qa')
+    await waitForStep(page, 'age')
+    await expect(page.getByRole('heading', { name: 'What is your age?' })).toBeVisible()
+  })
+})
+
+test.describe('walking the funnel', () => {
+  test.use({ reducedMotion: 'reduce' })
+
+  test('goes from the intro to the checkout modal: 42 steps, reference wording and progress', async ({
+    page,
+  }) => {
+    test.setTimeout(180_000)
+    const consoleErrors: string[] = []
+    page.on('console', (message) => {
+      if (message.type() === 'error') consoleErrors.push(message.text())
+    })
+
+    await page.goto('/s/intro')
+    await waitForStep(page, 'intro')
+
+    for (const ref of REFERENCE.steps.filter((step) => step.n < 42)) {
+      await waitForStep(page, ref.id)
+      const progress = page.getByRole('progressbar')
+      if (ref.type === 'single') {
+        // Same question as the reference ({{brand}} is Bloom here).
+        await expect(page.getByRole('heading', { level: 1 })).toHaveText(
+          ref.title!.replace('{{brand}}', 'Bloom'),
+        )
+        await expect(progress).toHaveAttribute(
+          'aria-valuenow',
+          String(Math.round(((ref.n - 1) / 39) * 100)),
+        )
+      }
+      if (ref.type === 'multi') {
+        await expect(page.getByRole('heading', { level: 1 })).toHaveText(ref.title!)
+      }
+      // The header shows on single, intro and capture only (the loader has its own bars).
+      if (ref.type !== 'loader') await expect(progress).toHaveCount(ref.header ? 1 : 0)
+      await answerStep(page)
+    }
+
+    await waitForStep(page, 'checkout')
+    const dialog = page.getByRole('dialog', { name: "Your plan is ready. Let's make it real." })
+    await expect(dialog).toBeVisible()
+    await expect(dialog.getByTestId('checkout-total')).toContainText('$8.99')
+    await expect(dialog.getByRole('textbox', { name: 'Email' })).toHaveValue('qa@example.com')
+    expect(consoleErrors).toEqual([])
+  })
+
+  test('resumes on the same step after a reload, with the answers kept', async ({ page }) => {
+    await page.goto('/s/intro')
+    await walkTo(page, 'sleep')
+    await page.reload()
+    await waitForStep(page, 'sleep')
+
+    await page.goBack()
+    await waitForStep(page, 'overthink')
+    await expect(page.getByRole('radio', { name: 'Always' })).toHaveAttribute(
+      'aria-checked',
+      'true',
+    )
+  })
+
+  test("the browser's Back goes one step back and Forward returns", async ({ page }) => {
+    await page.goto('/s/intro')
+    await walkTo(page, 'overthink')
+    await page.goBack()
+    await waitForStep(page, 'drained')
+    await page.goForward()
+    await waitForStep(page, 'overthink')
+  })
+
+  test('personalises the copy with the gender answer', async ({ page }) => {
+    await page.goto('/s/gender?qa')
+    await waitForStep(page, 'gender')
+    await page.getByRole('radio', { name: 'Male', exact: true }).click()
+    await waitForStep(page, 'age')
+    await answerStep(page)
+    await waitForStep(page, 'science')
+    await expect(page.getByText('Made for men like you')).toBeVisible()
+  })
+
+  test('multi-select keeps Continue disabled until a row is checked', async ({ page }) => {
+    await page.goto('/s/sacrifice?qa')
+    await waitForStep(page, 'sacrifice')
+    const cta = page.getByRole('button', { name: 'Continue' })
+    await expect(cta).toBeDisabled()
+    await page.getByRole('checkbox', { name: 'Sleep' }).click()
+    await expect(cta).toBeEnabled()
+    await page.keyboard.press('Space')
+    await expect(page.getByRole('checkbox', { name: 'Sleep' })).toHaveAttribute(
+      'aria-checked',
+      'false',
+    )
+  })
+
+  test('can be answered with the keyboard alone', async ({ page }) => {
+    await page.goto('/s/drained?qa')
+    await waitForStep(page, 'drained')
+    await page.keyboard.press('Tab')
+    await expect(page.getByRole('radio', { name: 'Always' })).toBeFocused()
+    await page.keyboard.press('ArrowDown')
+    await expect(page.getByRole('radio', { name: 'Often' })).toBeFocused()
+    await page.keyboard.press('Enter')
+    await waitForStep(page, 'overthink')
+    await expect(page.getByRole('heading', { name: 'Do you overthink?' })).toBeFocused()
+  })
+})
+
+test.describe('transition between questions (PLAN 4.4)', () => {
+  test('selects at once, then fades the content out and in while the card stays', async ({
+    page,
+  }) => {
+    await page.goto('/s/drained?qa')
+    await waitForStep(page, 'drained')
+    const card = page.locator('[data-frame-step]')
+    await card.evaluate((el) => el.setAttribute('data-test-marker', 'same-card'))
+
+    const started = Date.now()
+    await page.getByRole('radio', { name: 'Often' }).click()
+    await expect(page.getByRole('radio', { name: 'Often' })).toHaveAttribute('aria-checked', 'true')
+    await expect(stage(page)).toHaveAttribute('data-phase', 'out')
+    await expect(page.getByRole('heading', { name: 'Do you overthink?' })).toBeVisible()
+    await expect(stage(page)).toHaveAttribute('data-phase', 'idle')
+    const elapsed = Date.now() - started
+
+    // 150 ms selected + 400 out + 150 gap + 300 in = 1 s (plus test overhead).
+    expect(elapsed).toBeGreaterThanOrEqual(900)
+    expect(elapsed).toBeLessThan(2500)
+    await expect(card).toHaveAttribute('data-test-marker', 'same-card')
+    expect(stepId(page)).toBe('overthink')
+  })
+})
+
+test.describe('intro and interstitials (phase 3)', () => {
+  // Wording of the reference's claims that Bloom has no evidence for (PLAN 2, guardrails 1 to 3).
+  const CLAIMS =
+    /million|as featured|new york times|wired|forbes|girlboss|healthline|stanford|duke|harvard|jazmin|reviewed by/i
+
+  test('the intro reveals everything within about a second, CTA at the bottom', async ({
+    page,
+  }) => {
+    await page.goto('/s/intro')
+    await waitForStep(page, 'intro')
+    const cta = page.getByRole('button', { name: 'Continue' })
+    await expect(cta).toBeVisible()
+    await page.waitForTimeout(1200)
+    const opacities = await page.evaluate(() =>
+      [...document.querySelectorAll('[data-phase] *')].map((el) => getComputedStyle(el).opacity),
+    )
+    expect(opacities.every((value) => value === '1')).toBe(true)
+    const box = await cta.boundingBox()
+    expect(Math.round(box!.y + box!.height)).toBe(720 - 56)
+  })
+
+  for (const id of ['science', 'not_alone', 'evidence', 'expert']) {
+    test(`/s/${id} enables its CTA about 0.5 s after it shows and makes no claims`, async ({
+      page,
+    }) => {
+      await page.goto(`/s/${id}?qa`)
+      const cta = page.getByRole('button', { name: 'Continue' })
+      await expect(cta).toBeDisabled()
+      await expect(cta).toBeEnabled()
+      expect(await page.locator('main, body').first().innerText()).not.toMatch(CLAIMS)
+      const box = await cta.boundingBox()
+      expect(Math.round(box!.y + box!.height)).toBe(720 - 56)
+    })
+  }
+
+  test('the match merges the circles, then shows the check and the CTA', async ({ page }) => {
+    await page.goto('/s/match?qa')
+    await waitForStep(page, 'match')
+    const cta = page.getByRole('button', { name: 'Continue' })
+    await expect(cta).toBeDisabled()
+    await expect(page.getByRole('heading', { name: "It's a match." })).toBeVisible()
+    await expect(cta).toBeEnabled({ timeout: 5000 })
+    await cta.click()
+    await waitForStep(page, 'not_alone')
+  })
+})
+
+test.describe('magic wand (phase 4)', () => {
+  const bubble = (page: import('@playwright/test').Page, name: string) =>
+    page.getByRole('button', { name: `Release ${name}` })
+
+  test('three releases burst, count, store the order and finish with a white Continue', async ({
+    page,
+  }) => {
+    await page.goto('/s/wand?qa')
+    await waitForStep(page, 'wand')
+    await expect(page.getByText('0 / 3 released')).toBeVisible()
+
+    await bubble(page, 'Self-doubt').click({ force: true })
+    await expect(page.getByText('1 / 3 released')).toBeVisible()
+    await expect(page.locator('[data-burst="self_doubt"]')).toBeAttached()
+    await bubble(page, 'Anxiety').click({ force: true })
+    await bubble(page, 'Lack of motivation').click({ force: true })
+
+    await expect(page.getByRole('heading', { name: 'Feel that lightness' })).toBeVisible()
+    await expect(page.getByText("and know it's possible")).toBeVisible()
+    expect(
+      await page.evaluate(
+        () => JSON.parse(sessionStorage.getItem('bloom.funnel.v1')!).answers.wand,
+      ),
+    ).toEqual(['self_doubt', 'anxiety', 'lack_of_motivation'])
+
+    const cta = page.getByRole('button', { name: 'Continue' })
+    expect(await cta.evaluate((el) => getComputedStyle(el).backgroundColor)).toBe(
+      'rgb(255, 255, 255)',
+    )
+    await cta.click()
+    await waitForStep(page, 'procrastinate')
+  })
+
+  test('the bubbles drift slowly', async ({ page }) => {
+    await page.goto('/s/wand?qa')
+    await waitForStep(page, 'wand')
+    const target = bubble(page, 'Burnout')
+    const before = await target.boundingBox()
+    await page.waitForTimeout(1000)
+    const after = await target.boundingBox()
+    const moved = Math.hypot(after!.x - before!.x, after!.y - before!.y)
+    expect(moved).toBeGreaterThan(0.5)
+    expect(moved).toBeLessThan(20)
+  })
+
+  test.describe('with reduced motion', () => {
+    test.use({ reducedMotion: 'reduce' })
+
+    test('the bubbles stay still', async ({ page }) => {
+      await page.goto('/s/wand?qa')
+      await waitForStep(page, 'wand')
+      const target = bubble(page, 'Burnout')
+      const before = await target.boundingBox()
+      await page.waitForTimeout(600)
+      expect(await target.boundingBox()).toEqual(before)
+    })
+  })
+})
+
+test.describe('summary and loader (phase 5)', () => {
+  test('the summary derives the profile and the loader asks twice, then moves on', async ({
+    page,
+  }) => {
+    test.setTimeout(60_000)
+    await page.addInitScript(() => {
+      sessionStorage.setItem(
+        'bloom.funnel.v1',
+        JSON.stringify({
+          answers: {
+            drained: 'often',
+            overthink: 'often',
+            juggling: 'yes',
+            procrastinate: 'always',
+            concentration: 'always',
+            adhd: 'diagnosed',
+            control_life: 'few_weeks',
+            wand: ['self_doubt', 'anxiety'],
+            gender: 'male',
+          },
+          lead: { email: '', name: '' },
+          selectedPlanId: null,
+          paywallStartedAt: null,
+          furthest: 36,
+        }),
+      )
+    })
+    await page.goto('/s/summary')
+    await waitForStep(page, 'summary')
+    await expect(page.getByText('HIGH level', { exact: true })).toBeVisible()
+    for (const value of ['Manage ADHD', 'Few weeks', 'Anxiety', 'Low'])
+      await expect(page.getByText(value, { exact: true })).toBeVisible()
+    await page.getByRole('button', { name: 'Continue' }).click()
+
+    await waitForStep(page, 'loader')
+    const first = page.getByRole('dialog', { name: 'Are you generally rushed in the mornings?' })
+    await expect(first).toBeVisible({ timeout: 8000 })
+    const paused = await page.getByRole('progressbar').first().getAttribute('aria-valuenow')
+    await page.waitForTimeout(700)
+    expect(await page.getByRole('progressbar').first().getAttribute('aria-valuenow')).toBe(paused)
+    await page.getByRole('button', { name: 'Yes' }).click()
+
+    await page
+      .getByRole('dialog', { name: 'Have you heard of habit stacking?' })
+      .waitFor({ timeout: 8000 })
+    await page.getByRole('button', { name: 'No' }).click()
+    await waitForStep(page, 'email')
+
+    // The loader replaced its own history entry: Back skips it.
+    await page.goBack()
+    await waitForStep(page, 'summary')
+  })
+})
+
+test.describe('lead capture (phase 6)', () => {
+  test('email and name lead to a short brand loader and the paywall; Back skips the loader', async ({
+    page,
+  }) => {
+    await page.goto('/s/email?qa')
+    await waitForStep(page, 'email')
+    const email = page.getByRole('textbox', { name: 'Please enter your email' })
+    await expect(email).toBeFocused()
+    await email.fill('not-an-email')
+    await page.keyboard.press('Enter')
+    await expect(page.locator('form [role="alert"]')).toHaveText(
+      'Please enter a valid email address.',
+    )
+    await expect(email).toHaveAttribute('aria-invalid', 'true')
+    await email.fill('qa@example.com')
+    await page.getByRole('button', { name: 'Continue' }).click()
+
+    await waitForStep(page, 'name')
+    await expect(page.getByRole('progressbar')).toHaveAttribute('aria-valuenow', '95')
+    await page.getByRole('textbox', { name: /what do your friends call you/ }).fill('Sam')
+    await page.getByRole('button', { name: 'Continue' }).click()
+    await expect(page.getByRole('button', { name: 'Please wait...' })).toBeVisible()
+
+    await waitForStep(page, 'loading')
+    const started = Date.now()
+    await waitForStep(page, 'paywall')
+    expect(Date.now() - started).toBeLessThan(2500)
+    expect(
+      await page.evaluate(() => JSON.parse(sessionStorage.getItem('bloom.funnel.v1')!).lead),
+    ).toEqual({ email: 'qa@example.com', name: 'Sam' })
+
+    await page.goBack()
+    await waitForStep(page, 'name')
+    await expect(page.getByRole('textbox')).toHaveValue('Sam')
+  })
+})
+
+test.describe('paywall and checkout (phase 7)', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.addInitScript(() => {
+      if (sessionStorage.getItem('bloom.funnel.v1')) return
+      sessionStorage.setItem(
+        'bloom.funnel.v1',
+        JSON.stringify({
+          answers: {},
+          lead: { email: 'qa@example.com', name: 'Sam' },
+          selectedPlanId: null,
+          paywallStartedAt: null,
+          furthest: 41,
+        }),
+      )
+    })
+  })
+
+  test('the checkout total and legal text always follow the chosen plan', async ({ page }) => {
+    await page.goto('/s/paywall')
+    await waitForStep(page, 'paywall')
+    await expect(page.getByRole('radio', { name: /^1 month plan/ })).toHaveAttribute(
+      'aria-checked',
+      'true',
+    )
+    await page.getByRole('radio', { name: /^3 month plan/ }).click()
+    await expect(page.getByText(/The \$16\.99 applies to your first subscription/)).toBeVisible()
+    await page.getByRole('button', { name: 'Continue' }).click()
+
+    await waitForStep(page, 'checkout')
+    const dialog = page.getByRole('dialog')
+    await expect(dialog.getByTestId('checkout-total')).toHaveText('Total$59.99 $16.99')
+    await expect(dialog).toContainText(
+      'You agree that $16.99 will be charged as an intro offer, then $59.99 will be automatically billed every 3 months',
+    )
+    // The provider's buttons show up within 2 s (the reference took 7 to 8 s).
+    const paypal = dialog.getByRole('button', { name: 'Pay with PayPal' })
+    await expect(paypal).toBeVisible({ timeout: 2000 })
+    await paypal.click()
+    await expect(dialog.getByRole('status')).toHaveText(
+      'This is a demo checkout: no payment was taken.',
+    )
+
+    await page.keyboard.press('Escape')
+    await waitForStep(page, 'paywall')
+    await expect(page.getByRole('dialog')).toHaveCount(0)
+    await expect(page.getByRole('radio', { name: /^3 month plan/ })).toHaveAttribute(
+      'aria-checked',
+      'true',
+    )
+  })
+
+  test('the countdown (behind its flag) does not restart on reload', async ({ page }) => {
+    await page.goto('/s/paywall?countdown')
+    await waitForStep(page, 'paywall')
+    await expect(page.getByRole('timer')).toContainText('Discount reserved for:')
+    await page.waitForTimeout(2500)
+    await page.reload()
+    await waitForStep(page, 'paywall')
+    await page.waitForTimeout(1200)
+    const clock = (await page.getByRole('timer').textContent())!.match(/\d\d:\d\d/)![0]
+    expect(clock < '14:58').toBe(true)
+  })
+
+  test('without the flag there is no countdown, only a calm status', async ({ page }) => {
+    await page.goto('/s/paywall')
+    await waitForStep(page, 'paywall')
+    await expect(page.getByText('Sam, your plan is ready')).toBeVisible()
+    await expect(page.getByRole('timer')).toHaveCount(0)
+  })
+})
+
+test.describe('accessibility (axe)', () => {
+  for (const id of [
+    'intro',
+    'wand',
+    'summary',
+    'loader',
+    'email',
+    'name',
+    'paywall',
+    'checkout',
+    'drained',
+    'adhd',
+    'sacrifice',
+    'science',
+    'match',
+    'not_alone',
+    'evidence',
+    'expert',
+  ]) {
+    test(`/s/${id} has no WCAG A/AA violations`, async ({ page }) => {
+      await page.goto(`/s/${id}?qa`)
+      await waitForStep(page, id)
+      // Let entrance animations finish: axe would read half-transparent text as low contrast.
+      await page.waitForTimeout(2500)
+      const results = await new AxeBuilder({ page })
+        .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])
+        .analyze()
+      expect(
+        results.violations.map(
+          (v) => `${v.id}: ${v.nodes.map((n) => n.target.join(' ')).join(' | ')}`,
+        ),
+      ).toEqual([])
+    })
+  }
+})

@@ -1,0 +1,111 @@
+/* 09-interstitial-match.png at 1280x720 (CSS px): glow about 190 across, circles 90 overlapping by
+   14, serif 24/30 headline, two grey lines, the group centred above the CTA. */
+.group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1 1 auto;
+  width: 100%;
+  --art-bubble-size: 90px;
+}
+
+.art {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 194px;
+  height: 194px;
+  margin-bottom: 9px;
+}
+
+.glow {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(244, 172, 120, 0.55) 0%,
+    rgba(249, 217, 170, 0.35) 45%,
+    rgba(249, 217, 170, 0) 70%
+  );
+}
+
+.left,
+.right {
+  position: relative;
+  animation: var(--match-merge, 1000ms) var(--ease-standard) var(--match-delay, 300ms) both;
+}
+
+/* 90 + 90 - 14 = 166 across once merged; each circle starts 28px further out. */
+.left {
+  margin-right: -7px;
+  animation-name: merge-left;
+}
+
+.right {
+  margin-left: -7px;
+  animation-name: merge-right;
+}
+
+.badge {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  translate: -50% -50%;
+  animation: pop 300ms var(--ease-out) 1300ms both;
+}
+
+.title {
+  font: var(--type-headline-md);
+  color: var(--ink-900);
+}
+
+.body {
+  margin-top: 9px;
+  font: var(--fw-subtitle) var(--fs-inter-body) / 24px var(--font-sans);
+  color: var(--ink-600);
+}
+
+.line {
+  display: block;
+}
+
+@keyframes merge-left {
+  from {
+    transform: translateX(-28px);
+  }
+  to {
+    transform: none;
+  }
+}
+
+@keyframes merge-right {
+  from {
+    transform: translateX(28px);
+  }
+  to {
+    transform: none;
+  }
+}
+
+@keyframes pop {
+  from {
+    opacity: 0;
+    scale: 0.4;
+  }
+  to {
+    opacity: 1;
+    scale: 1;
+  }
+}
+
+/* Reduced motion: no sliding or popping, everything is simply there. */
+@media (prefers-reduced-motion: reduce) {
+  .left,
+  .right,
+  .badge {
+    animation: none;
+  }
+}

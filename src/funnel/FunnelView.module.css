@@ -1,0 +1,7 @@
+.noscript {
+  margin: auto;
+  padding: 24px var(--card-gutter-cta);
+  font: var(--type-option);
+  color: var(--ink-700);
+  text-align: center;
+}

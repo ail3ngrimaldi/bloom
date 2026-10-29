@@ -1,0 +1,391 @@
+{
+  "$comment": "English copy of the funnel, kept out of the components (decision D6). Question wording is seeded from the reference funnel (docs/feature-parity/funnel.reference.json) and is TODO(content): Bloom's own copy must replace it before launch. {{brand}} = product name, {{audience}} = men | women | people (from the gender answer). Keys ending in 'Claim' are only shown once Bloom has evidence for the claim (src/funnel/claims.ts); every other text must stay true without it.",
+  "brand": "Bloom",
+  "common": {
+    "continue": "Continue",
+    "pleaseWait": "Please wait...",
+    "chooseAllThatApply": "Choose all that apply",
+    "progressLabel": "Quiz progress",
+    "privacyPolicy": "Privacy Policy",
+    "termsAndConditions": "Terms and Conditions",
+    "subscriptionPolicy": "Subscription Policy",
+    "notMedicalAdvice": "This is not medical advice.",
+    "noscript": "Bloom needs JavaScript to show this step. Please turn it on and reload the page."
+  },
+  "audience": {
+    "men": "men",
+    "women": "women",
+    "people": "people"
+  },
+  "optionSets": {
+    "FREQ4": { "always": "Always", "often": "Often", "sometimes": "Sometimes", "rarely": "Rarely" },
+    "YSN": { "yes": "Yes", "sometimes": "Sometimes", "no": "No" },
+    "OSN": { "often": "Often", "sometimes": "Sometimes", "never": "Never" }
+  },
+  "steps": {
+    "intro": {
+      "title": "You're not lazy, you might be burning out.",
+      "subtitle": "The next questions reveal whether {{brand}} is the right app for you.",
+      "you": "You",
+      "cta": "Continue"
+    },
+    "drained": { "title": "How often do you feel mentally or physically drained?" },
+    "overthink": { "title": "Do you overthink?" },
+    "sleep": { "title": "Do you sleep poorly?" },
+    "selfcare": { "title": "Do you skip self-care?" },
+    "phone": { "title": "Do you feel like you spend too much time on your phone?" },
+    "juggling": {
+      "title": "Do you feel like you're constantly juggling too much and still falling behind?"
+    },
+    "wand": {
+      "title": "If you had a magic wand...",
+      "subtitle": "Tap 3 things you'd make vanish",
+      "counter": "{{count}} / {{total}} released",
+      "counterAnnouncement": "{{count}} of {{total}} released",
+      "bubbles": {
+        "anxiety": "Anxiety",
+        "self_doubt": "Self-doubt",
+        "burnout": "Burnout",
+        "loneliness": "Loneliness",
+        "lack_of_motivation": "Lack of motivation"
+      },
+      "releaseLabel": "Release {{label}}",
+      "finishTitle": "Feel that lightness",
+      "finishSubtitle": "and know it's possible",
+      "cta": "Continue"
+    },
+    "procrastinate": { "title": "How often do you procrastinate on important tasks?" },
+    "restart_habit": {
+      "title": "How often do you find yourself restarting a habit?",
+      "options": {
+        "stick": "I usually stick with things",
+        "rarely": "Rarely, only after major life events",
+        "sometimes": "Sometimes, I drop it for a while",
+        "often": "Often, I'm constantly restarting"
+      }
+    },
+    "concentration": { "title": "Do you have trouble concentrating or staying focused?" },
+    "adhd": {
+      "title": "Do you have ADHD or do you suspect you have it?",
+      "subtitle": "Your answer helps us better understand your needs",
+      "options": {
+        "diagnosed": "Yes, I've been diagnosed with ADHD",
+        "suspect": "I think I might have it",
+        "no": "No, I don't think I have ADHD",
+        "prefer_not": "I'd rather not say"
+      },
+      "privacy": "Optional. By answering you agree that we use it only to tailor your plan; it stays in this browser session. Not a medical assessment."
+    },
+    "untapped": {
+      "title": "Do you feel like there's untapped potential within you?",
+      "options": { "yes": "Yes", "sometimes": "Sometimes", "not_really": "Not really" }
+    },
+    "control_life": {
+      "title": "When was the last time you felt fully in control of your life?",
+      "options": {
+        "this_week": "This week",
+        "few_weeks": "A few weeks ago",
+        "months": "Months ago",
+        "not_sure": "I'm not sure I ever have"
+      }
+    },
+    "gender": {
+      "title": "What is your gender?",
+      "subtitle": "We will use this to personalize your plan",
+      "options": { "female": "Female", "male": "Male", "non_binary": "Non-binary" }
+    },
+    "age": {
+      "title": "What is your age?",
+      "options": {
+        "under_20": "Under 20s",
+        "20s": "20s",
+        "30s": "30s",
+        "40s": "40s",
+        "50_plus": "50+"
+      }
+    },
+    "science": {
+      "title": "The Science of a Better You",
+      "featuredLabelClaim": "As featured on:",
+      "headlineClaim": "Join over {{claims.users}} {{audience}}",
+      "bodyClaim": "Who transformed their lives using science-backed behaviour change techniques.",
+      "headline": "Made for {{audience}} like you",
+      "body": "Your plan uses well-studied behaviour change techniques, one small habit at a time.",
+      "cta": "Continue"
+    },
+    "others_needs": { "title": "Do you tend to put others' needs before your own?" },
+    "others_expect": { "title": "Do others expect too much of you?" },
+    "say_no": { "title": "Do you find it hard to say 'no' to others?" },
+    "sacrifice": {
+      "title": "Which of these do you tend to sacrifice for others?",
+      "options": {
+        "sleep": "Sleep",
+        "nutrition": "Nutrition",
+        "alone_time": "Alone time",
+        "own_goals": "Your own goals",
+        "emotional_space": "Emotional space"
+      }
+    },
+    "missing": {
+      "title": "What is currently missing from your life?",
+      "options": {
+        "motivation": "Motivation",
+        "structure": "Structure",
+        "support": "Support from others",
+        "clear_plan": "A clear plan",
+        "time": "Time",
+        "self_belief": "Belief in myself"
+      }
+    },
+    "wish_understood": {
+      "title": "What's one thing you wish others understood about your struggles?",
+      "options": {
+        "trying_hard": "I'm trying hard",
+        "where_to_start": "I don't know where to start",
+        "time_support": "I need time and support",
+        "stuck": "I want change, but I feel stuck"
+      }
+    },
+    "tried_habits": {
+      "title": "Have you ever tried building habits but couldn't stick with them?",
+      "options": {
+        "many_times": "Yes, many times",
+        "few_times": "A few times",
+        "never_tried": "Never really tried"
+      }
+    },
+    "match": {
+      "title": "It's a match.",
+      "body": "You and {{brand}}\nIt's time to create your plan.",
+      "you": "You",
+      "cta": "Continue"
+    },
+    "not_alone": {
+      "title": "You are not alone",
+      "bodyClaim": "{{brand}} has guided more than {{claims.users}} {{audience}} towards a happier healthier life using simple behavioral science techniques.",
+      "body": "Many {{audience}} feel just like you. {{brand}} guides you towards a happier, healthier life with simple behavioural science.",
+      "cta": "Continue"
+    },
+    "who_for": {
+      "title": "Who are you doing this for?",
+      "options": {
+        "myself": "Myself",
+        "family": "My family",
+        "future_self": "My future self",
+        "believer": "Someone who believes in me",
+        "not_sure": "I don't know yet"
+      }
+    },
+    "lose_motivation": {
+      "title": "Do you tend to lose motivation easily?",
+      "options": { "yes": "Yes", "no": "No", "not_tried": "I haven't tried yet" }
+    },
+    "expert_referral": {
+      "title": "Did you hear about {{brand}} from an expert?",
+      "options": { "yes": "Yes", "no": "No" }
+    },
+    "evidence": {
+      "title": "{{brand}} is built on evidence-based psychological practices",
+      "subtitle": "Your plan draws on decades of behavioural research",
+      "practices": {
+        "habits": "Habit formation",
+        "cbt": "Cognitive reframing",
+        "mindfulness": "Mindfulness"
+      },
+      "practiceCaption": "PRACTICE",
+      "body": "Your habit building plan also gives you tools to manage stress and ease your procrastination tendencies.",
+      "cta": "Continue"
+    },
+    "expert": {
+      "titleClaim": "Your plan will be reviewed by {{emphasis}}",
+      "emphasisClaim": "an expert",
+      "title": "Your plan is shaped by how you {{emphasis}}",
+      "emphasis": "think, feel and act",
+      "chips": { "thoughts": "Thoughts", "feelings": "Feelings", "behavior": "Behavior" },
+      "quote": "\"{{brand}} uses a structured approach to give you personalised guidance and resources that support emotional resilience.\"",
+      "reviewerLabelClaim": "Content reviewed by an expert",
+      "cta": "Continue"
+    },
+    "self_discipline": {
+      "title": "How would you describe your relationship with self-discipline?",
+      "options": {
+        "none": "I have none",
+        "phases": "It comes in phases",
+        "structured": "I'm usually pretty structured"
+      }
+    },
+    "need_most": {
+      "title": "In order to live a better life, what do you think you need most?",
+      "options": {
+        "energy": "More energy",
+        "habits": "Stronger habits",
+        "focus": "Better focus",
+        "peace": "Inner peace"
+      }
+    },
+    "success_30d": {
+      "title": "What would success look like for you in 30 days?",
+      "options": {
+        "wake_motivated": "Waking up feeling motivated",
+        "no_procrastination": "Going a week without procrastinating",
+        "eat_healthier": "Eating healthier meals",
+        "calmer": "Feeling calmer in stressful situations",
+        "morning_routine": "Sticking to a morning routine"
+      }
+    },
+    "biggest_motivation": {
+      "title": "What's your biggest motivation to start now?",
+      "options": {
+        "stop_stuck": "I want to stop feeling stuck",
+        "tired_restarting": "I'm tired of restarting",
+        "long_term": "I want long-term change",
+        "feel_better": "I just want to feel better"
+      }
+    },
+    "summary": {
+      "title": "Summary of your Well-being Profile",
+      "levelLabel": "Negative effects level",
+      "levels": { "low": "Low", "medium": "Medium", "high": "High" },
+      "alerts": {
+        "high": {
+          "title": "HIGH level",
+          "body": "High levels of negative effects can lead to constant procrastination, increased worrying, reduced energy and well-being"
+        },
+        "medium": {
+          "title": "MEDIUM level",
+          "body": "Moderate negative effects can make it harder to keep routines, stay focused and rest well"
+        },
+        "low": {
+          "title": "LOW level",
+          "body": "Your negative effects are low. A few small habits can help you keep it that way"
+        }
+      },
+      "tiles": {
+        "mainDifficulty": "Main difficulty:",
+        "challengingPeriod": "Challenging period:",
+        "trigger": "Trigger:",
+        "energyLevel": "Energy level:"
+      },
+      "mainDifficulty": {
+        "adhd": "Manage ADHD",
+        "attention": "Focus and attention",
+        "procrastination": "Procrastination",
+        "focus": "Staying focused",
+        "habits": "Sticking to habits"
+      },
+      "challengingPeriod": {
+        "days": "Few days",
+        "weeks": "Few weeks",
+        "months": "Several months",
+        "long": "A long time"
+      },
+      "trigger": {
+        "anxiety": "Anxiety",
+        "burnout": "Burnout",
+        "self_doubt": "Self-doubt",
+        "loneliness": "Loneliness",
+        "lack_of_motivation": "Lack of motivation",
+        "stress": "Everyday stress"
+      },
+      "energyLevel": {
+        "very_low": "Very low",
+        "low": "Low",
+        "moderate": "Moderate",
+        "good": "Good"
+      },
+      "meterLabel": "Negative effects level: {{level}}",
+      "disclaimer": "Based on your answers. Not a medical assessment.",
+      "cta": "Continue"
+    },
+    "loader": {
+      "title": "Creating your Personalized Plan",
+      "bars": {
+        "goals": "Setting goals",
+        "strategies": "Selecting strategies",
+        "saving": "Saving plan"
+      },
+      "questions": {
+        "rushed_mornings": "Are you generally rushed in the mornings?",
+        "heard_habit_stacking": "Have you heard of habit stacking?"
+      },
+      "options": { "yes": "Yes", "no": "No" },
+      "tipsLabel": "While your plan is being created",
+      "tips": {
+        "small": {
+          "title": "Small steps, real change",
+          "body": "Your plan starts with habits that take a few minutes, so they fit even your busiest days."
+        },
+        "you": {
+          "title": "Built around you",
+          "body": "Each step follows what you told us about your energy, focus and goals."
+        },
+        "restart": {
+          "title": "Progress, not perfection",
+          "body": "Missing a day is part of the process. Your plan helps you pick up again without guilt."
+        }
+      }
+    },
+    "email": {
+      "title": "Please enter your email",
+      "subtitle": "To save your progress...",
+      "label": "Email",
+      "placeholder": "you@example.com",
+      "error": "Please enter a valid email address.",
+      "cta": "Continue"
+    },
+    "name": {
+      "title": "One last thing, what do your friends call you?",
+      "subtitle": "We will use this for your personal plan.",
+      "label": "Name",
+      "placeholder": "Your name",
+      "error": "Please enter your name (up to 40 characters).",
+      "submitError": "Something went wrong. Please try again.",
+      "cta": "Continue"
+    },
+    "loading": {
+      "title": "Preparing your plan..."
+    },
+    "paywall": {
+      "title": "Choose your plan",
+      "countdownLabel": "Discount reserved for:",
+      "countdownEnded": "Your discount has ended",
+      "readyLabel": "Your plan is ready",
+      "readyName": "{{name}}, your plan is ready",
+      "getPlan": "Get my Plan",
+      "close": "Close",
+      "plans": { "trial_1w": "1 week trial", "month_1": "1 month plan", "month_3": "3 month plan" },
+      "plansLabel": "Plans",
+      "perDay": "Per day",
+      "perDayLabel": "{{price}} per day, instead of {{original}}",
+      "priceLabel": "{{price}} instead of {{original}}",
+      "mostPopular": "MOST POPULAR",
+      "save": "SAVE {{percent}}%",
+      "periods": { "month": "month", "three_months": "3 months" },
+      "legal": "By clicking \"Continue,\" you agree to the {{terms}} and {{privacy}}. The {{price}} applies to your first subscription. Your subscription will automatically renew at the full price of {{renewal}} every {{period}} until you cancel. You can cancel at any time before the renewal date; cancelling stops the next charge and you keep access until the end of the period you paid for.",
+      "demoNotice": "Demo prices: Bloom is not launched yet and no payment can be taken.",
+      "cta": "Continue"
+    },
+    "checkout": {
+      "title": "Your plan is ready. Let's make it real.",
+      "titleEmphasis": "Your plan is ready.",
+      "titleRest": "Let's make it real.",
+      "subtitle": "Checkout in seconds with Apple Pay or PayPal",
+      "total": "Total",
+      "emailLabel": "Email",
+      "emailError": "Please enter a valid email address.",
+      "loadingMethods": "Loading payment options...",
+      "paypal": "Pay with PayPal",
+      "googlePay": "Pay with G Pay (Google Pay)",
+      "card": "Credit Card",
+      "cardBrands": "Visa, American Express, Mastercard",
+      "cardUnavailable": "Card payments will be available at launch.",
+      "safe": "Pay Safe & Secure",
+      "methodsLabel": "Accepted payment methods",
+      "legal": "You agree that {{price}} will be charged as an intro offer, then {{renewal}} will be automatically billed every {{period}} until you cancel. See our {{policy}} for details.",
+      "processing": "Processing...",
+      "demoResult": "This is a demo checkout: no payment was taken.",
+      "close": "Close",
+      "cta": "Close"
+    }
+  }
+}

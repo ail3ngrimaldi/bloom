@@ -36,6 +36,14 @@ const nextConfig: NextConfig = {
     // this shim and tsconfig.json stays the single hand-written source.
     tsconfigPath: 'tsconfig.next.json',
   },
+  async redirects() {
+    // The funnel is the site: the root and the bare /s go to its first step. Temporary (307), and
+    // the query string (campaign parameters) is passed through.
+    return [
+      { source: '/', destination: '/s/intro', permanent: false },
+      { source: '/s', destination: '/s/intro', permanent: false },
+    ]
+  },
   async rewrites() {
     // The QA gallery keeps the URL of the plan (/__gallery). App Router treats folders that start
     // with an underscore as private (not routable), so the real folder is src/app/gallery.

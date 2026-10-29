@@ -1,0 +1,124 @@
+/* Plan cards of 17-paywall.png (CSS px): 457 wide, radius 12, 2px lavender border; selected:
+   #E7E2FD fill and a 2px violet border; the most popular one carries a violet ribbon on top. */
+.card {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 0;
+  border: 2px solid #e2def8;
+  border-radius: 12px;
+  background: var(--surface-option);
+  color: var(--ink-900);
+  text-align: left;
+  overflow: hidden;
+  transition:
+    background-color 150ms var(--ease-standard),
+    border-color 150ms var(--ease-standard);
+}
+
+.card.selected {
+  border-color: var(--paywall-accent);
+  background: var(--paywall-selected-bg);
+}
+
+.popular {
+  border-color: var(--paywall-accent);
+}
+
+/* White text needs a slightly darker violet than the border colour to reach 4.5:1. */
+.ribbon {
+  display: block;
+  padding: 5px 0;
+  background: color-mix(in srgb, var(--paywall-accent) 85%, black);
+  color: var(--on-brand);
+  font: 700 12px / 15px var(--font-sans);
+  letter-spacing: 0.04em;
+  text-align: center;
+}
+
+.body {
+  display: flex;
+  align-items: stretch;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 18px 16px 16px 20px;
+}
+
+.left,
+.right {
+  display: flex;
+  flex-direction: column;
+}
+
+.left {
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.right {
+  align-items: flex-end;
+  justify-content: space-between;
+}
+
+.title,
+.perDayLabel {
+  font: var(--fw-paywall) var(--fs-plan-title) / var(--lh-plan-title) var(--font-sans);
+}
+
+.badge {
+  padding: 3px 8px;
+  border-radius: 6px;
+  background: #ebe6fe;
+  color: #4a33c8;
+  font: 700 13px / 16px var(--font-sans);
+}
+
+.selected .badge {
+  background: color-mix(in srgb, var(--paywall-accent) 85%, black);
+  color: var(--on-brand);
+}
+
+.prices {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  margin-top: auto;
+  font: 600 15px / 20px var(--font-sans);
+}
+
+.struck {
+  color: var(--ink-600);
+  font-weight: 400;
+}
+
+.price {
+  color: var(--ink-700);
+}
+
+.perDay {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.struckRed {
+  color: var(--price-struck-red);
+  font: 400 15px / 20px var(--font-sans);
+}
+
+.money {
+  display: flex;
+  align-items: flex-start;
+  font-weight: var(--fw-price);
+  line-height: 1;
+}
+
+.symbol,
+.fraction {
+  margin-top: 6px;
+  font-size: var(--fs-price-small);
+}
+
+.whole {
+  font-size: var(--fs-price-big);
+}

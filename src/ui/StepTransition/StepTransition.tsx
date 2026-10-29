@@ -14,6 +14,12 @@ export interface StepTransitionProps {
   children: ReactNode
   /** Called with the step key once its content has fully faded in (or mounted, without `appear`). */
   onEntered?: (stepKey: string | number) => void
+  /**
+   * Called with the key whose content is about to fade in: when the old content has faded out
+   * (the gap starts), and again when the gap ends in case the target changed meanwhile. The moment
+   * to swap what surrounds the stage for the next step (page background, frame) unseen.
+   */
+  onSwap?: (stepKey: string | number) => void
   /** Fade the very first content in instead of showing it immediately. */
   appear?: boolean
   className?: string
@@ -29,6 +35,7 @@ export function StepTransition({
   stepKey,
   children,
   onEntered,
+  onSwap,
   appear = false,
   className,
 }: StepTransitionProps) {
@@ -45,9 +52,9 @@ export function StepTransition({
     setSnapshot(children)
   }
 
-  const latest = useRef({ stepKey, children, onEntered })
+  const latest = useRef({ stepKey, children, onEntered, onSwap })
   useEffect(() => {
-    latest.current = { stepKey, children, onEntered }
+    latest.current = { stepKey, children, onEntered, onSwap }
   })
 
   useEffect(() => {
@@ -58,10 +65,13 @@ export function StepTransition({
       if (phase === 'out') {
         setLeaving(null)
         setPhase('gap')
+        latest.current.onSwap?.(latest.current.stepKey)
       } else if (phase === 'gap') {
-        setShownKey(latest.current.stepKey)
+        const next = latest.current.stepKey
+        setShownKey(next)
         setSnapshot(latest.current.children)
         setPhase('in')
+        latest.current.onSwap?.(next)
       } else {
         setPhase('idle')
         latest.current.onEntered?.(shownKey)

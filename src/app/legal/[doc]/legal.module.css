@@ -1,0 +1,25 @@
+.page {
+  max-width: 640px;
+  min-height: 100vh;
+  min-height: 100dvh;
+  margin: 0 auto;
+  padding: 48px var(--card-gutter-cta);
+  background: var(--bg-page-white);
+}
+
+.title {
+  margin-bottom: 16px;
+  font: var(--type-question);
+  color: var(--ink-900);
+}
+
+.text {
+  margin-bottom: 12px;
+  font: var(--type-option);
+  color: var(--ink-700);
+}
+
+.link {
+  font: var(--type-subtitle);
+  color: var(--brand-indigo);
+}

@@ -1,0 +1,148 @@
+/*
+ * Interstitials (PLAN 5.6), measured on 08-12 at 1280x720 in CSS px: the column starts 32 below
+ * the top like the card, titles at about 110, the text block ends 25 above the CTA, and the CTA
+ * ends 56 above the viewport bottom.
+ */
+.column {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  width: 100%;
+  max-width: var(--card-width);
+  margin: 0 auto;
+  padding: var(--card-margin-top) var(--card-gutter-cta)
+    calc(var(--card-margin-bottom) + var(--cta-margin-bottom));
+  text-align: center;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+.footer {
+  display: flex;
+  justify-content: center;
+  flex: none;
+  padding-top: 25px;
+}
+
+/* Indigo 21/26 title of #17 and #26. */
+.title {
+  margin-top: 78px;
+  font: var(--type-inter-title);
+  color: var(--brand-indigo);
+}
+
+/* Free space between the title and the text block, with the art centred in it. */
+.grow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1 1 auto;
+  width: 100%;
+  min-height: 0;
+  padding: 12px 0;
+}
+
+.body {
+  font: var(--type-inter-body);
+  color: var(--brand-indigo);
+}
+
+.headline {
+  margin-bottom: 15px;
+  font: 700 20px / 24px var(--font-sans);
+  color: var(--accent-violet-soft);
+}
+
+.map {
+  width: 300px;
+  max-width: 100%;
+}
+
+.orbits {
+  width: 270px;
+  max-width: 100%;
+}
+
+/* #30: dark 18/22 title and grey subtitle, both narrow like the reference. */
+.darkTitle {
+  max-width: 240px;
+  font: 700 18px / 22px var(--font-sans);
+  color: var(--ink-900);
+}
+
+.evidenceTitle {
+  margin-top: 71px;
+}
+
+.subtitle {
+  max-width: 220px;
+  margin-top: 8px;
+  font: var(--fw-subtitle) var(--fs-inter-body) / 21px var(--font-sans);
+  color: var(--ink-600);
+}
+
+.cards {
+  display: flex;
+  flex-direction: column;
+  gap: 19px;
+  width: 212px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.practice {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  min-height: 78px;
+  padding: 8px 12px;
+  border-radius: var(--radius-option);
+  background: var(--surface-option);
+}
+
+.practiceName {
+  font: 700 17px / 21px var(--font-serif);
+  color: var(--ink-900);
+}
+
+.practiceCaption {
+  font: 500 11px / 14px var(--font-sans);
+  letter-spacing: 0.08em;
+  color: var(--ink-600);
+}
+
+/* #31: art on top, 18/22 title with a violet emphasis, small grey quote. */
+.expertGroup {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1 1 auto;
+  width: 100%;
+}
+
+.diagram {
+  width: 277px;
+  max-width: 100%;
+  margin-bottom: 18px;
+}
+
+.emphasis {
+  color: var(--accent-violet-emphasis);
+}
+
+.quote {
+  max-width: 300px;
+  margin-top: 12px;
+  font: italic 400 13px / 17px var(--font-sans);
+  color: var(--ink-600);
+}

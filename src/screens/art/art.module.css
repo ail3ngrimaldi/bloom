@@ -1,0 +1,66 @@
+.you {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: var(--art-bubble-size, 90px);
+  height: var(--art-bubble-size, 90px);
+  border: 2px solid var(--you-border);
+  border-radius: 50%;
+  background: var(--you-fill);
+  color: var(--you-border);
+  font: 600 19px / 1 var(--font-serif);
+}
+
+.orb {
+  display: block;
+  flex: none;
+  width: var(--art-bubble-size, 90px);
+  height: var(--art-bubble-size, 90px);
+  border-radius: 50%;
+  box-shadow: 0 6px 18px rgba(52, 36, 184, 0.25);
+}
+
+.chip {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 34px;
+  height: 34px;
+  border: 2px dotted var(--progress-fill);
+  border-radius: 50%;
+  background: var(--surface-option);
+  color: var(--ink-600);
+  font: 700 15px / 1 var(--font-sans);
+}
+
+.check {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border: 3px solid var(--surface-option);
+  border-radius: 50%;
+  background: var(--success-green);
+}
+
+.check svg {
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: var(--on-brand);
+  stroke-width: 2.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.illustration {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.wand {
+  display: block;
+  width: 40px;
+  height: 40px;
+}

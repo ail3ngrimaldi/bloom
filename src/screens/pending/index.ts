@@ -1,1 +1,0 @@
-export { PendingScreen } from './PendingScreen'

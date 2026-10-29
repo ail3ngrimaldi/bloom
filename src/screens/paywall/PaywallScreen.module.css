@@ -1,0 +1,206 @@
+/*
+ * Paywall (#41, PLAN 5.10), from 17-paywall.png in CSS px: content 457 wide; a white sticky
+ * header 98 tall with a soft shadow (timer or status, "Get my Plan" pill, close); 26/32 title;
+ * plan cards; a 457 x 57 gradient pill CTA; 12/16 legal text below.
+ */
+.page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1 1 auto;
+  width: 100%;
+  background: var(--bg-page-white);
+}
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  height: var(--paywall-header-height);
+  padding: 0 var(--card-gutter-cta);
+  background: var(--bg-page-white);
+  box-shadow: 0 4px 12px rgba(19, 23, 27, 0.08);
+}
+
+.headerInner {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  max-width: var(--paywall-width);
+  padding-top: 12px;
+}
+
+.status {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.ring {
+  flex: none;
+  width: 36px;
+  height: 36px;
+  transform: rotate(-90deg);
+}
+
+.ringTrack,
+.ringArc {
+  fill: none;
+  stroke-width: 4;
+}
+
+.ringTrack {
+  stroke: var(--paywall-selected-bg);
+}
+
+.ringArc {
+  stroke: var(--paywall-accent);
+  stroke-linecap: round;
+  transition: stroke-dashoffset 1s linear;
+}
+
+.readyIcon {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--paywall-selected-bg);
+}
+
+.readyIcon svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: #5b45e0;
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.statusText {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.statusLabel {
+  font: 400 13px / 17px var(--font-sans);
+  color: var(--ink-600);
+}
+
+.clock {
+  font: 700 18px / 22px var(--font-sans);
+  color: var(--ink-900);
+  font-variant-numeric: tabular-nums;
+}
+
+.getPlan {
+  flex: none;
+  height: 35px;
+  padding: 0 14px;
+  border: 0;
+  border-radius: 18px;
+  background: var(--paywall-grad);
+  color: var(--on-brand);
+  font: 700 14px / 1 var(--font-sans);
+  text-shadow: 0 1px 1px rgba(52, 36, 184, 0.35);
+}
+
+.close {
+  position: absolute;
+  top: 2px;
+  right: -6px;
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--ink-600);
+}
+
+.close svg {
+  width: 14px;
+  height: 14px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: calc(var(--paywall-width) + 2 * var(--card-gutter-cta));
+  padding: 22px var(--card-gutter-cta) 40px;
+}
+
+.title {
+  font: var(--fw-paywall) var(--fs-paywall-title) / var(--lh-paywall-title) var(--font-sans);
+  color: var(--ink-900);
+  text-align: center;
+}
+
+.plans {
+  gap: 10px;
+  width: 100%;
+  margin-top: 22px;
+}
+
+.main > div {
+  width: 100%;
+}
+
+.cta {
+  width: 100%;
+  height: 57px;
+  margin-top: 20px;
+  border: 0;
+  border-radius: 16px;
+  background: var(--paywall-grad);
+  color: var(--on-brand);
+  font: 700 20px / 1 var(--font-sans);
+  text-shadow: 0 1px 2px rgba(52, 36, 184, 0.4);
+  transition: opacity var(--motion-option) var(--ease-standard);
+}
+
+.cta:disabled {
+  opacity: var(--opacity-disabled);
+  cursor: not-allowed;
+}
+
+.legal {
+  margin-top: 14px;
+  font: var(--type-legal);
+  color: var(--ink-700);
+  text-align: center;
+}
+
+.legal a {
+  color: inherit;
+  font-weight: 600;
+  text-decoration: underline;
+}
+
+.demo {
+  margin-top: 12px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  background: var(--bg-page-warm);
+  font: var(--type-legal);
+  color: var(--ink-600);
+  text-align: center;
+}

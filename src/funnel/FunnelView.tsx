@@ -12,6 +12,14 @@ import type { FunnelStep, StepId } from './steps'
 import type { Step } from './types'
 import { useFunnelActions } from './useFunnelActions'
 
+/**
+ * What the step transition is keyed on: the checkout is the paywall with a modal on top, so
+ * moving between them changes the modal, not the page.
+ */
+export function transitionKeyFor(step: Step): string {
+  return step.type === 'checkout' ? 'paywall' : step.id
+}
+
 /** Question and capture screens sit on the quiz card; every other screen fills the page. */
 export function frameFor(step: Step): 'card' | 'bare' {
   return step.type === 'single' || step.type === 'multi' || step.type === 'capture'
@@ -105,7 +113,7 @@ function FunnelStage({ step }: { step: FunnelStep }) {
     <PageShell theme={frameStep.theme}>
       <Card ref={frameRef} variant={frameFor(frameStep)} data-frame-step={frameStep.id}>
         <StepTransition
-          stepKey={step.id}
+          stepKey={transitionKeyFor(step)}
           appear
           onSwap={(key) => setFrameId(key as StepId)}
           onEntered={onEntered}

@@ -18,6 +18,8 @@ export interface FunnelNavigator {
   replace(url: string): void
   /** Path of the URL currently shown, read at call time (not at render time). */
   currentPath(): string
+  /** The browser's Back. */
+  back(): void
 }
 
 /**
@@ -30,6 +32,7 @@ export const historyNavigator: FunnelNavigator = {
   push: (url) => window.history.pushState(null, '', url + window.location.search),
   replace: (url) => window.history.replaceState(null, '', url + window.location.search),
   currentPath: () => window.location.pathname,
+  back: () => window.history.back(),
 }
 
 /**

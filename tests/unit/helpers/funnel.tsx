@@ -7,6 +7,7 @@ import type { FunnelNavigator } from '@/funnel/navigation'
 import { INITIAL_STATE } from '@/funnel/state'
 import type { FunnelState } from '@/funnel/state'
 import { STORAGE_KEY, createFunnelStore } from '@/funnel/store'
+import type { CheckoutProvider } from '@/services/checkout/types'
 import type { LeadService } from '@/services/lead/types'
 import { navigationState } from './nextNavigation'
 
@@ -21,7 +22,13 @@ export function renderFunnel(
     path = '/s/intro',
     state,
     leads,
-  }: { path?: string; state?: Partial<FunnelState>; leads?: LeadService } = {},
+    checkout,
+  }: {
+    path?: string
+    state?: Partial<FunnelState>
+    leads?: LeadService
+    checkout?: CheckoutProvider
+  } = {},
 ) {
   navigationState.pathname = path.split('?')[0]
   window.history.replaceState(null, '', path)
@@ -40,16 +47,24 @@ export function renderFunnel(
   const navigator: FunnelNavigator & {
     push: ReturnType<typeof vi.fn>
     replace: ReturnType<typeof vi.fn>
+    back: ReturnType<typeof vi.fn>
   } = {
     push: vi.fn(go),
     replace: vi.fn(go),
     currentPath: () => navigationState.pathname,
+    back: vi.fn(() => {}),
   }
   const events: FunnelEvent[] = []
   const analytics = { track: (event: FunnelEvent) => void events.push(event) }
 
   const wrap = (node: ReactElement) => (
-    <FunnelProvider store={store} navigator={navigator} analytics={analytics} leads={leads}>
+    <FunnelProvider
+      store={store}
+      navigator={navigator}
+      analytics={analytics}
+      leads={leads}
+      checkout={checkout}
+    >
       {node}
     </FunnelProvider>
   )

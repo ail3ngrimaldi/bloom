@@ -37,10 +37,10 @@ test.describe('entry and routing', () => {
 test.describe('walking the funnel', () => {
   test.use({ reducedMotion: 'reduce' })
 
-  test('goes through the 28 questions in order with the reference wording and progress', async ({
+  test('goes from the intro to the checkout modal: 42 steps, reference wording and progress', async ({
     page,
   }) => {
-    test.setTimeout(120_000)
+    test.setTimeout(180_000)
     const consoleErrors: string[] = []
     page.on('console', (message) => {
       if (message.type() === 'error') consoleErrors.push(message.text())
@@ -49,7 +49,7 @@ test.describe('walking the funnel', () => {
     await page.goto('/s/intro')
     await waitForStep(page, 'intro')
 
-    for (const ref of REFERENCE.steps.filter((step) => step.n < 36)) {
+    for (const ref of REFERENCE.steps.filter((step) => step.n < 42)) {
       await waitForStep(page, ref.id)
       const progress = page.getByRole('progressbar')
       if (ref.type === 'single') {
@@ -65,12 +65,16 @@ test.describe('walking the funnel', () => {
       if (ref.type === 'multi') {
         await expect(page.getByRole('heading', { level: 1 })).toHaveText(ref.title!)
       }
-      // The header shows on single, intro and capture only.
-      await expect(progress).toHaveCount(ref.header ? 1 : 0)
+      // The header shows on single, intro and capture only (the loader has its own bars).
+      if (ref.type !== 'loader') await expect(progress).toHaveCount(ref.header ? 1 : 0)
       await answerStep(page)
     }
 
-    await waitForStep(page, 'summary')
+    await waitForStep(page, 'checkout')
+    const dialog = page.getByRole('dialog', { name: "Your plan is ready. Let's make it real." })
+    await expect(dialog).toBeVisible()
+    await expect(dialog.getByTestId('checkout-total')).toContainText('$8.99')
+    await expect(dialog.getByRole('textbox', { name: 'Email' })).toHaveValue('qa@example.com')
     expect(consoleErrors).toEqual([])
   })
 
@@ -356,6 +360,77 @@ test.describe('lead capture (phase 6)', () => {
   })
 })
 
+test.describe('paywall and checkout (phase 7)', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.addInitScript(() => {
+      if (sessionStorage.getItem('bloom.funnel.v1')) return
+      sessionStorage.setItem(
+        'bloom.funnel.v1',
+        JSON.stringify({
+          answers: {},
+          lead: { email: 'qa@example.com', name: 'Sam' },
+          selectedPlanId: null,
+          paywallStartedAt: null,
+          furthest: 41,
+        }),
+      )
+    })
+  })
+
+  test('the checkout total and legal text always follow the chosen plan', async ({ page }) => {
+    await page.goto('/s/paywall')
+    await waitForStep(page, 'paywall')
+    await expect(page.getByRole('radio', { name: /^1 month plan/ })).toHaveAttribute(
+      'aria-checked',
+      'true',
+    )
+    await page.getByRole('radio', { name: /^3 month plan/ }).click()
+    await expect(page.getByText(/The \$16\.99 applies to your first subscription/)).toBeVisible()
+    await page.getByRole('button', { name: 'Continue' }).click()
+
+    await waitForStep(page, 'checkout')
+    const dialog = page.getByRole('dialog')
+    await expect(dialog.getByTestId('checkout-total')).toHaveText('Total$59.99 $16.99')
+    await expect(dialog).toContainText(
+      'You agree that $16.99 will be charged as an intro offer, then $59.99 will be automatically billed every 3 months',
+    )
+    // The provider's buttons show up within 2 s (the reference took 7 to 8 s).
+    const paypal = dialog.getByRole('button', { name: 'Pay with PayPal' })
+    await expect(paypal).toBeVisible({ timeout: 2000 })
+    await paypal.click()
+    await expect(dialog.getByRole('status')).toHaveText(
+      'This is a demo checkout: no payment was taken.',
+    )
+
+    await page.keyboard.press('Escape')
+    await waitForStep(page, 'paywall')
+    await expect(page.getByRole('dialog')).toHaveCount(0)
+    await expect(page.getByRole('radio', { name: /^3 month plan/ })).toHaveAttribute(
+      'aria-checked',
+      'true',
+    )
+  })
+
+  test('the countdown (behind its flag) does not restart on reload', async ({ page }) => {
+    await page.goto('/s/paywall?countdown')
+    await waitForStep(page, 'paywall')
+    await expect(page.getByRole('timer')).toContainText('Discount reserved for:')
+    await page.waitForTimeout(2500)
+    await page.reload()
+    await waitForStep(page, 'paywall')
+    await page.waitForTimeout(1200)
+    const clock = (await page.getByRole('timer').textContent())!.match(/\d\d:\d\d/)![0]
+    expect(clock < '14:58').toBe(true)
+  })
+
+  test('without the flag there is no countdown, only a calm status', async ({ page }) => {
+    await page.goto('/s/paywall')
+    await waitForStep(page, 'paywall')
+    await expect(page.getByText('Sam, your plan is ready')).toBeVisible()
+    await expect(page.getByRole('timer')).toHaveCount(0)
+  })
+})
+
 test.describe('accessibility (axe)', () => {
   for (const id of [
     'intro',
@@ -364,6 +439,8 @@ test.describe('accessibility (axe)', () => {
     'loader',
     'email',
     'name',
+    'paywall',
+    'checkout',
     'drained',
     'adhd',
     'sacrifice',

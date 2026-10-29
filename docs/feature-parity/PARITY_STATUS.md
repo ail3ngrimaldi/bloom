@@ -45,8 +45,8 @@ Actualiza una fila por paso a medida que se implementa. **Estado:** `pendiente` 
 | 38 | `email` | capture | 6 | listo | `16-lead-capture.png` | `shots/38.png` · `capture.test.tsx` · e2e `funnel.spec.ts` (fase 6, axe) | Validación al enviar, error inline con `aria-invalid`; subrayado y placeholder (recomendación de §5.9) · I-34 |
 | 39 | `name` | capture | 6 | listo | — | `shots/39.png` · `capture.test.tsx`, `services/lead.test.ts` · e2e `funnel.spec.ts` (fase 6, axe) | "Please wait… ⟶" mientras el `LeadService` mock responde; la respuesta de salud no se envía · I-34/I-35 |
 | 40 | `loading` | loading | 6 | listo | — | `shots/40.png` · `capture.test.tsx` · e2e `funnel.spec.ts` (fase 6) | Loader de marca de 1 s (no la pantalla en blanco de 4–5 s); reemplaza su entrada del historial · I-36 |
-| 41 | `paywall` | paywall | 7 | en curso | `17-paywall.png` | `shots/41.png` (placeholder) | Pantalla provisional con título + Continue hasta su fase |
-| 42 | `checkout` | checkout | 7 | en curso | `18-checkout.png` | `shots/42.png` (placeholder) | Pantalla provisional con título + Continue hasta su fase |
+| 41 | `paywall` | paywall | 7 | listo | `17-paywall.png` | `shots/41.png` · `paywall.test.tsx`, `pricing.test.ts` · e2e `funnel.spec.ts` (fase 7, axe) | 3 planes con cálculos de §5.10, 1 mes por defecto, legal dinámico, precios demo etiquetados; contador sólo con flag (D7) · I-37/I-38 |
+| 42 | `checkout` | checkout | 7 | listo | `18-checkout.png` | `shots/42.png` · `paywall.test.tsx` · e2e `funnel.spec.ts` (recorrido completo, fase 7, axe) | Total = plan elegido (no replica el bug); email de #38; botones del `MockCheckoutProvider` en < 2 s; sin formulario de tarjeta · I-39 |
 
 ## Resumen por fase
 
@@ -59,7 +59,7 @@ Actualiza una fila por paso a medida que se implementa. **Estado:** `pendiente` 
 | 4 | Wand interactivo | 8 | listo |
 | 5 | Resumen y loader | 36, 37 | listo |
 | 6 | Captura de lead + transición | 38, 39, 40 | listo |
-| 7 | Paywall y checkout (UI + mock) | 41, 42 | pendiente |
+| 7 | Paywall y checkout (UI + mock) | 41, 42 | listo |
 | 8 | Integraciones reales | — | bloqueado (decisiones §9.1) |
 | 9 | QA, a11y, performance, responsive | todos | pendiente |
 

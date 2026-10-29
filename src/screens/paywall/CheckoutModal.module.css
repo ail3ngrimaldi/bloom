@@ -1,0 +1,318 @@
+/*
+ * Checkout modal (#42, PLAN 5.11), from 18-checkout.png in CSS px: up to 430 x 630 with its own
+ * scroll; 390 wide payment buttons 54 tall; PayPal gold, Google Pay white with a 2px grey border,
+ * the card row on #F0F1F4; a mint "Pay Safe & Secure" pill; 12/16 legal text.
+ */
+.content {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 36px 20px 24px;
+}
+
+.close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--ink-600);
+}
+
+.close svg {
+  width: 14px;
+  height: 14px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+.title {
+  font: 700 20px / 26px var(--font-sans);
+  color: var(--ink-900);
+  text-align: center;
+}
+
+.emphasis {
+  color: #6247f0;
+}
+
+.subtitle {
+  margin-top: 2px;
+  font: 400 15px / 20px var(--font-sans);
+  color: var(--ink-600);
+  text-align: center;
+}
+
+.total {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  width: 100%;
+  margin-top: 22px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #eceef2;
+  font: 400 15px / 20px var(--font-sans);
+  color: var(--ink-900);
+}
+
+.struck {
+  color: var(--ink-600);
+}
+
+.emailField {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: var(--checkout-button-width);
+  margin-top: 16px;
+}
+
+.emailLabel {
+  margin: 0 0 4px 4px;
+  font: var(--type-legal);
+  color: var(--ink-600);
+}
+
+.email {
+  height: 56px;
+  padding: 0 16px;
+  border: 1px solid #dfe3e8;
+  border-radius: 10px;
+  background: var(--surface-option);
+  color: var(--ink-900);
+  font: 400 16px / 22px var(--font-sans);
+}
+
+.email[aria-invalid='true'] {
+  border-color: #b3141f;
+}
+
+.error {
+  margin: 6px 0 0 4px;
+  font: var(--type-legal);
+  color: #b3141f;
+}
+
+.methods {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  max-width: var(--checkout-button-width);
+  margin-top: 12px;
+}
+
+.method {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: var(--checkout-button-height);
+  border: 0;
+  border-radius: 8px;
+  font: 600 16px / 1 var(--font-sans);
+}
+
+.method:disabled {
+  opacity: 0.6;
+  cursor: progress;
+}
+
+.paypal {
+  background: var(--paypal-gold);
+}
+
+.paypalLoading {
+  border: 2px solid var(--paypal-gold);
+  background: var(--surface-option);
+}
+
+/* Text marks, not the providers' logos: this checkout is a mock. */
+.paypalMark {
+  font: italic 800 22px / 1 var(--font-sans);
+  letter-spacing: -0.01em;
+}
+
+.paypalMark span:first-child {
+  color: #1b2e6e;
+}
+
+.paypalMark span:last-child {
+  color: #0f6fae;
+}
+
+.gpay {
+  border: 2px solid #aeb7be;
+  background: var(--surface-option);
+  color: #3c4043;
+}
+
+.gpayMark {
+  font: 500 21px / 1 var(--font-sans);
+}
+
+.g {
+  font-weight: 700;
+  color: #3367d6;
+}
+
+.spinnerSlot {
+  display: grid;
+  place-items: center;
+  height: var(--checkout-button-height);
+}
+
+.spinner {
+  width: 26px;
+  height: 26px;
+  border: 3px solid #d8dbe0;
+  border-top-color: var(--ink-600);
+  border-radius: 50%;
+  animation: spin 900ms linear infinite;
+}
+
+.cardBlock {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.card {
+  gap: 14px;
+  background: #f0f1f4;
+  color: var(--ink-700);
+  font-weight: 500;
+}
+
+.brands {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.visa {
+  font: italic 800 15px / 1 var(--font-sans);
+  color: #1a1f71;
+}
+
+.amex {
+  padding: 5px 6px;
+  border-radius: 3px;
+  background: #2671b9;
+  color: var(--on-brand);
+  font: 800 11px / 1 var(--font-sans);
+}
+
+.mc {
+  display: flex;
+}
+
+.mc span {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #eb001b;
+}
+
+.mc span:last-child {
+  margin-left: -7px;
+  background: #f79e1b;
+  opacity: 0.9;
+}
+
+.cardNote {
+  margin-top: 8px;
+  font: var(--type-legal);
+  color: var(--ink-600);
+  text-align: center;
+}
+
+.status {
+  min-height: 16px;
+  margin-top: 10px;
+  font: 600 13px / 16px var(--font-sans);
+  color: var(--brand-indigo);
+  text-align: center;
+}
+
+.safe {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 10px;
+  padding: 7px 14px;
+  border-radius: 999px;
+  background: var(--safe-pill-bg);
+  color: #13574f;
+  font: 500 13px / 16px var(--font-sans);
+}
+
+.safe svg {
+  width: 14px;
+  height: 14px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+}
+
+.strip {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 5px;
+  margin: 14px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.strip li {
+  padding: 3px 6px;
+  border: 1px solid #e2e5ea;
+  border-radius: 4px;
+  font: 600 10px / 12px var(--font-sans);
+  color: var(--ink-700);
+}
+
+.legal {
+  margin-top: 14px;
+  font: var(--type-legal);
+  color: var(--ink-700);
+  text-align: center;
+}
+
+.legal a {
+  color: inherit;
+  font-weight: 600;
+  text-decoration: underline;
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spinner {
+    animation-duration: 2s !important;
+  }
+}

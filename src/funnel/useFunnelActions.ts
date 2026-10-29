@@ -23,6 +23,8 @@ export interface FunnelActions {
   next(from: Step): void
   /** Goes to any step; the guard still applies. */
   goTo(id: StepId, options?: { replace?: boolean }): void
+  /** The browser's Back (closing the checkout returns to the paywall entry). */
+  back(): void
   setLead(patch: Partial<Lead>): void
   /** Hands the lead to the lead service (health answers left out) and tracks it, without PII. */
   submitLead(): Promise<void>
@@ -55,6 +57,9 @@ export function useFunnelActions(): FunnelActions {
       goTo(id, options) {
         if (options?.replace) navigator.replace(stepPath(id))
         else navigator.push(stepPath(id))
+      },
+      back() {
+        navigator.back()
       },
       setLead(patch) {
         store.dispatch({ type: 'lead', patch })

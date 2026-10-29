@@ -7,7 +7,7 @@ import { IntroScreen } from './intro'
 import { LoaderScreen } from './loader'
 import { LoadingScreen } from './loading'
 import { MultiSelectScreen } from './multi'
-import { PendingScreen } from './pending'
+import { PaywallScreen } from './paywall'
 import { SingleSelectScreen } from './single'
 import { SummaryScreen } from './summary'
 import { WandScreen } from './wand'
@@ -38,7 +38,8 @@ export function StepScreen({ step, onNext }: StepScreenProps) {
       return <SingleSelectScreen step={step} onNext={onNext} />
     case 'multi':
       return <MultiSelectScreen step={step} onNext={onNext} />
-    default:
-      return <PendingScreen step={step} onNext={onNext} />
+    case 'paywall':
+    case 'checkout':
+      return <PaywallScreen step={step} onNext={onNext} />
   }
 }

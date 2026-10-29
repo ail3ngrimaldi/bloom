@@ -39,7 +39,19 @@ export async function answerStep(page: Page, choice = 0) {
   const textbox = page.getByRole('textbox')
   const bubbles = page.getByRole('button', { name: /^Release / })
 
-  if (await radios.count()) {
+  if (from === 'loader') {
+    // Two questions stop the bars; the loader then moves on by itself.
+    for (let i = 0; i < 2; i++) {
+      const dialog = page.getByRole('dialog')
+      await dialog.waitFor({ timeout: 15_000 })
+      await dialog.getByRole('button', { name: 'Yes' }).click()
+      await dialog.waitFor({ state: 'detached' })
+    }
+  } else if (from === 'loading') {
+    // Moves on by itself.
+  } else if (from === 'paywall') {
+    await page.getByRole('button', { name: 'Continue' }).click()
+  } else if (await radios.count()) {
     await radios.nth(choice).click()
   } else if (await checkboxes.count()) {
     await checkboxes.nth(choice).click()
@@ -55,7 +67,7 @@ export async function answerStep(page: Page, choice = 0) {
   } else {
     await page.getByRole('button', { name: 'Continue' }).click()
   }
-  await expect(page).not.toHaveURL(new RegExp(`/s/${from}(\\?|$)`))
+  await expect(page).not.toHaveURL(new RegExp(`/s/${from}(\\?|$)`), { timeout: 20_000 })
   await expect(stage(page)).toHaveAttribute('data-phase', 'idle')
 }
 

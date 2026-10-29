@@ -56,6 +56,7 @@ const SETTLE_MS: Partial<Record<string, number>> = {
   match: 2500,
   summary: 1200,
   loader: 2500,
+  checkout: 1200,
 }
 
 test.use({ viewport: { width: 1280, height: 720 } })

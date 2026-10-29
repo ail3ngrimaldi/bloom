@@ -1,0 +1,16 @@
+.block {
+  margin-bottom: var(--title-options-gap);
+  /* The text sits 9px in from the edge of the options below it. */
+  padding-left: var(--title-inset);
+}
+
+.title {
+  font: var(--type-question);
+  color: var(--ink-900);
+}
+
+.subtitle {
+  margin-top: var(--title-subtitle-gap);
+  font: var(--type-subtitle);
+  color: var(--ink-600);
+}

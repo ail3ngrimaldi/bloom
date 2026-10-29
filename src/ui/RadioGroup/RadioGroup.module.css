@@ -1,0 +1,9 @@
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--option-gap);
+}
+
+.group[data-orientation='horizontal'] {
+  flex-direction: row;
+}

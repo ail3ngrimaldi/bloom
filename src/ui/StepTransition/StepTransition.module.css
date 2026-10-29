@@ -1,0 +1,32 @@
+.stage {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+.leaving {
+  animation: step-out var(--motion-step-out) var(--ease-standard) forwards;
+}
+
+.entering {
+  animation: step-in var(--motion-step-in) var(--ease-standard) both;
+}
+
+@keyframes step-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes step-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

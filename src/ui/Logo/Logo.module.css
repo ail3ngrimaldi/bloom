@@ -1,0 +1,31 @@
+.logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: var(--header-logo-height);
+  color: var(--ink-700);
+}
+
+.glyph {
+  display: block;
+  width: var(--header-logo-height);
+  height: var(--header-logo-height);
+  flex: none;
+}
+
+.petal {
+  fill: var(--brand-violet);
+  fill-opacity: 0.82;
+}
+
+.core {
+  fill: var(--surface-option);
+}
+
+.wordmark {
+  font-family: var(--font-sans);
+  font-size: 20px;
+  font-weight: 600;
+  line-height: var(--header-logo-height);
+  letter-spacing: 0.01em;
+}

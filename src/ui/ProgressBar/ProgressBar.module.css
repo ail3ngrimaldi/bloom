@@ -1,0 +1,14 @@
+.track {
+  width: min(var(--header-progress-width), 100%);
+  height: var(--header-progress-height);
+  border-radius: var(--radius-progress);
+  background: var(--progress-track);
+  overflow: hidden;
+}
+
+.fill {
+  height: 100%;
+  border-radius: var(--radius-progress);
+  background: var(--progress-fill);
+  transition: width var(--motion-progress) var(--ease-out);
+}

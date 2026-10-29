@@ -1,0 +1,44 @@
+.layout {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.content {
+  width: 100%;
+}
+
+/* Single-select: header, title at +124, options 24px below the title. */
+.top .body {
+  padding: var(--title-top) var(--card-gutter-option) 0;
+}
+
+.top[data-has-header] .body {
+  padding-top: calc(var(--title-top) - var(--header-height));
+}
+
+/* Multi-select: centred above the CTA, 2 x bias of bottom padding lifts it by the bias. */
+.center .body {
+  padding: 0 var(--card-gutter-cta) calc(2 * var(--multi-center-bias));
+}
+
+/* margin auto (not justify-content) keeps the top reachable when the content overflows. */
+.center .content {
+  margin-block: auto;
+}
+
+.footer {
+  display: flex;
+  justify-content: center;
+  flex: none;
+  padding: 0 var(--card-gutter-cta) var(--cta-margin-bottom);
+}

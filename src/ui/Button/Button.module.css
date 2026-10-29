@@ -1,0 +1,93 @@
+.button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: var(--cta-width);
+  height: var(--cta-height);
+  padding: 0 16px;
+  border: 0;
+  border-radius: var(--radius-cta);
+  font: var(--type-cta);
+  text-align: center;
+  transition:
+    background-color var(--motion-option) var(--ease-standard),
+    opacity var(--motion-option) var(--ease-standard);
+}
+
+.primary {
+  background: var(--btn-primary-bg);
+  color: var(--btn-primary-fg);
+}
+
+.interstitial {
+  height: var(--cta-interstitial-height);
+}
+
+.white {
+  height: var(--cta-white-height);
+  border-radius: var(--radius-cta-white);
+  background: var(--btn-white-bg);
+  color: var(--btn-white-fg);
+  box-shadow: var(--btn-white-shadow);
+}
+
+.loading {
+  background: var(--btn-loading-bg);
+  cursor: progress;
+}
+
+.disabled {
+  opacity: var(--opacity-disabled);
+  cursor: not-allowed;
+}
+
+.label {
+  min-width: 0;
+}
+
+/* Arrow: a 14px shaft with a chevron head. Hover, focus or press stretches the shaft by 10px
+   (a short arrow becomes a long one) without moving the label: the extra length travels into the
+   button's side padding. */
+.arrow {
+  --stretch: 0px;
+  position: relative;
+  flex: none;
+  width: 18px;
+  height: 18px;
+  margin-left: 6px;
+}
+
+.arrowLine {
+  position: absolute;
+  top: 7.75px;
+  left: 0;
+  width: calc(14px + var(--stretch));
+  height: 2.5px;
+  border-radius: 1px;
+  background: currentColor;
+  transition: width var(--motion-arrow) var(--ease-out);
+}
+
+.arrowHead {
+  position: absolute;
+  top: 4px;
+  left: 0;
+  width: 10px;
+  height: 10px;
+  border-top: 2.5px solid currentColor;
+  border-right: 2.5px solid currentColor;
+  border-top-right-radius: 1px;
+  transform: translateX(calc(3.2px + var(--stretch))) rotate(45deg);
+  transition: transform var(--motion-arrow) var(--ease-out);
+}
+
+.button:not(:disabled):not([aria-disabled='true']):is(
+    :hover,
+    :focus-visible,
+    :active,
+    [data-state='hover']
+  )
+  .arrow {
+  --stretch: 10px;
+}

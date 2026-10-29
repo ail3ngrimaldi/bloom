@@ -70,14 +70,36 @@ there first: Next blocks its dev resources (HMR) and the page loads but never hy
 Next rewrites the tsconfig it type-checks with, adding `<distDir>/types/**` to `include`; a config
 that extends another is left alone, so `tsconfig.json` is never touched, whatever the distDir.
 
+### The funnel
+
+`/` redirects to the first step, `/s/intro` (307, the query string is kept). Every step has its own
+URL, `/s/<stepId>` (ids in `src/funnel/steps.ts`), prerendered at build time; any other id is a 404.
+Moving between steps changes the URL with the History API (`pushState`), which Next.js syncs with
+`usePathname`, so there is no request per step, the browser's Back goes one step back and a reload
+resumes in place. Self-advancing steps (the plan loader, the pre-paywall loading screen) replace
+their history entry instead, so Back never lands on them.
+
+- **State** (answers, lead, chosen plan, furthest step reached) lives in a small external store
+  persisted to `sessionStorage` (`bloom.funnel.v1`): it survives a reload, is gone when the tab
+  closes and is never sent anywhere. The step itself appears once the stored answers are back, so a
+  reload never flashes unpersonalised content; the server renders the empty frame of the step.
+- **Guard.** A visitor can only be on a step up to the furthest one reached by moving forward; a
+  deep link past it (shared URL, stale tab) is sent back there. `?qa` on any step URL skips the
+  guard for QA, only where the dev tools are on (`next dev`, Vercel previews), never in production.
+- **Copy** is in `src/funnel/copy.en.json` (`{{brand}}`, `{{audience}}` placeholders), separate from
+  the step structure in `src/funnel/steps.ts`. Claims that need evidence (user numbers, press,
+  universities, expert, testimonials) are off in `src/funnel/claims.ts` and never rendered.
+- **Analytics** is a stub adapter (`src/funnel/analytics.ts`): nothing is sent; with the dev tools on,
+  events are recorded in `window.__bloomEvents` for QA.
+
 ### QA gallery and dev tools
 
 `/__gallery` (and `/__gallery/quiz-single`, `/__gallery/quiz-multi`) show every design-system
 component. They exist while `isGalleryEnabled()` (`src/lib/env.ts`) is true: under `next dev` and on
 every Vercel deployment, Production included, while the site is pre-launch (see "Deploy on Vercel").
-A production build anywhere else returns 404. The riskier QA tooling (demo content, the step-guard
-bypass) follows the separate `isDevToolsEnabled()`, which is limited to `next dev` and Vercel
-previews and never opens on Production.
+A production build anywhere else returns 404. The riskier QA tooling (the `?qa` step-guard bypass,
+the analytics event log) follows the separate `isDevToolsEnabled()`, which is limited to `next dev`
+and Vercel previews and never opens on Production.
 
 ## Deploy on Vercel
 
@@ -87,12 +109,12 @@ previews and never opens on Production.
 3. No environment variable is required. Nothing is deployed from this repository by itself, and the
    code holds no credentials: payments and every other integration are mocks until real
    credentials are supplied.
-4. **Pre-launch: the gallery is visible everywhere on Vercel.** While there is no funnel to show,
-   every deployment (Preview and Production) serves the UI gallery, and the home page links to it
-   (`next.config.ts` turns `NEXT_PUBLIC_SHOW_GALLERY` on for every Vercel build; nothing has to be
-   configured). **At launch**, set `NEXT_PUBLIC_SHOW_GALLERY=0` on the Production environment and
-   redeploy so real users never see it. Demo content and the other QA tooling are stricter: previews
-   only (`NEXT_PUBLIC_ENABLE_DEV_TOOLS=0` hides them there too), never Production.
+4. **Pre-launch: the gallery is visible everywhere on Vercel.** Every deployment (Preview and
+   Production) serves the funnel at `/` and the UI gallery at `/__gallery` (`next.config.ts` turns
+   `NEXT_PUBLIC_SHOW_GALLERY` on for every Vercel build; nothing has to be configured). **At
+   launch**, set `NEXT_PUBLIC_SHOW_GALLERY=0` on the Production environment and redeploy so real
+   users never see the gallery. The other QA tooling (`?qa`, the event log) is stricter: previews
+   only (`NEXT_PUBLIC_ENABLE_DEV_TOOLS=0` hides it there too), never Production.
 
 The app is a normal Next.js server app (no `output: 'export'`), so route handlers such as
 `/api/leads` can be added later. Reference images and the `.mkv` recording never ship: images live
@@ -102,10 +124,12 @@ only in `docs/`, the recording is ignored by git (see below).
 
 | Path                   | Contents                                                                          |
 | ---------------------- | --------------------------------------------------------------------------------- |
-| `src/app/`             | App Router: `layout.tsx` (fonts, metadata, global CSS), `page.tsx`, `icon.svg`    |
+| `src/app/`             | App Router: `layout.tsx` (fonts, metadata, global CSS), `icon.svg`                |
+| `src/app/s/`           | The funnel: `layout.tsx` (state provider) and `[stepId]/page.tsx` (42 steps)      |
+| `src/app/legal/`       | Placeholder Terms, Privacy Policy and Subscription Policy (`TODO(content)`)       |
 | `src/app/gallery/`     | QA gallery pages (served as `/__gallery` through a rewrite); 404 in production    |
 | `src/lib/`             | Small shared modules (`env.ts`: the two switches)                                 |
-| `src/funnel/`          | Funnel engine: step types, config and copy, store, navigation, progress           |
+| `src/funnel/`          | Funnel engine: step config and copy, store, navigation, progress, `FunnelView`    |
 | `src/screens/`         | One module per screen type (single, multi, intro, wand, paywall, ...)             |
 | `src/ui/`              | Design-system components (Button, OptionCard, Modal, ...) as CSS Modules          |
 | `src/styles/`          | Global design tokens (`tokens.css`) and base styles                               |

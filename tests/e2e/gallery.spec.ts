@@ -38,12 +38,10 @@ function near(actual: number, expected: number) {
 }
 
 test.describe('routing', () => {
-  test('the home link reaches /__gallery through the rewrite to src/app/gallery', async ({
+  test('/__gallery reaches src/app/gallery through the rewrite and links to the twins', async ({
     page,
   }) => {
-    await page.goto('/')
-    await page.getByRole('link', { name: 'Open the UI gallery' }).click()
-    await expect(page).toHaveURL(/\/__gallery$/)
+    await page.goto('/__gallery')
     await expect(page.getByRole('heading', { name: 'Bloom UI gallery' })).toBeVisible()
 
     await page.getByRole('link', { name: 'quiz-multi' }).click()

@@ -1,0 +1,12 @@
+.note {
+  margin-top: var(--option-gap);
+  padding: 0 var(--title-inset);
+  font: var(--type-legal);
+  color: var(--ink-600);
+}
+
+.link {
+  color: var(--brand-indigo);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}

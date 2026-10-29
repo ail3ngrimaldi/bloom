@@ -7,14 +7,14 @@ Import from the barrel (`import { Card, Button } from '@/ui'`). All values come 
 | Component                       | Purpose                                                                                                   |
 | ------------------------------- | --------------------------------------------------------------------------------------------------------- |
 | `PageShell`                     | Full-viewport background by `theme` (`lilac`, `soft`, `dark`, `warm`, `white`); centres its child.        |
-| `Card`                          | The 375 x (viewport - 62) column, radius 32. Full-bleed below 480px. It never animates.                   |
+| `Card`                          | The 375 x (viewport - 62) column, radius 32. Full-bleed below 480px. `variant="bare"` drops the look.     |
 | `Header`, `Logo`, `ProgressBar` | Logo at +42, progress bar (0 to 1) at +75. The logo is an original placeholder (`TODO(content)`).         |
 | `QuizLayout`, `QuestionTitle`   | Vertical structure of question screens: `align="top"` (single) or `"center"` (multi), title at +124.      |
 | `Button`                        | `primary`, `disabled`, `loading` ("Please wait..."), `white`; arrow stretches on hover, focus and press.  |
 | `OptionCard` + `RadioGroup`     | Single-select: 333 x 72 radios in a `radiogroup`, roving tab stop, arrows move focus, Enter/Space select. |
 | `CheckboxRow` + `CheckboxGroup` | Multi-select rows, 325 x 56, `role="checkbox"`, Space toggles.                                            |
 | `Modal`                         | Portal dialog: `size="sheet"` (375 x 648) or `"checkout"` (max 430 x 630), focus trap, ESC, scroll lock.  |
-| `StepTransition`                | Fades the content of the card between steps: out 400 ms, gap 150 ms, in 300 ms. `onEntered(stepKey)`.     |
+| `StepTransition`                | Fades the content of the card between steps: out 400 ms, gap 150 ms, in 300 ms. `onSwap`, `onEntered`.    |
 
 ## Conventions worth knowing
 

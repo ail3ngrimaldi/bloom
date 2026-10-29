@@ -22,3 +22,18 @@
     border-radius: 0;
   }
 }
+
+/* variant="bare": the same element without the card look, for screens that have no card (intro,
+   interstitials, wand, summary, loader, paywall). It fills the page and grows with its content,
+   so the page scrolls; two classes so it also wins over the phone rules above. Keeping one element
+   for both looks lets the funnel swap them without remounting what is inside. */
+.card.bare {
+  width: 100%;
+  height: auto;
+  min-height: 100vh;
+  min-height: 100dvh;
+  margin: 0;
+  border-radius: 0;
+  background: transparent;
+  overflow: visible;
+}

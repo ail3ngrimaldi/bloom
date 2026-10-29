@@ -27,4 +27,18 @@ describe('Card', () => {
     render(<Card data-testid="card">x</Card>)
     expect(screen.getByTestId('card')).not.toHaveAttribute('style')
   })
+
+  it('keeps the same element for the bare variant, marked for styling and QA', () => {
+    const { rerender } = render(<Card data-testid="card">x</Card>)
+    const element = screen.getByTestId('card')
+    expect(element).toHaveAttribute('data-variant', 'card')
+    rerender(
+      <Card data-testid="card" variant="bare">
+        x
+      </Card>,
+    )
+    expect(screen.getByTestId('card')).toBe(element)
+    expect(element).toHaveAttribute('data-variant', 'bare')
+    expect(element.className).toMatch(/bare/)
+  })
 })

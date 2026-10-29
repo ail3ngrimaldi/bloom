@@ -1,0 +1,32 @@
+.shell {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+.alignCenter {
+  align-items: center;
+}
+
+.lilac {
+  background: var(--bg-page-lilac);
+}
+
+.soft {
+  background: var(--bg-page-soft);
+}
+
+.dark {
+  background: var(--bg-page-dark);
+}
+
+.warm {
+  background: var(--bg-page-warm);
+}
+
+.white {
+  background: var(--bg-page-white);
+}

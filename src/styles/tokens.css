@@ -1,3 +1,268 @@
-/* Global design tokens (PLAN section 4). Phase 1 fills this in; keep names brand-neutral. */
+/*
+ * Global design tokens (PLAN section 4). Names are brand-neutral on purpose: restyling Bloom means
+ * editing values here (and the Logo component), never the components.
+ *
+ * Colours were sampled from H.264 frames (+-3 levels per channel): treat them as starting values.
+ * Every text colour is checked against its background in tokens.test.ts (WCAG AA, 4.5:1).
+ */
 :root {
+  color-scheme: light;
+
+  /* ---- 4.1 Colour: page and card backgrounds ---------------------------------------------- */
+  --bg-page-lilac: #eceaff; /* intro, questions, match */
+  --bg-card: #f5f4fd; /* quiz card */
+  --bg-page-soft: #f5f4fd; /* interstitials without card, summary, loader */
+  --bg-page-dark: #0d0e11; /* wand: outside the column */
+  --bg-wand-col: #edebf9; /* wand: the column */
+  --bg-page-warm: #f3f1ef; /* email and name capture */
+  --bg-page-white: #ffffff; /* paywall, checkout */
+
+  /* ---- Surfaces ----------------------------------------------------------------------------- */
+  --surface-option: #ffffff;
+  --surface-option-active: #e4e1fd; /* single: hover, pressed, selected */
+  --surface-option-active-multi: #e3e0fe; /* multi: selected row */
+  --surface-checkbox: #eceaff; /* unchecked box, no border */
+
+  /* ---- Progress bar ------------------------------------------------------------------------- */
+  --progress-track: #ffffff;
+  --progress-fill: #bab3fd;
+
+  /* ---- Brand and accents -------------------------------------------------------------------- */
+  --brand-indigo: #3424b8; /* primary CTA, interstitial text */
+  --brand-violet: #6454fe; /* checked checkbox, summary icons */
+  --accent-violet-soft: #6c5fff; /* big figures. Large text only: 4.1:1 on the card */
+  --accent-violet-emphasis: #6657e3; /* inline emphasis */
+  --on-brand: #ffffff; /* text on indigo and violet */
+
+  /* ---- Ink (text) --------------------------------------------------------------------------- */
+  --ink-900: #13171b; /* titles */
+  --ink-700: #353334; /* option labels */
+  --ink-600: #5c5f73; /* subtitles */
+  /* Sampled #9ca4b0 reached only 2.1:1 on the wand column, so the text token is darkened to AA. */
+  --ink-400: #646971; /* wand counter */
+  --ink-400-sampled: #9ca4b0; /* original sample: decorative use only, never for text */
+
+  /* ---- "You" bubble ------------------------------------------------------------------------- */
+  --you-border: #6f58db;
+  --you-fill-from: #f9d9aa;
+  --you-fill-to: #f4ceb8;
+  --you-fill: linear-gradient(180deg, var(--you-fill-from), var(--you-fill-to));
+
+  /* ---- Status and summary ------------------------------------------------------------------- */
+  --success-green: #11b786;
+  --meter-1: #7bd5f1;
+  --meter-2: #9df6a7;
+  --meter-3: #e6e881;
+  --meter-4: #f0b76d;
+  --meter-5: #ef845d;
+  --meter-6: #f06253;
+  --meter-track: #f3f1ef;
+  --alert-bg: #fbdfe6;
+  --alert-icon-bg: #feb2b6;
+  --alert-icon-fg: #fc4247;
+  --alert-pill-bg: #fedde0;
+
+  /* ---- Loader ------------------------------------------------------------------------------- */
+  --step-1: #35ba9c;
+  --step-2: #f6a76c;
+  --step-3: #e99282;
+  --overlay-loader: rgba(0, 0, 0, 0.5);
+
+  /* ---- Paywall and checkout ----------------------------------------------------------------- */
+  --paywall-accent: #7a60ff; /* ribbon, selected border, timer arc, SAVE badge */
+  --paywall-selected-bg: #e7e2fd;
+  --paywall-grad: linear-gradient(90deg, #636efe 0%, #9c7bfe 50%, #d085fd 100%);
+  --price-struck: #818f9e;
+  --price-struck-red: #bd2128;
+  --checkout-overlay: rgba(0, 0, 0, 0.6);
+  --paypal-gold: #fcc237; /* sampled; the official brand value is #ffc439 */
+  --safe-pill-bg: #bef7f1;
+
+  /* ---- Wand bubbles (mid tone; highlight and glow are added in the component) --------------- */
+  --wand-bubble-anxiety: #6c5fe0;
+  --wand-bubble-self-doubt: #4f78c4;
+  --wand-bubble-burnout: #9a5bbe;
+  --wand-bubble-loneliness: #d2648e;
+  --wand-bubble-motivation: #e08a4a;
+
+  /* ---- Component colours -------------------------------------------------------------------- */
+  --btn-primary-bg: var(--brand-indigo);
+  --btn-primary-fg: var(--on-brand);
+  --btn-loading-bg: #6e62cc;
+  --btn-white-bg: #ffffff;
+  --btn-white-fg: var(--ink-700);
+  --btn-white-shadow: 0 8px 24px rgba(19, 23, 27, 0.18);
+  --opacity-disabled: 0.35;
+  --checkbox-checked-bg: var(--brand-violet);
+  --focus-ring-color: var(--brand-indigo);
+  --focus-ring-width: 3px;
+  --focus-ring-offset: 2px;
+
+  /* ---- 4.3 Radii ---------------------------------------------------------------------------- */
+  --radius-card: 32px;
+  --radius-sheet: 32px; /* modal that mirrors the card */
+  --radius-dialog: 24px; /* checkout modal (not measured: assumed) */
+  --radius-option: 12px;
+  --radius-cta: 10px;
+  --radius-cta-white: 20px;
+  --radius-checkbox: 6px;
+  --radius-progress: 2px;
+  --radius-loader-bar: 22px;
+
+  /* ---- 4.3 Measures ------------------------------------------------------------------------- */
+  --card-width: 375px;
+  --card-height: calc(100vh - 62px);
+  --card-margin-top: 32px;
+  --card-margin-bottom: 30px;
+  --card-gutter-option: 21px; /* side padding around options and the progress bar */
+  --card-gutter-cta: 25px; /* side padding around the CTA and multi rows */
+  --card-mobile-breakpoint: 480px; /* below this width the card is full-bleed */
+
+  --header-logo-top: 42px;
+  --header-logo-height: 26px;
+  --header-progress-top: 75px;
+  --header-progress-height: 3px;
+  --header-progress-width: 333px;
+  --header-height: calc(var(--header-progress-top) + var(--header-progress-height));
+  --title-top: 124px; /* question title block, measured from the card top */
+  --title-inset: 9px; /* the title text sits this far in from the option edge */
+  --title-subtitle-gap: 4px;
+  --title-options-gap: 24px;
+
+  --option-width: 333px;
+  --option-height: 72px;
+  --option-gap: 9px;
+  --option-padding: 16px;
+  /* Where the label sits inside an option (decision D5): flex-end = bottom-left, center = middle. */
+  --option-label-align: flex-end;
+
+  --multi-row-width: 325px;
+  --multi-row-height: 56px;
+  --multi-row-gap: 9px;
+  --multi-row-padding-block: 15px;
+  --checkbox-size: 24px;
+  --checkbox-inset: 17px;
+  --checkbox-label-inset: 59px;
+  --multi-center-bias: 6px; /* the centred block sits this much above true centre */
+
+  --cta-width: 325px;
+  --cta-height: 52px;
+  --cta-interstitial-height: 50px; /* observed 47 to 53 */
+  --cta-white-height: 40px;
+  --cta-margin-bottom: 26px;
+
+  --wand-col-width: 365px;
+  --summary-width: 520px;
+  --summary-tile-width: 256px;
+  --summary-tile-height: 46px;
+  --summary-cta-width: 274px;
+  --loader-bar-width: 270px;
+  --loader-bar-height: 44px;
+  --loader-bar-gap: 12px;
+  --sheet-width: 375px;
+  --sheet-height: 648px;
+  --sheet-button-width: 157px;
+  --sheet-button-height: 60px;
+  --sheet-button-gap: 9px;
+  --paywall-width: 457px;
+  --paywall-header-height: 98px;
+  --checkout-max-width: 430px;
+  --checkout-max-height: 630px;
+  --checkout-button-width: 390px;
+  --checkout-button-height: 54px;
+
+  /* ---- 4.2 Typography ----------------------------------------------------------------------- */
+  --font-sans:
+    'Inter Variable', 'Inter Fallback', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-serif: 'Source Serif 4 Variable', Georgia, 'Times New Roman', serif;
+
+  --fs-headline-lg: 26px; /* intro */
+  --lh-headline-lg: 31px;
+  --fs-headline-md: 24px; /* match */
+  --lh-headline-md: 30px;
+  --fs-headline-sm: 22px; /* wand */
+  --lh-headline-sm: 28px;
+  --fw-headline: 500;
+
+  --fs-question: 20px;
+  --lh-question: 24px;
+  --fw-question: 700;
+  --fs-subtitle: 14px;
+  --lh-subtitle: 17px;
+  --fw-subtitle: 400;
+  --fs-option: 15px;
+  --lh-option: 20px;
+  --fw-option: 400;
+  --fs-cta: 17px;
+  --lh-cta: 24px;
+  --fw-cta: 600;
+  --fs-inter-title: 21px;
+  --lh-inter-title: 26px;
+  --fw-inter-title: 700;
+  --fs-inter-body: 15px;
+  --lh-inter-body: 23px;
+  --fw-inter-body: 500;
+  --fs-paywall-title: 26px;
+  --lh-paywall-title: 32px;
+  --fs-plan-title: 18px;
+  --lh-plan-title: 22px;
+  --fw-paywall: 700;
+  --fs-price-big: 44px; /* the integer digit of the per-day price */
+  --fs-price-small: 16px; /* currency sign and decimals */
+  --fw-price: 600;
+  --fs-legal: 12px;
+  --lh-legal: 16px;
+  --fw-legal: 400;
+
+  --type-headline-lg: var(--fw-headline) var(--fs-headline-lg) / var(--lh-headline-lg)
+    var(--font-serif);
+  --type-headline-md: var(--fw-headline) var(--fs-headline-md) / var(--lh-headline-md)
+    var(--font-serif);
+  --type-headline-sm: var(--fw-headline) var(--fs-headline-sm) / var(--lh-headline-sm)
+    var(--font-serif);
+  --type-question: var(--fw-question) var(--fs-question) / var(--lh-question) var(--font-sans);
+  --type-subtitle: var(--fw-subtitle) var(--fs-subtitle) / var(--lh-subtitle) var(--font-sans);
+  --type-option: var(--fw-option) var(--fs-option) / var(--lh-option) var(--font-sans);
+  --type-cta: var(--fw-cta) var(--fs-cta) / var(--lh-cta) var(--font-sans);
+  --type-inter-title: var(--fw-inter-title) var(--fs-inter-title) / var(--lh-inter-title)
+    var(--font-sans);
+  --type-inter-body: var(--fw-inter-body) var(--fs-inter-body) / var(--lh-inter-body)
+    var(--font-sans);
+  --type-legal: var(--fw-legal) var(--fs-legal) / var(--lh-legal) var(--font-sans);
+
+  /* ---- 4.4 Motion --------------------------------------------------------------------------- */
+  /* The three step durations are mirrored by STEP_OUT_MS, STEP_GAP_MS and STEP_IN_MS in
+     src/ui/StepTransition/timing.ts (a unit test keeps both in sync). */
+  --motion-step-out: 400ms; /* outgoing content fades 1 to 0; the card stays */
+  --motion-step-gap: 150ms; /* nothing is shown between exit and entrance */
+  --motion-step-in: 300ms; /* incoming content fades 0 to 1 */
+  --motion-option: 120ms; /* option hover, pressed and selected background */
+  --motion-arrow: 150ms; /* CTA arrow stretch */
+  --motion-progress: 400ms; /* progress bar fill */
+  --motion-overlay: 150ms; /* modal appearing */
+  --motion-reduced-fade: 100ms; /* the longest fade allowed under prefers-reduced-motion */
+
+  --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in: cubic-bezier(0.64, 0, 0.78, 1);
+}
+
+/* Only fades remain: no travel, no stretching, nothing longer than --motion-reduced-fade. */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --motion-step-out: 100ms;
+    --motion-step-gap: 0ms;
+    --motion-step-in: 100ms;
+    --motion-option: 60ms;
+    --motion-arrow: 0ms;
+    --motion-progress: 100ms;
+    --motion-overlay: 100ms;
+  }
+}
+
+/* 100vh is the fallback for browsers without dynamic viewport units. */
+@supports (height: 100dvh) {
+  :root {
+    --card-height: calc(100dvh - 62px);
+  }
 }

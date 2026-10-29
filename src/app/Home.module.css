@@ -1,0 +1,25 @@
+.main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  gap: 12px;
+  padding: 0 var(--card-gutter-cta) var(--cta-margin-bottom);
+  text-align: center;
+}
+
+.title {
+  font: var(--type-headline-lg);
+  color: var(--ink-900);
+}
+
+.text {
+  font: var(--type-subtitle);
+  color: var(--ink-600);
+}
+
+.link {
+  font: var(--type-subtitle);
+  color: var(--brand-indigo);
+}

@@ -3,8 +3,23 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#eceaff" />
+    <meta name="color-scheme" content="light" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <title>Bloom</title>
+    <!-- Critical CSS: paint the lilac page background from the first pixel (PLAN 5.2), so there is
+         no black or white flash while the JS bundle and the stylesheet load. Keep it in sync with
+         --bg-page-lilac in src/styles/tokens.css. -->
+    <style>
+      html,
+      body {
+        margin: 0;
+        background: #eceaff;
+      }
+      body {
+        min-height: 100vh;
+      }
+    </style>
   </head>
   <body>
     <div id="root"></div>

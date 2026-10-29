@@ -1,0 +1,45 @@
+.option {
+  display: flex;
+  align-items: var(--option-label-align);
+  inline-size: min(100%, var(--option-width));
+  min-height: var(--option-height);
+  padding: var(--option-padding);
+  border: 0;
+  border-radius: var(--radius-option);
+  background: var(--surface-option);
+  color: var(--ink-700);
+  font: var(--type-option);
+  text-align: left;
+  transition: background-color var(--motion-option) var(--ease-standard);
+}
+
+.icon {
+  display: flex;
+  align-items: center;
+  align-self: center;
+  flex: none;
+  margin-right: 12px;
+}
+
+.label {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+@media (hover: hover) {
+  .option:hover {
+    background: var(--surface-option-active);
+  }
+}
+
+.option:active,
+.option[data-state='hover'],
+.option[data-state='pressed'],
+.option[aria-checked='true'] {
+  background: var(--surface-option-active);
+}
+
+.option:disabled {
+  cursor: not-allowed;
+  opacity: var(--opacity-disabled);
+}

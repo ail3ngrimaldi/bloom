@@ -15,6 +15,7 @@ import type { ScreenProps } from '../types'
  */
 export function MultiSelectScreen({ step, onNext }: ScreenProps<'multi'>) {
   const titleId = useId()
+  const subtitleId = useId()
   const { answers } = useFunnelState()
   const actions = useFunnelActions()
   const text = stepCopy(step.id)
@@ -37,11 +38,12 @@ export function MultiSelectScreen({ step, onNext }: ScreenProps<'multi'>) {
       }
     >
       <QuestionTitle
-        id={titleId}
+        titleId={titleId}
+        subtitleId={subtitleId}
         title={personalize(text.title, answers)}
         subtitle={text.subtitle ?? copy.common.chooseAllThatApply}
       />
-      <CheckboxGroup aria-labelledby={titleId}>
+      <CheckboxGroup aria-labelledby={titleId} aria-describedby={subtitleId}>
         {step.options.map((option) => (
           <CheckboxRow
             key={option}

@@ -2,6 +2,8 @@
 
 import { createContext, useContext, useState, useSyncExternalStore } from 'react'
 import type { ReactNode } from 'react'
+import { mockLeadService } from '@/services/lead/mock'
+import type { LeadService } from '@/services/lead/types'
 import { localAnalytics } from './analytics'
 import type { AnalyticsAdapter } from './analytics'
 import { historyNavigator } from './navigation'
@@ -14,6 +16,7 @@ interface FunnelContextValue {
   store: FunnelStore
   navigator: FunnelNavigator
   analytics: AnalyticsAdapter
+  leads: LeadService
 }
 
 const FunnelContext = createContext<FunnelContextValue | null>(null)
@@ -25,14 +28,23 @@ export interface FunnelProviderProps {
   /** Defaults to the History API. */
   navigator?: FunnelNavigator
   analytics?: AnalyticsAdapter
+  /** Defaults to the mock, which sends nothing. */
+  leads?: LeadService
 }
 
 /** Holds the funnel state for every /s/* page; it lives in the layout, so it outlasts each step. */
-export function FunnelProvider({ children, store, navigator, analytics }: FunnelProviderProps) {
+export function FunnelProvider({
+  children,
+  store,
+  navigator,
+  analytics,
+  leads,
+}: FunnelProviderProps) {
   const [value] = useState<FunnelContextValue>(() => ({
     store: store ?? createFunnelStore(sessionStorageOrNull()),
     navigator: navigator ?? historyNavigator,
     analytics: analytics ?? localAnalytics,
+    leads: leads ?? mockLeadService,
   }))
   return <FunnelContext.Provider value={value}>{children}</FunnelContext.Provider>
 }

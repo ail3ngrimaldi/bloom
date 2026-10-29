@@ -42,9 +42,9 @@ Actualiza una fila por paso a medida que se implementa. **Estado:** `pendiente` 
 | 35 | `biggest_motivation` | single | 2 | listo | — | `shots/35.png` · e2e `funnel.spec.ts` (recorrido) | |
 | 36 | `summary` | summary | 5 | listo | `13-summary.png` | `shots/36.png` · `summary.test.tsx`, `profile/derive.test.ts` · e2e `funnel.spec.ts` (fase 5, axe) | Reglas de §6.5; "Focus and attention" si sólo se sospecha TDAH; aviso "Not a medical assessment" · I-32 |
 | 37 | `loader` | loader | 5 | listo | `14-loader-states.png` | `shots/37.png`, `shots/37b.png` · `loader.test.tsx`, `loaderScript.test.ts` · e2e `funnel.spec.ts` (fase 5, axe) | 2 preguntas bloqueantes (50 %, 58 %); notas propias en vez de testimonios; texto oscuro sobre las barras (AA) · I-33 |
-| 38 | `email` | capture | 6 | en curso | `16-lead-capture.png` | `shots/38.png` (placeholder) | Pantalla provisional con título + Continue hasta su fase |
-| 39 | `name` | capture | 6 | en curso | — | `shots/39.png` (placeholder) | Pantalla provisional con título + Continue hasta su fase |
-| 40 | `loading` | loading | 6 | en curso | — | `shots/40.png` (placeholder) | Pantalla provisional con título + Continue hasta su fase |
+| 38 | `email` | capture | 6 | listo | `16-lead-capture.png` | `shots/38.png` · `capture.test.tsx` · e2e `funnel.spec.ts` (fase 6, axe) | Validación al enviar, error inline con `aria-invalid`; subrayado y placeholder (recomendación de §5.9) · I-34 |
+| 39 | `name` | capture | 6 | listo | — | `shots/39.png` · `capture.test.tsx`, `services/lead.test.ts` · e2e `funnel.spec.ts` (fase 6, axe) | "Please wait… ⟶" mientras el `LeadService` mock responde; la respuesta de salud no se envía · I-34/I-35 |
+| 40 | `loading` | loading | 6 | listo | — | `shots/40.png` · `capture.test.tsx` · e2e `funnel.spec.ts` (fase 6) | Loader de marca de 1 s (no la pantalla en blanco de 4–5 s); reemplaza su entrada del historial · I-36 |
 | 41 | `paywall` | paywall | 7 | en curso | `17-paywall.png` | `shots/41.png` (placeholder) | Pantalla provisional con título + Continue hasta su fase |
 | 42 | `checkout` | checkout | 7 | en curso | `18-checkout.png` | `shots/42.png` (placeholder) | Pantalla provisional con título + Continue hasta su fase |
 
@@ -58,7 +58,7 @@ Actualiza una fila por paso a medida que se implementa. **Estado:** `pendiente` 
 | 3 | Intro e intermedias | 1, 17, 25, 26, 30, 31 | listo |
 | 4 | Wand interactivo | 8 | listo |
 | 5 | Resumen y loader | 36, 37 | listo |
-| 6 | Captura de lead + transición | 38, 39, 40 | pendiente |
+| 6 | Captura de lead + transición | 38, 39, 40 | listo |
 | 7 | Paywall y checkout (UI + mock) | 41, 42 | pendiente |
 | 8 | Integraciones reales | — | bloqueado (decisiones §9.1) |
 | 9 | QA, a11y, performance, responsive | todos | pendiente |

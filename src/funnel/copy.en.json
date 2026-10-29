@@ -338,6 +338,7 @@
       "label": "Name",
       "placeholder": "Your name",
       "error": "Please enter your name (up to 40 characters).",
+      "submitError": "Something went wrong. Please try again.",
       "cta": "Continue"
     },
     "loading": {

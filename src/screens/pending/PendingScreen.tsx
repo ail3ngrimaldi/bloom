@@ -9,7 +9,7 @@ import { Button, Header } from '@/ui'
 import type { ScreenProps } from '../types'
 import styles from './PendingScreen.module.css'
 
-type PendingType = 'capture' | 'loading' | 'paywall' | 'checkout'
+type PendingType = 'paywall' | 'checkout'
 
 /**
  * Stand-in for a screen type that is not built yet: its title and a Continue button, so the whole

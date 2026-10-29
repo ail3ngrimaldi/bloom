@@ -83,6 +83,16 @@ describe('Button', () => {
       expect(button).toHaveFocus()
     })
 
+    it('can keep its arrow while loading, as "Please wait..." does on the name step', () => {
+      const { container } = render(
+        <Button loading arrow>
+          Continue
+        </Button>,
+      )
+      expect(screen.getByRole('button', { name: 'Please wait...' })).toBeInTheDocument()
+      expect(container.querySelector('[aria-hidden="true"]')).not.toBeNull()
+    })
+
     it('allows a custom loading label', () => {
       render(
         <Button loading loadingLabel="Saving...">

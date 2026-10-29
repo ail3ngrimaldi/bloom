@@ -83,12 +83,17 @@ function FunnelStage({ step }: { step: FunnelStep }) {
 
   const onNext = useCallback(() => actions.next(step), [actions, step])
 
-  // After a step change, focus the new heading so screen readers announce it. Not on first load.
+  // After a step change, focus what the step asks for first (a field marked data-autofocus) or
+  // else its heading, so screen readers announce it. On first load only a field gets focus.
   const onEntered = useCallback(() => {
-    if (firstEntrance.current) {
-      firstEntrance.current = false
+    const first = firstEntrance.current
+    firstEntrance.current = false
+    const field = frameRef.current?.querySelector<HTMLElement>('[data-autofocus]')
+    if (field) {
+      field.focus({ preventScroll: true })
       return
     }
+    if (first) return
     const heading = frameRef.current?.querySelector<HTMLElement>('h1')
     if (!heading) return
     heading.tabIndex = -1

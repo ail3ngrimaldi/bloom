@@ -91,3 +91,8 @@
   .arrow {
   --stretch: 10px;
 }
+
+/* "Please wait... ⟶" (#39): a loading button that keeps its arrow shows it long. */
+.loading .arrow {
+  --stretch: 10px;
+}

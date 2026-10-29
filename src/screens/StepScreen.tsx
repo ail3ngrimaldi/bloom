@@ -1,9 +1,11 @@
 'use client'
 
 import type { FunnelStep } from '@/funnel/steps'
+import { CaptureScreen } from './capture'
 import { InterstitialScreen } from './inter'
 import { IntroScreen } from './intro'
 import { LoaderScreen } from './loader'
+import { LoadingScreen } from './loading'
 import { MultiSelectScreen } from './multi'
 import { PendingScreen } from './pending'
 import { SingleSelectScreen } from './single'
@@ -24,6 +26,10 @@ export function StepScreen({ step, onNext }: StepScreenProps) {
       return <WandScreen step={step} onNext={onNext} />
     case 'loader':
       return <LoaderScreen step={step} onNext={onNext} />
+    case 'capture':
+      return <CaptureScreen step={step} onNext={onNext} />
+    case 'loading':
+      return <LoadingScreen step={step} onNext={onNext} />
     case 'summary':
       return <SummaryScreen step={step} onNext={onNext} />
     case 'inter':

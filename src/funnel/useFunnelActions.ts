@@ -2,6 +2,7 @@
 
 import { useMemo } from 'react'
 import type { PlanId } from '@/pricing/types'
+import { buildLeadSubmission } from '@/services/lead/submission'
 import type { Lead } from '@/services/lead/types'
 import type { FunnelEvent } from './analytics'
 import { useFunnelContext } from './FunnelProvider'
@@ -23,6 +24,8 @@ export interface FunnelActions {
   /** Goes to any step; the guard still applies. */
   goTo(id: StepId, options?: { replace?: boolean }): void
   setLead(patch: Partial<Lead>): void
+  /** Hands the lead to the lead service (health answers left out) and tracks it, without PII. */
+  submitLead(): Promise<void>
   selectPlan(planId: PlanId): void
   /** Starts the paywall countdown once; later calls keep the first start time. */
   startPaywall(): void
@@ -30,7 +33,7 @@ export interface FunnelActions {
 }
 
 export function useFunnelActions(): FunnelActions {
-  const { store, navigator, analytics } = useFunnelContext()
+  const { store, navigator, analytics, leads } = useFunnelContext()
 
   return useMemo<FunnelActions>(
     () => ({
@@ -56,6 +59,10 @@ export function useFunnelActions(): FunnelActions {
       setLead(patch) {
         store.dispatch({ type: 'lead', patch })
       },
+      async submitLead() {
+        await leads.submit(buildLeadSubmission(store.getState()))
+        analytics.track({ name: 'lead_submit' })
+      },
       selectPlan(planId) {
         store.dispatch({ type: 'selectPlan', planId })
         analytics.track({ name: 'plan_select', planId })
@@ -67,6 +74,6 @@ export function useFunnelActions(): FunnelActions {
         analytics.track(event)
       },
     }),
-    [store, navigator, analytics],
+    [store, navigator, analytics, leads],
   )
 }

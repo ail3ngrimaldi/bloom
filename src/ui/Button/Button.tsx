@@ -16,7 +16,10 @@ export interface ButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement
   disabled?: boolean
   loading?: boolean
   loadingLabel?: string
-  /** Trailing arrow that stretches on hover, focus and press. Defaults to on for primary. */
+  /**
+   * Trailing arrow that stretches on hover, focus and press. Defaults to on for primary and off
+   * while loading; `arrow` forces it, and a loading button then shows it stretched (#39).
+   */
   arrow?: boolean
 }
 
@@ -48,7 +51,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
   const isLoading = loading || variant === 'loading'
   const isDisabled = !isLoading && (disabled || variant === 'disabled')
   const isWhite = variant === 'white'
-  const showArrow = !isLoading && (arrow ?? !isWhite)
+  const showArrow = arrow ?? (!isLoading && !isWhite)
 
   // A loading button stays focusable (focus must not vanish mid-submit) but ignores activation.
   const handleClick = (event: MouseEvent<HTMLButtonElement>) => {

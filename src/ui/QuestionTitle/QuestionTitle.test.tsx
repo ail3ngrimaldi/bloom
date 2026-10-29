@@ -26,4 +26,15 @@ describe('QuestionTitle', () => {
       screen.getByRole('heading', { name: 'Question' }),
     )
   })
+
+  it('can put ids on the heading and the subtitle, to name and describe a control', () => {
+    render(
+      <>
+        <QuestionTitle titleId="q" subtitleId="s" title="Question?" subtitle="Hint" />
+        <input aria-labelledby="q" aria-describedby="s" />
+      </>,
+    )
+    const input = screen.getByRole('textbox', { name: 'Question?' })
+    expect(input).toHaveAccessibleDescription('Hint')
+  })
 })

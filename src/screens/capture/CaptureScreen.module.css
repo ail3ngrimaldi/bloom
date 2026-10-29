@@ -1,0 +1,51 @@
+/*
+ * Lead capture (#38, #39), from 16-lead-capture.png: the block is centred in the card height
+ * above the CTA, header included (so it sits half a header higher than QuizLayout centres it).
+ * The reference field has no visible box; Bloom adds a hairline underline and a placeholder so
+ * it reads as a field (PLAN 5.9 recommendation).
+ */
+.form {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+.block {
+  position: relative;
+  top: calc(var(--header-height) / -2);
+}
+
+.input {
+  display: block;
+  width: 100%;
+  margin-top: -8px;
+  padding: 8px var(--title-inset);
+  border: 0;
+  border-bottom: 1px solid var(--progress-fill);
+  border-radius: 0;
+  background: transparent;
+  color: var(--ink-900);
+  font: 400 16px / 22px var(--font-sans);
+  caret-color: var(--brand-indigo);
+}
+
+.input::placeholder {
+  color: var(--ink-600);
+  opacity: 1;
+}
+
+.input:focus-visible {
+  outline-offset: 0;
+}
+
+.input[aria-invalid='true'] {
+  border-bottom-color: #b3141f;
+}
+
+.error {
+  margin-top: 8px;
+  padding: 0 var(--title-inset);
+  font: var(--type-legal);
+  color: #b3141f;
+}

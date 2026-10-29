@@ -18,6 +18,7 @@ import { PrivacyNote } from './PrivacyNote'
  */
 export function SingleSelectScreen({ step, onNext }: ScreenProps<'single'>) {
   const titleId = useId()
+  const subtitleId = useId()
   const { answers } = useFunnelState()
   const actions = useFunnelActions()
   const [picked, setPicked] = useState<string | null>(null)
@@ -41,12 +42,14 @@ export function SingleSelectScreen({ step, onNext }: ScreenProps<'single'>) {
   return (
     <QuizLayout header={<Header progress={progressFor(step)} />}>
       <QuestionTitle
-        id={titleId}
+        titleId={titleId}
+        subtitleId={subtitleId}
         title={personalize(text.title, answers)}
         subtitle={text.subtitle && personalize(text.subtitle, answers)}
       />
       <RadioGroup
         aria-labelledby={titleId}
+        aria-describedby={text.subtitle ? subtitleId : undefined}
         value={picked ?? (typeof stored === 'string' ? stored : null)}
         onValueChange={choose}
       >

@@ -319,12 +319,51 @@ test.describe('summary and loader (phase 5)', () => {
   })
 })
 
+test.describe('lead capture (phase 6)', () => {
+  test('email and name lead to a short brand loader and the paywall; Back skips the loader', async ({
+    page,
+  }) => {
+    await page.goto('/s/email?qa')
+    await waitForStep(page, 'email')
+    const email = page.getByRole('textbox', { name: 'Please enter your email' })
+    await expect(email).toBeFocused()
+    await email.fill('not-an-email')
+    await page.keyboard.press('Enter')
+    await expect(page.locator('form [role="alert"]')).toHaveText(
+      'Please enter a valid email address.',
+    )
+    await expect(email).toHaveAttribute('aria-invalid', 'true')
+    await email.fill('qa@example.com')
+    await page.getByRole('button', { name: 'Continue' }).click()
+
+    await waitForStep(page, 'name')
+    await expect(page.getByRole('progressbar')).toHaveAttribute('aria-valuenow', '95')
+    await page.getByRole('textbox', { name: /what do your friends call you/ }).fill('Sam')
+    await page.getByRole('button', { name: 'Continue' }).click()
+    await expect(page.getByRole('button', { name: 'Please wait...' })).toBeVisible()
+
+    await waitForStep(page, 'loading')
+    const started = Date.now()
+    await waitForStep(page, 'paywall')
+    expect(Date.now() - started).toBeLessThan(2500)
+    expect(
+      await page.evaluate(() => JSON.parse(sessionStorage.getItem('bloom.funnel.v1')!).lead),
+    ).toEqual({ email: 'qa@example.com', name: 'Sam' })
+
+    await page.goBack()
+    await waitForStep(page, 'name')
+    await expect(page.getByRole('textbox')).toHaveValue('Sam')
+  })
+})
+
 test.describe('accessibility (axe)', () => {
   for (const id of [
     'intro',
     'wand',
     'summary',
     'loader',
+    'email',
+    'name',
     'drained',
     'adhd',
     'sacrifice',

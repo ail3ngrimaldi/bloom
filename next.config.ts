@@ -10,10 +10,19 @@ const vercelEnv = process.env.NEXT_PUBLIC_VERCEL_ENV ?? process.env.VERCEL_ENV ?
 // production environment never shows them (isDevToolsEnabled checks the environment too).
 const devTools = process.env.NEXT_PUBLIC_ENABLE_DEV_TOOLS ?? (vercelEnv === 'preview' ? '1' : '')
 
+// The gallery only holds design-system components, so while the site is pre-launch it is shown on
+// every Vercel deployment, Production included, to let the owner look at the work. At launch set
+// NEXT_PUBLIC_SHOW_GALLERY=0 on the Production environment. Builds outside Vercel keep it hidden.
+const showGallery = process.env.NEXT_PUBLIC_SHOW_GALLERY ?? (vercelEnv ? '1' : '')
+
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
-  env: { NEXT_PUBLIC_VERCEL_ENV: vercelEnv, NEXT_PUBLIC_ENABLE_DEV_TOOLS: devTools },
+  env: {
+    NEXT_PUBLIC_VERCEL_ENV: vercelEnv,
+    NEXT_PUBLIC_ENABLE_DEV_TOOLS: devTools,
+    NEXT_PUBLIC_SHOW_GALLERY: showGallery,
+  },
   // Next refuses two dev servers on the same distDir, so parallel runs set NEXT_DIST_DIR=.next-<tag>.
   distDir: process.env.NEXT_DIST_DIR || '.next',
   // Dev only. Next blocks dev resources (HMR) requested from any origin but localhost, and the page

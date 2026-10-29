@@ -62,7 +62,7 @@ function InteractiveCheckboxDemo() {
   )
 }
 
-/** Every component in every state. Dev and QA tooling: see isDevToolsEnabled in src/lib/env.ts. */
+/** Every component in every state. Design-system QA page: see isGalleryEnabled in src/lib/env.ts. */
 export function Gallery() {
   return (
     <main className={styles.page}>

@@ -4,12 +4,12 @@ Visual QA for the design system. The pages are `src/app/gallery/**`; `next.confi
 `/__gallery/:path*` to `/gallery/:path*` so the URL stays the one of the plan (App Router treats a
 folder that starts with an underscore as private, which is why the real folder has no underscores).
 
-**They 404 in production.** Every gallery page calls `notFound()` unless `isDevToolsEnabled()`
-(`src/lib/env.ts`) is true: that is the case under `next dev`, and on every Vercel _preview_
-deployment (`next.config.ts` derives the switch from `VERCEL_ENV`; set
-`NEXT_PUBLIC_ENABLE_DEV_TOOLS=0` on the Preview environment to hide it). The production environment
-never enables it. `tests/unit/pages/gallery.test.tsx`, `tests/unit/env.test.ts` and
-`tests/unit/nextConfig.test.ts` cover the matrix.
+**Pre-launch visibility.** Every gallery page calls `notFound()` unless `isGalleryEnabled()`
+(`src/lib/env.ts`) is true: under `next dev`, and on every Vercel deployment, Production included
+(`next.config.ts` turns `NEXT_PUBLIC_SHOW_GALLERY` on for every Vercel build so the owner can look at
+the work). At launch set `NEXT_PUBLIC_SHOW_GALLERY=0` on the Production environment: the pages then 404. A production build outside Vercel also 404s. The stricter `isDevToolsEnabled()` (demo content,
+step-guard bypass) is unrelated and never opens on Production. `tests/unit/pages/gallery.test.tsx`,
+`tests/unit/env.test.ts` and `tests/unit/nextConfig.test.ts` cover the matrix.
 
 | Route                    | Shows                                                                                                                 |
 | ------------------------ | --------------------------------------------------------------------------------------------------------------------- |

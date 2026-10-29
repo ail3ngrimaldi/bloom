@@ -1,1 +1,14 @@
+# Large screen recording of the reference funnel: never commit it
 *.mkv
+
+node_modules
+dist
+coverage
+playwright-report
+test-results
+*.tsbuildinfo
+.DS_Store
+.env.local
+
+# Screenshots produced by `npm run shots` (compared against docs/feature-parity/images)
+docs/feature-parity/shots/

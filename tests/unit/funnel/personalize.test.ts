@@ -47,8 +47,8 @@ describe('personalize', () => {
         for (const [k, v] of Object.entries(node)) collect(v, k)
     }
     for (const id of STEP_IDS) collect(copy.steps[id])
-    // {{count}}, {{total}} and {{label}} are filled by the screens that own them.
-    const screenVars = { count: 1, total: 3, label: 'x', emphasis: 'y' }
+    // {{count}}, {{total}}, {{label}}, {{emphasis}} and {{level}} are filled by their screens.
+    const screenVars = { count: 1, total: 3, label: 'x', emphasis: 'y', level: 'High' }
     for (const text of texts) {
       expect(personalize(text, { gender: 'female' }, screenVars), text).not.toMatch(/\{\{/)
     }

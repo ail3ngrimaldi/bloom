@@ -1,0 +1,238 @@
+{
+  "$comment": "Catalogo de pasos observados en la grabacion (funnel web de referencia). El copy es de REFERENCIA (en ingles, tal cual se ve en pantalla): sirve para sembrar el motor y comparar paridad; antes de publicar hay que reemplazarlo por copy propio de Bloom. {{brand}} = nombre del producto (en la referencia: 'Fabulous'). {{audience}} = 'men' | 'women' | 'people' segun la respuesta de genero. Los claims marcados con claimRef requieren evidencia propia antes de mostrarse. Los tiempos 't' son aproximados (+-1 s) sobre la grabacion de 6:33.",
+  "meta": {
+    "source": "2026-10-29 01-53-06.mkv",
+    "referenceProduct": "Fabulous (funnel web de onboarding, entrada desde anuncio de Meta)",
+    "copyLanguage": "en",
+    "totalSteps": 42,
+    "questions": 28,
+    "progress": {
+      "formula": "pageIndex / 39 donde pageIndex = (n - 1) para n = 1..38; el paso 39 (nombre) reutiliza el valor del paso 38",
+      "visibleOn": ["single", "capture"],
+      "hiddenOn": ["multi", "inter", "wand", "summary", "loader", "paywall", "checkout"]
+    }
+  },
+  "optionSets": {
+    "FREQ4": ["Always", "Often", "Sometimes", "Rarely"],
+    "YSN": ["Yes", "Sometimes", "No"],
+    "OSN": ["Often", "Sometimes", "Never"]
+  },
+  "personalization": {
+    "audience": { "Male": "men", "Female": "women", "Non-binary": "people" },
+    "note": "Solo se observo 'men' tras elegir 'Male' (pasos 17 y 26). La asignacion Female/Non-binary es inferida; confirmar con el usuario."
+  },
+  "claimRefs": {
+    "users": { "reference": "30 million", "usedIn": [17, 26], "requiresEvidence": true },
+    "press": { "reference": ["The New York Times", "WIRED", "Forbes", "girlboss", "healthline"], "usedIn": [17], "requiresEvidence": true },
+    "universities": { "reference": ["Stanford University", "Duke University", "Harvard University"], "usedIn": [30], "requiresEvidence": true },
+    "expert": { "reference": { "name": "Jazmin Quill, MSc", "role": "Co-founder, Stanford Psych One Program" }, "usedIn": [31], "requiresEvidence": true },
+    "testimonials": { "reference": ["Alice L.", "Tara M.", "Remi L."], "usedIn": [37], "requiresEvidence": true }
+  },
+  "steps": [
+    {
+      "n": 1, "id": "intro", "type": "intro", "t": "0:06", "theme": "quiz", "header": true,
+      "title": "You're not lazy, you might be burning out.",
+      "subtitle": "The next questions reveal whether {{brand}} is the right app for you.",
+      "cta": "Continue",
+      "images": ["02-intro.png", "anim-01-intro-reveal.png"]
+    },
+    {
+      "n": 2, "id": "drained", "type": "single", "t": "0:16", "theme": "quiz", "header": true, "answerKey": "drained",
+      "title": "How often do you feel mentally or physically drained?", "optionSet": "FREQ4",
+      "images": ["03-quiz-single.png", "04-quiz-single-states.png"]
+    },
+    { "n": 3, "id": "overthink", "type": "single", "t": "0:25", "theme": "quiz", "header": true, "answerKey": "overthink", "title": "Do you overthink?", "optionSet": "FREQ4" },
+    { "n": 4, "id": "sleep", "type": "single", "t": "0:28", "theme": "quiz", "header": true, "answerKey": "sleep", "title": "Do you sleep poorly?", "optionSet": "FREQ4" },
+    { "n": 5, "id": "selfcare", "type": "single", "t": "0:30", "theme": "quiz", "header": true, "answerKey": "selfcare", "title": "Do you skip self-care?", "optionSet": "FREQ4" },
+    { "n": 6, "id": "phone", "type": "single", "t": "0:46", "theme": "quiz", "header": true, "answerKey": "phone", "title": "Do you feel like you spend too much time on your phone?", "optionSet": "FREQ4" },
+    { "n": 7, "id": "juggling", "type": "single", "t": "0:49", "theme": "quiz", "header": true, "answerKey": "juggling", "title": "Do you feel like you're constantly juggling too much and still falling behind?", "optionSet": "YSN" },
+    {
+      "n": 8, "id": "wand", "type": "wand", "t": "0:54", "theme": "dark", "header": false, "answerKey": "wand",
+      "title": "If you had a magic wand...", "subtitle": "Tap 3 things you'd make vanish",
+      "bubbles": ["Anxiety", "Self-doubt", "Burnout", "Loneliness", "Lack of motivation"],
+      "pick": 3, "counter": "{{n}} / 3 released",
+      "finish": { "title": "Feel that lightness", "subtitle": "and know it's possible", "cta": "Continue" },
+      "images": ["07-wand.png", "anim-03-wand-burst.png", "anim-04-wand-finish.png"]
+    },
+    { "n": 9, "id": "procrastinate", "type": "single", "t": "1:07", "theme": "quiz", "header": true, "answerKey": "procrastinate", "title": "How often do you procrastinate on important tasks?", "optionSet": "FREQ4" },
+    {
+      "n": 10, "id": "restart_habit", "type": "single", "t": "1:39", "theme": "quiz", "header": true, "answerKey": "restart_habit",
+      "title": "How often do you find yourself restarting a habit?",
+      "options": ["I usually stick with things", "Rarely, only after major life events", "Sometimes, I drop it for a while", "Often, I'm constantly restarting"],
+      "images": ["05-quiz-variants.png"]
+    },
+    { "n": 11, "id": "concentration", "type": "single", "t": "1:44", "theme": "quiz", "header": true, "answerKey": "concentration", "title": "Do you have trouble concentrating or staying focused?", "optionSet": "FREQ4" },
+    {
+      "n": 12, "id": "adhd", "type": "single", "t": "1:50", "theme": "quiz", "header": true, "answerKey": "adhd", "sensitive": "health",
+      "title": "Do you have ADHD or do you suspect you have it?", "subtitle": "Your answer helps us better understand your needs",
+      "options": ["Yes, I've been diagnosed with ADHD", "I think I might have it", "No, I don't think I have ADHD"]
+    },
+    { "n": 13, "id": "untapped", "type": "single", "t": "1:54", "theme": "quiz", "header": true, "answerKey": "untapped", "title": "Do you feel like there's untapped potential within you?", "options": ["Yes", "Sometimes", "Not really"] },
+    {
+      "n": 14, "id": "control_life", "type": "single", "t": "2:18", "theme": "quiz", "header": true, "answerKey": "control_life",
+      "title": "When was the last time you felt fully in control of your life?",
+      "options": ["This week", "A few weeks ago", "Months ago", "I'm not sure I ever have"]
+    },
+    {
+      "n": 15, "id": "gender", "type": "single", "t": "2:34", "theme": "quiz", "header": true, "answerKey": "gender", "drives": "personalization.audience",
+      "title": "What is your gender?", "subtitle": "We will use this to personalize your plan",
+      "options": ["Female", "Male", "Non-binary"]
+    },
+    { "n": 16, "id": "age", "type": "single", "t": "2:36", "theme": "quiz", "header": true, "answerKey": "age", "title": "What is your age?", "options": ["Under 20s", "20s", "30s", "40s", "50+"] },
+    {
+      "n": 17, "id": "science", "type": "inter", "variant": "science", "t": "2:51", "theme": "soft", "header": false,
+      "title": "The Science of a Better You",
+      "label": "As featured on:", "claimRef": ["press", "users"],
+      "headline": "Join over {{claims.users}} {{audience}}",
+      "body": "Who transformed their lives using science-backed behaviour change techniques.",
+      "cta": "Continue", "ctaEnableDelayMs": 500,
+      "images": ["08-interstitial-science.png"]
+    },
+    { "n": 18, "id": "others_needs", "type": "single", "t": "2:53", "theme": "quiz", "header": true, "answerKey": "others_needs", "title": "Do you tend to put others' needs before your own?", "optionSet": "OSN" },
+    { "n": 19, "id": "others_expect", "type": "single", "t": "2:56", "theme": "quiz", "header": true, "answerKey": "others_expect", "title": "Do others expect too much of you?", "optionSet": "OSN" },
+    { "n": 20, "id": "say_no", "type": "single", "t": "3:10", "theme": "quiz", "header": true, "answerKey": "say_no", "title": "Do you find it hard to say 'no' to others?", "optionSet": "OSN" },
+    {
+      "n": 21, "id": "sacrifice", "type": "multi", "t": "3:13", "theme": "quiz", "header": false, "answerKey": "sacrifice",
+      "title": "Which of these do you tend to sacrifice for others?", "subtitle": "Choose all that apply",
+      "options": ["Sleep", "Nutrition", "Alone time", "Your own goals", "Emotional space"], "cta": "Continue",
+      "images": ["06-quiz-multi.png"]
+    },
+    {
+      "n": 22, "id": "missing", "type": "multi", "t": "3:24", "theme": "quiz", "header": false, "answerKey": "missing",
+      "title": "What is currently missing from your life?", "subtitle": "Choose all that apply",
+      "options": ["Motivation", "Structure", "Support from others", "A clear plan", "Time", "Belief in myself"], "cta": "Continue"
+    },
+    {
+      "n": 23, "id": "wish_understood", "type": "single", "t": "3:38", "theme": "quiz", "header": true, "answerKey": "wish_understood",
+      "title": "What's one thing you wish others understood about your struggles?",
+      "options": ["I'm trying hard", "I don't know where to start", "I need time and support", "I want change, but I feel stuck"]
+    },
+    {
+      "n": 24, "id": "tried_habits", "type": "single", "t": "3:44", "theme": "quiz", "header": true, "answerKey": "tried_habits",
+      "title": "Have you ever tried building habits but couldn't stick with them?",
+      "options": ["Yes, many times", "A few times", "Never really tried"]
+    },
+    {
+      "n": 25, "id": "match", "type": "inter", "variant": "match", "t": "3:49", "theme": "quiz", "header": false,
+      "title": "It's a match.", "body": "You and {{brand}}\nIt's time to create your plan.", "cta": "Continue",
+      "images": ["09-interstitial-match.png", "anim-05-match-reveal.png"]
+    },
+    {
+      "n": 26, "id": "not_alone", "type": "inter", "variant": "not_alone", "t": "3:58", "theme": "soft", "header": false,
+      "title": "You are not alone", "claimRef": ["users"],
+      "body": "{{brand}} has guided more than {{claims.users}} {{audience}} towards a happier healthier life using simple behavioral science techniques.",
+      "cta": "Continue", "images": ["10-interstitial-not-alone.png"]
+    },
+    {
+      "n": 27, "id": "who_for", "type": "multi", "t": "4:00", "theme": "quiz", "header": false, "answerKey": "who_for",
+      "title": "Who are you doing this for?", "subtitle": "Choose all that apply",
+      "options": ["Myself", "My family", "My future self", "Someone who believes in me", "I don't know yet"], "cta": "Continue"
+    },
+    { "n": 28, "id": "lose_motivation", "type": "single", "t": "4:04", "theme": "quiz", "header": true, "answerKey": "lose_motivation", "title": "Do you tend to lose motivation easily?", "options": ["Yes", "No", "I haven't tried yet"] },
+    { "n": 29, "id": "expert_referral", "type": "single", "t": "4:06", "theme": "quiz", "header": true, "answerKey": "expert_referral", "title": "Did you hear about {{brand}} from an expert?", "options": ["Yes", "No"] },
+    {
+      "n": 30, "id": "evidence", "type": "inter", "variant": "evidence", "t": "4:11", "theme": "soft", "header": false, "claimRef": ["universities"],
+      "title": "{{brand}} was developed using evidence-based psychological practices", "subtitle": "Your plan is based on decades of research",
+      "logos": ["STANFORD UNIVERSITY", "DUKE UNIVERSITY", "HARVARD UNIVERSITY"],
+      "body": "Your habit building plan will also help you overcome anxiety and neutralize your procrastination tendencies.",
+      "cta": "Continue", "ctaEnableDelayMs": 500, "images": ["11-interstitial-evidence.png"]
+    },
+    {
+      "n": 31, "id": "expert", "type": "inter", "variant": "expert", "t": "4:13", "theme": "soft", "header": false, "claimRef": ["expert"],
+      "title": "Your plan will be reviewed by an expert", "emphasis": "an expert",
+      "chips": ["Thoughts", "Feelings", "Behavior"],
+      "quote": "\"{{brand}} carefully uses a proven approach to provide personalized guidance and resources that support emotional resilience.\"",
+      "reviewerCard": { "label": "Content reviewed by an expert", "name": "Jazmin Quill, MSc", "role": "Co-founder, Stanford Psych One Program" },
+      "cta": "Continue", "images": ["12-interstitial-expert.png"]
+    },
+    {
+      "n": 32, "id": "self_discipline", "type": "single", "t": "4:19", "theme": "quiz", "header": true, "answerKey": "self_discipline",
+      "title": "How would you describe your relationship with self-discipline?",
+      "options": ["I have none", "It comes in phases", "I'm usually pretty structured"]
+    },
+    {
+      "n": 33, "id": "need_most", "type": "single", "t": "4:24", "theme": "quiz", "header": true, "answerKey": "need_most",
+      "title": "In order to live a better life, what do you think you need most?",
+      "options": ["More energy", "Stronger habits", "Better focus", "Inner peace"]
+    },
+    {
+      "n": 34, "id": "success_30d", "type": "multi", "t": "4:26", "theme": "quiz", "header": false, "answerKey": "success_30d",
+      "title": "What would success look like for you in 30 days?", "subtitle": "Choose all that apply",
+      "options": ["Waking up feeling motivated", "Going a week without procrastinating", "Eating healthier meals", "Feeling calmer in stressful situations", "Sticking to a morning routine"],
+      "cta": "Continue"
+    },
+    {
+      "n": 35, "id": "biggest_motivation", "type": "single", "t": "4:33", "theme": "quiz", "header": true, "answerKey": "biggest_motivation",
+      "title": "What's your biggest motivation to start now?",
+      "options": ["I want to stop feeling stuck", "I'm tired of restarting", "I want long-term change", "I just want to feel better"]
+    },
+    {
+      "n": 36, "id": "summary", "type": "summary", "t": "4:42", "theme": "soft", "header": false,
+      "title": "Summary of your Well-being Profile",
+      "card": { "label": "Negative effects level", "level": "High", "levelBadge": "High", "meterPosition": 0.74 },
+      "alert": { "title": "HIGH level", "body": "High levels of negative effects can lead to constant procrastination, increased worrying, reduced energy and well-being" },
+      "tiles": [
+        { "label": "Main difficulty:", "value": "Manage ADHD", "icon": "thumb-down" },
+        { "label": "Challenging period:", "value": "Few weeks", "icon": "calendar" },
+        { "label": "Trigger:", "value": "Anxiety", "icon": "bolt" },
+        { "label": "Energy level:", "value": "Low", "icon": "battery" }
+      ],
+      "cta": "Continue", "images": ["13-summary.png"],
+      "derivation": "NO observable en el video; ver PLAN.md seccion 6.5 (reglas propuestas)"
+    },
+    {
+      "n": 37, "id": "loader", "type": "loader", "t": "4:46", "theme": "soft", "header": false, "claimRef": ["testimonials"],
+      "title": "Creating your Personalized Plan",
+      "progressSteps": [
+        { "label": "Setting goals", "color": "#35BA9C" },
+        { "label": "Selecting strategies", "color": "#F6A76C" },
+        { "label": "Saving plan", "color": "#E99282" }
+      ],
+      "interrupts": [
+        { "step": 0, "atProgress": 0.5, "title": "Are you generally rushed in the mornings?", "options": ["Yes", "No"], "icon": "mountain-flag", "answerKey": "rushed_mornings" },
+        { "step": 1, "atProgress": 0.58, "title": "Have you heard of habit stacking?", "options": ["Yes", "No"], "icon": "quill-inkwell", "answerKey": "heard_habit_stacking" }
+      ],
+      "testimonials": [
+        { "stars": 5, "title": "This app is truly amazing! - Alice L.", "body": "I love it because it keeps me very motivated and focused on the goals I've set for myself to achieve. It makes me accountable and forces me to be consistent." },
+        { "stars": 5, "title": "This app literally changed my life - Tara M.", "body": "I had found myself at the deep end. You pulled me out, I am sincerely grateful." },
+        { "stars": 5, "title": "{{brand}} is an absolute amazing tool to have & apply in your life! - Remi L.", "body": "I've been using {{brand}} for at least 5 years. It just gets better and better. I love this app and whenever I'm lost this is always where I come back to." }
+      ],
+      "images": ["14-loader-states.png", "15-loader-popups.png", "anim-06-loader-timeline.png"]
+    },
+    {
+      "n": 38, "id": "email", "type": "capture", "t": "5:15", "theme": "warm", "header": true, "answerKey": "email", "input": "email",
+      "title": "Please enter your email", "subtitle": "To save your progress...", "cta": "Continue",
+      "images": ["16-lead-capture.png"]
+    },
+    {
+      "n": 39, "id": "name", "type": "capture", "t": "5:18", "theme": "warm", "header": true, "answerKey": "name", "input": "text",
+      "title": "One last thing, what do your friends call you?", "subtitle": "We will use this for your personal plan.",
+      "cta": "Continue", "ctaLoading": "Please wait...", "sharesProgressWith": 38
+    },
+    { "n": 40, "id": "loading", "type": "loading", "t": "5:21", "theme": "white", "header": false, "observedDurationSec": 4.5, "note": "Pantalla en blanco entre el nombre y el paywall; en produccion mostrar skeleton/loader de marca." },
+    {
+      "n": 41, "id": "paywall", "type": "paywall", "t": "5:25", "theme": "white", "header": false,
+      "title": "Choose your plan",
+      "countdown": { "label": "Discount reserved for:", "seconds": 900, "format": "mm:ss", "cta": "Get my Plan" },
+      "plans": [
+        { "id": "trial_1w", "title": "1 week trial", "price": 5.19, "originalPrice": 39.99, "perDay": 0.74, "perDayOriginal": 1.33 },
+        { "id": "month_1", "title": "1 month plan", "ribbon": "MOST POPULAR", "badge": "SAVE 78%", "price": 8.99, "originalPrice": 39.99, "perDay": 0.30, "perDayOriginal": 1.33, "default": true },
+        { "id": "month_3", "title": "3 month plan", "badge": "SAVE 72%", "price": 16.99, "originalPrice": 59.99, "perDay": 0.19, "perDayOriginal": 0.67 }
+      ],
+      "cta": "Continue",
+      "legal": "By clicking \"Continue,\" you agree to the Terms and Conditions and Privacy Policy. The {{selectedPrice}} applies to your first subscription. Your subscription will automatically renew at the full price of {{renewalPrice}} every month until you cancel. [texto completo no visible en el video: el original continua debajo del pliegue]",
+      "images": ["17-paywall.png"]
+    },
+    {
+      "n": 42, "id": "checkout", "type": "checkout", "t": "5:45", "theme": "white", "header": false,
+      "title": "Your plan is ready. Let's make it real.", "emphasis": "Your plan is ready.",
+      "subtitle": "Checkout in seconds with Apple Pay or PayPal",
+      "totalLabel": "Total", "emailField": true,
+      "methods": ["paypal", "google_pay (apple_pay en dispositivos compatibles)", "card (VISA, AMEX, Mastercard)"],
+      "badge": "Pay Safe & Secure",
+      "legal": "You agree that {{introPrice}} will be charged as an intro offer, then {{renewalPrice}} will be automatically billed every month until you cancel. See our Subscription Policy for details.",
+      "observedBug": "Total mostro $5.19 (plan 1 week trial) con el plan '1 month plan' resaltado; el total DEBE coincidir con el plan elegido.",
+      "images": ["18-checkout.png", "19-checkout-gpay.png"]
+    }
+  ]
+}

@@ -102,9 +102,9 @@ test.describe('walking the funnel', () => {
     await waitForStep(page, 'gender')
     await page.getByRole('radio', { name: 'Male', exact: true }).click()
     await waitForStep(page, 'age')
-    expect(
-      await page.evaluate(() => JSON.parse(sessionStorage.getItem('bloom.funnel.v1')!).answers),
-    ).toMatchObject({ gender: 'male' })
+    await answerStep(page)
+    await waitForStep(page, 'science')
+    await expect(page.getByText('Made for men like you')).toBeVisible()
   })
 
   test('multi-select keeps Continue disabled until a row is checked', async ({ page }) => {
@@ -159,11 +159,70 @@ test.describe('transition between questions (PLAN 4.4)', () => {
   })
 })
 
+test.describe('intro and interstitials (phase 3)', () => {
+  // Wording of the reference's claims that Bloom has no evidence for (PLAN 2, guardrails 1 to 3).
+  const CLAIMS =
+    /million|as featured|new york times|wired|forbes|girlboss|healthline|stanford|duke|harvard|jazmin|reviewed by/i
+
+  test('the intro reveals everything within about a second, CTA at the bottom', async ({
+    page,
+  }) => {
+    await page.goto('/s/intro')
+    await waitForStep(page, 'intro')
+    const cta = page.getByRole('button', { name: 'Continue' })
+    await expect(cta).toBeVisible()
+    await page.waitForTimeout(1200)
+    const opacities = await page.evaluate(() =>
+      [...document.querySelectorAll('[data-phase] *')].map((el) => getComputedStyle(el).opacity),
+    )
+    expect(opacities.every((value) => value === '1')).toBe(true)
+    const box = await cta.boundingBox()
+    expect(Math.round(box!.y + box!.height)).toBe(720 - 56)
+  })
+
+  for (const id of ['science', 'not_alone', 'evidence', 'expert']) {
+    test(`/s/${id} enables its CTA about 0.5 s after it shows and makes no claims`, async ({
+      page,
+    }) => {
+      await page.goto(`/s/${id}?qa`)
+      const cta = page.getByRole('button', { name: 'Continue' })
+      await expect(cta).toBeDisabled()
+      await expect(cta).toBeEnabled()
+      expect(await page.locator('main, body').first().innerText()).not.toMatch(CLAIMS)
+      const box = await cta.boundingBox()
+      expect(Math.round(box!.y + box!.height)).toBe(720 - 56)
+    })
+  }
+
+  test('the match merges the circles, then shows the check and the CTA', async ({ page }) => {
+    await page.goto('/s/match?qa')
+    await waitForStep(page, 'match')
+    const cta = page.getByRole('button', { name: 'Continue' })
+    await expect(cta).toBeDisabled()
+    await expect(page.getByRole('heading', { name: "It's a match." })).toBeVisible()
+    await expect(cta).toBeEnabled({ timeout: 5000 })
+    await cta.click()
+    await waitForStep(page, 'not_alone')
+  })
+})
+
 test.describe('accessibility (axe)', () => {
-  for (const id of ['drained', 'adhd', 'sacrifice']) {
+  for (const id of [
+    'intro',
+    'drained',
+    'adhd',
+    'sacrifice',
+    'science',
+    'match',
+    'not_alone',
+    'evidence',
+    'expert',
+  ]) {
     test(`/s/${id} has no WCAG A/AA violations`, async ({ page }) => {
       await page.goto(`/s/${id}?qa`)
       await waitForStep(page, id)
+      // Let entrance animations finish: axe would read half-transparent text as low contrast.
+      await page.waitForTimeout(2500)
       const results = await new AxeBuilder({ page })
         .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])
         .analyze()

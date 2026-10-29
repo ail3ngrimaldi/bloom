@@ -5,7 +5,7 @@ Actualiza una fila por paso a medida que se implementa. **Estado:** `pendiente` 
 
 | # | id | tipo | fase | estado | referencia | evidencia | notas |
 |---|---|---|---|---|---|---|---|
-| 01 | `intro` | intro | 3 | en curso | `02-intro.png` | `shots/01.png` (placeholder) | Pantalla provisional con título + Continue hasta su fase |
+| 01 | `intro` | intro | 3 | listo | `02-intro.png` | `shots/01.png` · `intro.test.tsx` · e2e `funnel.spec.ts` (reveal, CTA abajo, axe) | Arte propio (burbuja You, orbe de Bloom, chip ?) · I-26/I-27 |
 | 02 | `drained` | single | 2 | listo | `03-quiz-single.png` | `shots/02.png` · e2e `funnel.spec.ts` (recorrido) | |
 | 03 | `overthink` | single | 2 | listo | — | `shots/03.png` · e2e `funnel.spec.ts` (recorrido) | |
 | 04 | `sleep` | single | 2 | listo | — | `shots/04.png` · e2e `funnel.spec.ts` (recorrido) | |
@@ -21,7 +21,7 @@ Actualiza una fila por paso a medida que se implementa. **Estado:** `pendiente` 
 | 14 | `control_life` | single | 2 | listo | — | `shots/14.png` · e2e `funnel.spec.ts` (recorrido) | |
 | 15 | `gender` | single | 2 | listo | — | `shots/15.png` · e2e `funnel.spec.ts` (recorrido) | Define `{{audience}}` (men/women/people) |
 | 16 | `age` | single | 2 | listo | — | `shots/16.png` · e2e `funnel.spec.ts` (recorrido) | |
-| 17 | `science` | inter | 3 | en curso | `08-interstitial-science.png` | `shots/17.png` (placeholder) | Pantalla provisional con título + Continue hasta su fase |
+| 17 | `science` | inter | 3 | listo | `08-interstitial-science.png` | `shots/17.png` · `interstitials.test.tsx` · e2e `funnel.spec.ts` | Sin prensa ni cifra (sin evidencia); titular "Made for {{audience}} like you" · I-29 |
 | 18 | `others_needs` | single | 2 | listo | — | `shots/18.png` · e2e `funnel.spec.ts` (recorrido) | |
 | 19 | `others_expect` | single | 2 | listo | — | `shots/19.png` · e2e `funnel.spec.ts` (recorrido) | |
 | 20 | `say_no` | single | 2 | listo | — | `shots/20.png` · e2e `funnel.spec.ts` (recorrido) | |
@@ -29,13 +29,13 @@ Actualiza una fila por paso a medida que se implementa. **Estado:** `pendiente` 
 | 22 | `missing` | multi | 2 | listo | — | `shots/22.png` · e2e `funnel.spec.ts` (recorrido) | CTA deshabilitado con 0 selecciones |
 | 23 | `wish_understood` | single | 2 | listo | — | `shots/23.png` · e2e `funnel.spec.ts` (recorrido) | |
 | 24 | `tried_habits` | single | 2 | listo | — | `shots/24.png` · e2e `funnel.spec.ts` (recorrido) | |
-| 25 | `match` | inter | 3 | en curso | `09-interstitial-match.png` | `shots/25.png` (placeholder) | Pantalla provisional con título + Continue hasta su fase |
-| 26 | `not_alone` | inter | 3 | en curso | `10-interstitial-not-alone.png` | `shots/26.png` (placeholder) | Pantalla provisional con título + Continue hasta su fase |
+| 25 | `match` | inter | 3 | listo | `09-interstitial-match.png` | `shots/25.png` · `interstitials.test.tsx` · e2e `funnel.spec.ts` | Venn: fusión 1 s, check, glow; CTA a 2.3 s · I-30 |
+| 26 | `not_alone` | inter | 3 | listo | `10-interstitial-not-alone.png` | `shots/26.png` · `interstitials.test.tsx` · e2e `funnel.spec.ts` | Texto sin cifra de usuarios; órbitas propias · I-29 |
 | 27 | `who_for` | multi | 2 | listo | — | `shots/27.png` · e2e `funnel.spec.ts` (recorrido) | CTA deshabilitado con 0 selecciones |
 | 28 | `lose_motivation` | single | 2 | listo | — | `shots/28.png` · e2e `funnel.spec.ts` (recorrido) | |
 | 29 | `expert_referral` | single | 2 | listo | — | `shots/29.png` · e2e `funnel.spec.ts` (recorrido) | |
-| 30 | `evidence` | inter | 3 | en curso | `11-interstitial-evidence.png` | `shots/30.png` (placeholder) | Pantalla provisional con título + Continue hasta su fase |
-| 31 | `expert` | inter | 3 | en curso | `12-interstitial-expert.png` | `shots/31.png` (placeholder) | Pantalla provisional con título + Continue hasta su fase |
+| 30 | `evidence` | inter | 3 | listo | `11-interstitial-evidence.png` | `shots/30.png` · `interstitials.test.tsx` · e2e `funnel.spec.ts` | 3 tarjetas de prácticas en vez de universidades · I-29 |
+| 31 | `expert` | inter | 3 | listo | `12-interstitial-expert.png` | `shots/31.png` · `interstitials.test.tsx` · e2e `funnel.spec.ts` | Sin revisor experto: título sobre el enfoque, chips Thoughts/Feelings/Behavior · I-29 |
 | 32 | `self_discipline` | single | 2 | listo | — | `shots/32.png` · e2e `funnel.spec.ts` (recorrido) | |
 | 33 | `need_most` | single | 2 | listo | — | `shots/33.png` · e2e `funnel.spec.ts` (recorrido) | |
 | 34 | `success_30d` | multi | 2 | listo | — | `shots/34.png` · e2e `funnel.spec.ts` (recorrido) | CTA deshabilitado con 0 selecciones |
@@ -55,7 +55,7 @@ Actualiza una fila por paso a medida que se implementa. **Estado:** `pendiente` 
 | 0 | Bootstrap y decisiones | — | listo |
 | 1 | Design system y shell | base visual | listo (galería `/__gallery`, `tests/e2e/gallery.spec.ts`) |
 | 2 | Motor del funnel + 28 preguntas | 2, 3, 4, 5, 6, 7, 9, 10, 11, 12, 13, 14, 15, 16, 18, 19, 20, 21, 22, 23, 24, 27, 28, 29, 32, 33, 34, 35 | listo |
-| 3 | Intro e intermedias | 1, 17, 25, 26, 30, 31 | pendiente |
+| 3 | Intro e intermedias | 1, 17, 25, 26, 30, 31 | listo |
 | 4 | Wand interactivo | 8 | pendiente |
 | 5 | Resumen y loader | 36, 37 | pendiente |
 | 6 | Captura de lead + transición | 38, 39, 40 | pendiente |

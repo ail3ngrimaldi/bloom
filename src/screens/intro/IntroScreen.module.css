@@ -1,0 +1,67 @@
+/* Measures from 02-intro.png at 1280x720 (CSS px): logo top 32, progress bar at 77, circles 92 at
+   about 223, headline 26/31 serif in three lines, CTA bottom 56 above the viewport bottom. */
+.screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1 1 auto;
+  width: 100%;
+  max-width: var(--card-width);
+  margin: 0 auto;
+  padding: 0 var(--card-gutter-cta) calc(var(--card-margin-bottom) + var(--cta-margin-bottom));
+}
+
+.header {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: none;
+  width: 100%;
+  padding-top: var(--card-margin-top);
+}
+
+.progress {
+  margin-top: 19px;
+  width: min(var(--header-progress-width), 100%);
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1 1 auto;
+  width: 100%;
+  /* The reference sits the group a little below true centre. */
+  padding-top: 24px;
+  text-align: center;
+  --art-bubble-size: 92px;
+}
+
+.art {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 27px;
+}
+
+.title {
+  max-width: 220px;
+  font: var(--type-headline-lg);
+  color: var(--ink-900);
+}
+
+.subtitle {
+  max-width: 280px;
+  margin-top: 6px;
+  font: var(--fw-subtitle) var(--fs-inter-body) / var(--lh-inter-body) var(--font-sans);
+  color: var(--ink-600);
+}
+
+.footer {
+  display: flex;
+  justify-content: center;
+  flex: none;
+  width: 100%;
+}

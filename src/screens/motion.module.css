@@ -1,0 +1,39 @@
+/*
+ * Entrance reveals shared by the screens: fade (and optionally rise) in after a delay. Set the
+ * timing per element with --reveal-delay and --reveal-duration. Under prefers-reduced-motion the
+ * global rule caps the duration and this one drops the delay and the travel.
+ */
+.reveal {
+  animation: reveal var(--reveal-duration, 400ms) var(--ease-out) var(--reveal-delay, 0ms) both;
+}
+
+.rise {
+  animation-name: rise;
+}
+
+@keyframes reveal {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    animation-name: reveal;
+    animation-delay: 0ms !important;
+  }
+}

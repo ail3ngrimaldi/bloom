@@ -1,0 +1,38 @@
+.diagram {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 277 / 261;
+}
+
+.diagram svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.chip {
+  position: absolute;
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: var(--surface-option);
+  box-shadow: 0 4px 14px rgba(52, 36, 184, 0.12);
+  color: var(--brand-indigo);
+  font: 600 13px / 16px var(--font-sans);
+  white-space: nowrap;
+  transform: translate(-50%, -50%);
+}
+
+.thoughts {
+  left: 17%;
+  top: 34%;
+}
+
+.feelings {
+  left: 81%;
+  top: 25%;
+}
+
+.behavior {
+  left: 50%;
+  top: 87%;
+}

@@ -109,7 +109,7 @@
       "headlineClaim": "Join over {{claims.users}} {{audience}}",
       "bodyClaim": "Who transformed their lives using science-backed behaviour change techniques.",
       "headline": "Made for {{audience}} like you",
-      "body": "Your plan is built from well-studied behaviour change techniques: small habits, steady routines and reflection.",
+      "body": "Your plan uses well-studied behaviour change techniques, one small habit at a time.",
       "cta": "Continue"
     },
     "others_needs": { "title": "Do you tend to put others' needs before your own?" },
@@ -162,7 +162,7 @@
     "not_alone": {
       "title": "You are not alone",
       "bodyClaim": "{{brand}} has guided more than {{claims.users}} {{audience}} towards a happier healthier life using simple behavioral science techniques.",
-      "body": "Many {{audience}} feel exactly the way you do. {{brand}} guides you towards a happier, healthier life with simple behavioural science techniques.",
+      "body": "Many {{audience}} feel just like you. {{brand}} guides you towards a happier, healthier life with simple behavioural science.",
       "cta": "Continue"
     },
     "who_for": {
@@ -188,7 +188,7 @@
       "subtitle": "Your plan draws on decades of behavioural research",
       "practices": {
         "habits": "Habit formation",
-        "cbt": "Cognitive behavioural techniques",
+        "cbt": "Cognitive reframing",
         "mindfulness": "Mindfulness"
       },
       "practiceCaption": "PRACTICE",

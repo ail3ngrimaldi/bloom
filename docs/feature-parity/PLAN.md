@@ -11,6 +11,8 @@
 
 > **Actualización de stack (decisión del usuario, 2026-10-29):** Bloom se construye en **Next.js (App Router) y se despliega en Vercel**, no en Vite. Donde este plan dice *Vite*, *React Router*, `import.meta.env`, `import.meta.glob` o `index.html`, aplica el equivalente en Next.js (`src/app/` con `layout.tsx`, `next/navigation`, `process.env` / `NEXT_PUBLIC_*`, imports explícitos). La Fase 0 ya no hace scaffold de Vite. Ver [`DECISIONS.md`](DECISIONS.md) · D1.
 
+> **Nota (2026-10-31):** existe una segunda grabación, `fabulousFunnel.mkv`, con la **variante B** del cierre (*Pay what you want* + hoja de plan con regalo/descuento y pago). Está en [`PLAN-B.md`](PLAN-B.md); el índice y el orden de lectura, en [`README.md`](README.md). Este documento sigue siendo la base compartida (quiz, sistema visual, motor) y la especificación del cierre de la **variante A** (paywall de 3 planes + modal de checkout).
+
 ![Vista general del funnel: 42 pasos](images/00-funnel-overview.png)
 
 *Cada mosaico lleva `#NN` (número de paso, §3) y el minuto aproximado del video. Los pasos 08b, 37b y 37c son estados extra de la pantalla interactiva y de las dos preguntas que interrumpen el loader.*

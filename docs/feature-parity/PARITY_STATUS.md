@@ -104,3 +104,50 @@ Actualiza una fila por paso a medida que se implementa. **Estado:** `pendiente` 
 | CLS | 0.000–0.001 (recorrido intro → #04) | `quality.spec.ts` (< 0.1), medición manual |
 | LCP / FCP (build de producción, `next start` local) | Desktop 60–90 ms; móvil 4× CPU + 1.6 Mbps / 150 ms RTT: 0.87 s | Medición manual con PerformanceObserver (I-40) |
 
+---
+
+# Variante B (`fabulousFunnel.mkv`) — ver [PLAN-B.md](PLAN-B.md)
+
+Los pasos #01–#40 son los de la tabla de arriba (quiz compartido). Aquí van las **diferencias** y los pasos **nuevos** de la variante B. Mismos estados y reglas de evidencia: `pendiente` · `en curso` · `listo` (sólo con evidencia) · `bloqueado`.
+
+| Ítem | id | tipo | fase | estado | referencia | evidencia | notas |
+|---|---|---|---|---|---|---|---|
+| Entrada (UTM + slug) | `entry` | atribución | B7 | pendiente | `b-04b-ad-destination-urls.png` | | URL borrosa: verificar |
+| 01 (delta) | `intro` | intro | B1 | pendiente | `b-05-intro-variants.png` | | titular "Let's see if we're a match." |
+| 30 (delta) | `evidence` | inter | B1 | pendiente | `b-06-evidence-variants.png` | | frase final según perfil |
+| 36 (delta) | `summary` | summary | B1 | pendiente | `b-07-summary-b.png` | | valores según §6.4; medidor honesto |
+| 41 | `pwyw` | pwyw | B2 | pendiente | `b-08-pwyw.png` | | claim del costo: ver §2-3 |
+| 42a | `plan_sheet` (contenedor + carga) | plan_sheet | B3 | pendiente | `b-anim-02-sheet-loading.png` | | objetivo < 1.5 s |
+| 42b | `sheet_header` (contador + línea + barra fija) | plan_sheet | B3 | pendiente | `b-10-sheet-top.png` | | contador del servidor |
+| 42c | `sheet_compare` (NOW vs GOAL) | plan_sheet | B4 | pendiente | `b-10-sheet-top.png` | | reglas propuestas §6.4 |
+| 42d | `sheet_ticket_plan` (cupón + banner + plan) | plan_sheet | B4 | pendiente | `b-11-sheet-plan.png` | | cálculos §6.3 |
+| 42e | `sheet_legal_benefits_faq` | plan_sheet | B4 | pendiente | `b-13-sheet-legal-benefits.png` | | legal dinámico |
+| 42f | `sheet_reviews_expert_letter` | plan_sheet | B4 | pendiente | `b-15-sheet-expert-letter.png` | | claims bajo flag |
+| 42g | `gift_modal` | overlay | B5 | pendiente | `b-09-gift-reveal.png` | | `prefers-reduced-motion` |
+| 42h | `payment_block` | plan_sheet | B6 | pendiente | `b-12-sheet-payment.png` | | MockCheckoutProvider |
+
+## Resumen por fase (variante B)
+
+| Fase | Descripción | Estado |
+|---|---|---|
+| B0 | Decisiones, flag `funnel.closing` y config | pendiente |
+| B1 | Deltas del quiz (#01, #30, #36) | pendiente |
+| B2 | Página *Pay what you want* (#41) | pendiente |
+| B3 | Hoja de plan: contenedor, carga, cabecera, contador | pendiente |
+| B4 | Secciones de la hoja | pendiente |
+| B5 | Modal del regalo y descuento | pendiente |
+| B6 | Pago (mock) y *Start Now* | pendiente |
+| B7 | Atribución, slugs y analytics | pendiente |
+| B8 | QA, accesibilidad, rendimiento, responsive | pendiente |
+
+## Decisiones nuevas (copiar a DECISIONS.md)
+
+| ID | Tema | Default propuesto | Decisión final |
+|---|---|---|---|
+| D9 | Cierre principal (pwyw vs paywall) | Ambos tras `funnel.closing`; empezar por `pwyw` | |
+| D10 | Modelo *Pay what you want* | Importes configurables; sin claim del costo; preseleccionado el más popular | |
+| D11 | Regalo, cupón y contador | Descuento configurable; "un solo regalo" si todos dan lo mismo; contador apagado | |
+| D12 | Precios, moneda y periodicidad | Demo vía MockCheckoutProvider; tachado sólo con precio previo real | |
+| D13 | Prueba social y reglas del perfil | No renderizar; reglas "inferido" | |
+| D14 | Atribución, slugs, idiomas, píxel | UTM + slug por idioma; ES después; sin píxel sin consentimiento | |
+| D15 | ¿Investigación en la Biblioteca de anuncios? | Fuera de alcance | |

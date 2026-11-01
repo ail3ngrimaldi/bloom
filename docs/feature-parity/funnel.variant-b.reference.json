@@ -1,0 +1,183 @@
+{
+  "$comment": "Catalogo de la variante B (grabacion fabulousFunnel.mkv, 8:52). Complementa funnel.reference.json (variante A): los pasos 1-40 son los mismos salvo las diferencias de 'quizDiffs'; el cierre cambia (paywall de 3 planes + modal de checkout => 'Pay what you want' + hoja de plan con descuento por regalo). El copy es de REFERENCIA (en ingles, tal cual se ve en pantalla); antes de publicar hay que reemplazarlo por copy propio de Bloom. {{brand}} = nombre del producto (referencia: 'Fabulous'). Los claims marcados con claimRef requieren evidencia propia. Los 't' son aproximados (+-1 s) sobre la grabacion.",
+  "meta": {
+    "source": "fabulousFunnel.mkv",
+    "referenceProduct": "Fabulous (funnel web de onboarding, entrada desde anuncio de Meta)",
+    "copyLanguage": "en",
+    "duration": "8:52.7",
+    "video": "1280x720 @30 fps (letterbox: barras negras de 64 px arriba y 63 px abajo; viewport del navegador ~1270x593, SIN deformacion horizontal)",
+    "audio": "silencio digital (-91 dB); no hay narracion ni musica",
+    "pxToCss": 1.36,
+    "pxToCssNote": "La captura B esta a ~73 % de zoom del navegador: px de video x 1.36 = px CSS aproximados (referencia: la card del quiz mide 269 px de video = ~365 px CSS)."
+  },
+  "entry": {
+    "t": "1:31 - 2:08",
+    "kind": "meta_ad_library_research",
+    "inScopeForProduct": false,
+    "funnelSlugs": [
+      { "slug": "fab-initial-fb2", "locale": "en", "recorded": true },
+      { "slug": "fabulous-initial-localized-es", "locale": "es", "recorded": false }
+    ],
+    "destinationUrlTemplate": "https://start.<domain>/onboarding/<slug>?utm_source=facebook&utm_medium=paid&utm_campaign={{campaign.id}}&utm_content={{adset.id}}&utm_term={{ad.id}}&placement={{placement}}&site_source_name={{site_source_name}}",
+    "urlNote": "Leida de la barra de estado del navegador al pasar el cursor sobre el CTA del anuncio; el texto esta borroso y la barra la corta tras 'site_source_name=%7B%7Bsit'. Los macros {{...}} son los dinamicos de Meta. Verificar antes de usar.",
+    "adCopyObserved": "Morning can be your favorite part of the day! / No matter if you wake up at 5am or 10am, you can make your morning productive and pleasant. / Give Fabulous a try! More than 40,000,000+ members and counting!",
+    "adCreativeKinds": ["video UGC vertical", "captura estilo tweet ('He hasn't seen his ex in months...')", "infografia ('I went from bed rotting to that girl')"],
+    "adCtaLabels": ["Mas informacion", "Ver detalles", "Learn More"]
+  },
+  "quizDiffs": [
+    {
+      "n": 1, "id": "intro",
+      "A": "You're not lazy, you might be burning out.",
+      "B": "Let's see if we're a match.",
+      "image": "b-05-intro-variants.png"
+    },
+    {
+      "n": 30, "id": "evidence",
+      "field": "closing paragraph",
+      "A": "Your habit building plan will also help you overcome anxiety and neutralize your procrastination tendencies.",
+      "B": "Your habit building plan will also help you overcome burnout.",
+      "observedWandPicks": { "A": ["Self-doubt", "Anxiety", "Lack of motivation"], "B": ["Self-doubt", "Burnout", "Anxiety"] },
+      "proposedRule": "Frase por burbuja liberada; prioridad Burnout > Anxiety+Lack of motivation. Inferido de 2 muestras: validar con el equipo.",
+      "image": "b-06-evidence-variants.png"
+    },
+    {
+      "n": 36, "id": "summary",
+      "A": { "level": "High", "meter": 0.74, "mainDifficulty": "Manage ADHD", "challengingPeriod": "Few weeks", "trigger": "Anxiety", "energyLevel": "Low" },
+      "B": { "level": "High", "meter": 0.73, "mainDifficulty": "Low energy", "challengingPeriod": "Last Week", "trigger": "Anxiety", "energyLevel": "Normal" },
+      "observedAnswersB": { "drained": "Rarely", "adhd": "No, I don't think I have ADHD", "untapped": "Not really", "control_life": "This week", "gender": "Male", "need_most": "Stronger habits", "wandPicks": ["Self-doubt", "Burnout", "Anxiety"] },
+      "inference": {
+        "levelAndMeter": "'High' y la perilla (~73-74 %) salen IGUALES en A y B pese a respuestas distintas: probablemente fijo o saturado. No asumir que se deriva del cuestionario; derivarlo honestamente o rotularlo como ilustrativo.",
+        "challengingPeriod": "control_life: 'A few weeks ago' => 'Few weeks' (A); 'This week' => 'Last Week' (B).",
+        "energyLevel": "drained: 'Rarely' => 'Normal' (B). 'Low' en A (respuesta de A no registrada; se supone Always/Often).",
+        "mainDifficulty": "ADHD sospechado/diagnosticado => 'Manage ADHD' (A); con 'No ADHD' => 'Low energy' (B). Regla exacta desconocida.",
+        "trigger": "Burbuja liberada de mayor prioridad: 'Anxiety' en ambas corridas."
+      },
+      "image": "b-07-summary-b.png"
+    }
+  ],
+  "closing": {
+    "flag": "funnel.closing",
+    "values": ["paywall", "pwyw"],
+    "recorded": { "paywall": "variante A (PLAN.md §5.10-5.11)", "pwyw": "variante B (este archivo)" },
+    "steps": [
+      {
+        "n": 40, "id": "loading", "type": "loading", "t": "6:08", "observedDurationSec": 4.5,
+        "note": "Pantalla en blanco entre el nombre y la pagina PWYW (6:08-6:12). En Bloom: loader de marca <= 1.5 s."
+      },
+      {
+        "n": 41, "id": "pwyw", "type": "pwyw", "t": "6:13", "theme": "white", "header": "logo + chip de usuario (nombre capturado en #39)",
+        "title": "Pay what you want",
+        "body": "Money shouldn't stay in the way of finding a plan that finally works. Choose an amount that you think is reasonable to try us out for two weeks.",
+        "fineprint": "It costs us {{companyCost}} to compensate our employees for the trial, but please choose the amount you are comfortable with.",
+        "trialDays": 14,
+        "companyCost": 16.41,
+        "tiles": [
+          { "id": "low", "amount": 2.0, "tone": "light-blue" },
+          { "id": "mid", "amount": 10.0, "tone": "blue" },
+          { "id": "full", "amount": 16.41, "ribbon": "MOST POPULAR", "tone": "orange" }
+        ],
+        "cta": "See my plan",
+        "selectedStateObserved": "No se ve un estado seleccionado claro; la hoja siguiente mostro $2.00 (se eligio el tile de $2.00). Definir un estado explicito.",
+        "artifact": "Tooltip oscuro 'pwyw pwywPage' bajo el CTA = etiqueta interna/depuracion, NO replicar",
+        "claimRef": ["companyCost"],
+        "images": ["b-08-pwyw.png"]
+      },
+      {
+        "n": 42, "id": "plan_sheet", "type": "plan_sheet", "t": "6:16", "theme": "sheet",
+        "container": { "kind": "modal", "closeButton": true, "widthCss": 420, "sticky": "bottom" },
+        "loading": {
+          "observedDurationSec": 4,
+          "sequence": ["hoja blanca vacia", "aparece el boton X (6:16.7)", "se pinta primero el bloque de pago (6:17.7)", "se pinta el resto; avatares como circulos tintados vacios (6:20.3)", "se abre el modal del regalo (6:21.3)"],
+          "images": ["b-anim-02-sheet-loading.png"]
+        },
+        "countdown": {
+          "label": "Your discount has been reserved for the next 15 minutes",
+          "totalSeconds": 900,
+          "firstSeen": "12:33 en 6:21 (corre 1 s/s; mismo valor en la cabecera y en el chip del cupon)",
+          "startsAt": "desconocido: ~2m27s antes de que aparezca la hoja, sin evento visible. Definir (recomendado: al conceder el descuento) y que el vencimiento sea real.",
+          "progressBar": "linea fina bajo la cabecera, queda pegada arriba al hacer scroll; relleno ~27 % observado, semantica desconocida"
+        },
+        "sticky": { "label": "14 Day Trial - {{trialPrice}}", "sublabel": "We'll remind you before the trial ends", "cta": "Start Now", "ctaAction": "scroll suave a 'Payment Options' (observado 8:24-8:28)" },
+        "sections": [
+          { "id": "compare", "title": null, "pills": ["NOW", "YOUR GOAL"], "avatars": "2 ilustraciones (placeholder tintado mientras cargan)", "stats": [
+              { "label": "Energy level", "now": "Low", "goal": "High", "icon": "flames", "nowFlames": 1, "goalFlames": 5 },
+              { "label": "Well-being level", "now": "Weak", "goal": "Strong", "icon": "segments", "nowSegments": 1, "goalSegments": 3 },
+              { "label": "Self-esteem level", "now": "Low", "goal": "High", "icon": "segments", "nowSegments": 1, "goalSegments": 3 }
+            ], "rows": [{ "label": "Difficulty", "value": "Perfectionist" }, { "label": "Goal", "value": "State of calm" }],
+            "derivation": "no observable; ver PLAN-B.md §6.4", "images": ["b-10-sheet-top.png"] },
+          { "id": "promo_ticket", "copy": "Your {{discountPct}}% Discount Promo Code Is Applied!", "code": "off_{{discountPct}}_{{month}}", "timer": "mismo countdown (12:05 en 6:50)", "visibleWhen": "despues de aplicar el regalo", "images": ["b-11-sheet-plan.png"] },
+          { "id": "banner", "copy": "{{discountPct}}% OFF YOUR PLAN", "style": "degradado lima -> teal" },
+          { "id": "plan_card", "title": "Your personalized plan is ready!", "timeline": [
+              { "icon": "check", "title": "14-day trial", "right": "{{trialPrice}}", "body": "Full access to the {{brand}} app." },
+              { "icon": "send", "title": "Unlock lasting behavior change", "body": "Daily rituals that make new habits second nature." },
+              { "icon": "bell", "title": "Day 12", "body": "A gentle nudge 2 days before your trial ends." },
+              { "icon": "dotted", "title": "Price after trial", "badge": "SAVE {{discountPct}}%", "perDayStruck": 2.22, "perDay": 0.67, "billing": "{{price}} billed every 2 months" }
+            ], "pricing": { "afterTrialPrice": 39.99, "periodDays": 60, "discountPct": 70, "formulas": { "perDay": "afterTrialPrice / periodDays", "perDayStruck": "perDay / (1 - discountPct/100)", "trialEndDate": "today + trialDays", "gift": "el descuento se aplica al precio POSTERIOR al trial; el monto del trial queda fijo" } },
+            "images": ["b-11-sheet-plan.png"] },
+          { "id": "payment", "title": "Payment Options", "emailField": { "prefilled": true, "source": "lead.email (#38)" },
+            "express": { "title": "Express checkout", "subtitle": "Checkout in seconds with Apple Pay or PayPal", "buttons": ["paypal", "google_pay (apple_pay en dispositivos compatibles)"] },
+            "divider": "OR",
+            "card": { "header": "Credit Card VISA AMEX Mastercard", "fields": ["Card Number (16 digits)", "MM / YY", "CVV (?)"] },
+            "reminder": { "text": "We'll remind you 2 days before renewal. You're in control.", "checkbox": true, "defaultChecked": true },
+            "cta": { "label": "START MEMBERSHIP", "disabledUntil": "datos de tarjeta validos (estado deshabilitado observado)", "sub": "No commitments. Cancel online at anytime." },
+            "trust": { "pill": "Pay Safe & Secure", "logos": ["PayPal", "Apple Pay", "VISA", "Mastercard", "Google Pay", "AMEX"] },
+            "images": ["b-12-sheet-payment.png"] },
+          { "id": "legal", "bullets": [
+              "This is an auto renewing subscription.",
+              "If you don't cancel during the 14-day intro period, {{brand}} will charge you {{renewalPrice}} on {{trialEndDate}}.",
+              "After the intro period, you will be charged automatically {{renewalPrice}} every 2 months until you cancel.",
+              "You can cancel at any time by going through your account settings via {{domain}}.",
+              "By purchasing a subscription, you agree to our Terms of Use and that you are over 18 and acknowledge the Privacy Statement.",
+              "See our Subscription Policy for details."
+            ], "images": ["b-13-sheet-legal-benefits.png"] },
+          { "id": "benefits", "title": "What you will get with {{brand}}", "items": [
+              { "title": "Healthy habits & routines", "body": "The life you've always wanted, with the help of behavioral science." },
+              { "title": "Improved well-being", "body": "Stepwise programs to enhance health, self-esteem, relationships & more." },
+              { "title": "Coaching sessions", "body": "On-demand coaching audios & 1-on-1 personalized support (on upgrade)." },
+              { "title": "Tools that support your goals", "body": "Meditations, guided workouts, deep work sessions, bedtime stories & more." },
+              { "title": "Planners & workbooks", "body": "Guided journals and printable workbooks to turn your plans into daily action." },
+              { "title": "Habitat Zero", "body": "Our desktop app for focused work, built to quiet the noise on your computer." }
+            ], "iconStyle": "ilustracion 3D en circulo pastel (propia de la marca; no copiar)", "images": ["b-13-sheet-legal-benefits.png"] },
+          { "id": "faq", "title": "People often ask", "defaultOpen": 0, "items": [
+              { "q": "How is {{brand}} different from just making a to-do list?", "a": "A to-do list tells you what to do. {{brand}} builds the drive to actually do it. Every routine is backed by behavioral science and adapts to your pace, so motivation stops being the problem." },
+              { "q": "What results can I realistically expect?" },
+              { "q": "I've tried habit apps before. Why will this be different?" },
+              { "q": "How much time does it actually take?" },
+              { "q": "What if I fall off track?" }
+            ], "note": "Solo la primera respuesta es visible en el video; las otras 4 no se abrieron.", "images": ["b-13-sheet-legal-benefits.png", "b-14-sheet-faq-reviews.png"] },
+          { "id": "reviews", "title": "Members love our plans", "claimRef": ["testimonials"], "items": [
+              { "stars": 5, "author": "(testimonio de terceros; no copiar)" },
+              { "stars": 5, "author": "(testimonio de terceros; no copiar)" }
+            ], "images": ["b-14-sheet-faq-reviews.png"] },
+          { "id": "expert", "banner": "Content reviewed by an expert", "claimRef": ["expert", "awards", "press"], "blocks": ["tarjeta del revisor (foto, nombre, cargo, cita)", "Fabulous awards (3 premios)", "As featured in (logos de prensa en una sola tinta)"], "images": ["b-15-sheet-expert-letter.png"] },
+          { "id": "letter", "illustration": "atardecer con dos personas (propia)", "title": "{{firstName}}, do you copy?", "body": [
+              "It's me, future {{firstName}}. I'm calling from {{currentYear+1}} because today is an important day for you - for us.",
+              "{{todayLong}} is the day we decide to change our lives for the better.",
+              "I have excellent news: I'm healthy, in great shape, and worry-free, thanks to the choices you're making.",
+              "I'll be with you every step of the way.",
+              "See you soon,\nFuture {{firstName}}"
+            ], "font": "serif", "sensitive": "no usar afirmaciones de salud; reescribir", "images": ["b-15-sheet-expert-letter.png"] }
+        ],
+        "overlays": [
+          {
+            "id": "gift_modal", "opensAt": "6:21.3 (~1 s despues de pintar la hoja)", "backdrop": "gris oscuro + desenfoque de la hoja",
+            "picker": { "pill": "ONE LAST THING", "title": "Pick a gift to reveal your discount.", "body": "Your trial amount is locked in. What is inside comes off your price after the trial.", "gifts": 3, "observedPickAt": "6:29.7 (esperando 8 s)" },
+            "reveal": { "pill": "DISCOUNT UNLOCKED", "title": "{{discountPct}}% off is yours.", "body": "Tap below and we add it to your plan. Nothing to type in.", "coupon": { "kicker": "RESERVED FOR YOU", "value": "{{discountPct}}% OFF", "sub": "Off your price after the trial." }, "cta": "Apply my discount", "confetti": true },
+            "outcomeObserved": "70 % (una sola corrida; se desconoce si los otros regalos dan otro valor)",
+            "ethics": "Si todos los regalos dan lo mismo, no presentarlo como azar.",
+            "images": ["b-09-gift-reveal.png", "b-anim-01-gift-reveal.png"]
+          },
+          { "id": "google_pay_popup", "observed": "8:29-8:48", "kind": "UI de terceros (lista de tarjetas guardadas + pagina de administracion de pagos de Google). Contiene datos de pago personales: NO se incluyeron imagenes.", "inScope": false }
+        ]
+      }
+    ]
+  },
+  "claimRefs": {
+    "users": { "reference": "30 million / 40,000,000+", "usedIn": ["entry.adCopyObserved", 17, 26], "requiresEvidence": true },
+    "companyCost": { "reference": "$16.41 'to compensate our employees for the trial'", "usedIn": [41], "requiresEvidence": true },
+    "testimonials": { "reference": "2 resenas de miembros", "usedIn": ["plan_sheet.reviews"], "requiresEvidence": true },
+    "expert": { "reference": "Jazmin Quill, MA, MSc - Co-founder, Stanford Psychology One Program", "usedIn": ["plan_sheet.expert", 31], "requiresEvidence": true },
+    "awards": { "reference": ["Best App Finalist (Google Play Awards)", "Best Self-Care App 2018 (App Store)", "Design Award Winner (Google Material)"], "usedIn": ["plan_sheet.expert"], "requiresEvidence": true },
+    "press": { "reference": ["The New York Times", "girlboss", "Forbes", "healthline", "SELF"], "usedIn": ["plan_sheet.expert", 17], "requiresEvidence": true }
+  }
+}

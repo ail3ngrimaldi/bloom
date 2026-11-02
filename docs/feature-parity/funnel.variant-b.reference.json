@@ -178,7 +178,7 @@
         "images": ["b-08-pwyw.png"]
       },
       {
-        "n": 42, "id": "plan_sheet", "type": "plan_sheet", "t": "6:16", "theme": "sheet",
+        "n": 42, "id": "plan", "type": "plan_sheet", "t": "6:16", "theme": "sheet",
         "container": { "kind": "modal", "closeButton": true, "widthCss": 420, "sticky": "bottom" },
         "loading": {
           "observedDurationSec": 4,

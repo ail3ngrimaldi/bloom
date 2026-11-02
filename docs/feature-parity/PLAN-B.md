@@ -7,7 +7,7 @@
 | **Relación con los otros documentos** | Complementa [`PLAN.md`](PLAN.md) (variante A, grabación `2026-10-29 01-53-06.mkv`). El quiz es el mismo; **cambia el cierre** (§4). Índice: [`README.md`](README.md) |
 | **Datos máquina-legibles** | [`funnel.variant-b.reference.json`](funnel.variant-b.reference.json) · tracker: [`PARITY_STATUS.md`](PARITY_STATUS.md) · decisiones: [`DECISIONS.md`](DECISIONS.md) |
 | **Imágenes** | [`images/b-*.png`](images/) (26 PNG; las de la variante A son `images/00…19-*.png`) |
-| **Estado del repo (2026-11-02)** | Variante A implementada (fases 0–7 y 9, con los guardrails *estrictos* anteriores). **La variante B no está empezada** y la fase B1 debe además alinear lo ya construido con los guardrails v2 (§2, §6.8) |
+| **Estado del repo (2026-11-02)** | Variante A implementada (fases 0–7 y 9) y **variante B implementada (fases B0–B8, rama `v2`)** con los guardrails v2, incluida la fase B1 que reabrió el quiz compartido. Evidencia por paso en [`PARITY_STATUS.md`](PARITY_STATUS.md); decisiones `I-43` a `I-62` en [`DECISIONS.md`](DECISIONS.md). Lo que el video no permite saber sigue en §9.2 |
 | **Fecha / autor** | 2026-11-02 · revisión v2: el video se recorrió de nuevo completo y se aplican los guardrails v2 |
 
 ![Mosaico del quiz de la variante B](images/b-00a-overview-quiz.png)

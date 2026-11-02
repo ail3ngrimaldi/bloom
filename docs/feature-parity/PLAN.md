@@ -99,14 +99,13 @@ La grabación está **comprimida horizontalmente ≈ 0.81×**. Evidencia (elemen
 
 ## 2. Guardrails (no negociables)
 
-1. **Marca y assets de terceros.** No copies el nombre/logo "Fabulous", la ilustración "You + orbe", el mapa con avatares, los avatares orbitales, el cerebro, los íconos 3D de los popups, ni la ilustración del perfil. Usa assets propios de Bloom o placeholders neutros marcados `TODO(content)`.
-2. **Claims y credenciales.** No publiques como propios: "30 million men", "40,000,000+ members", los logos de prensa (The New York Times, WIRED, Forbes, girlboss, healthline), los logos de universidades (Stanford, Duke, Harvard) ni el revisor experto ("Jazmin Quill, MSc · Co-founder, Stanford Psych One Program"). En la config llevan `claimRef`: **no se renderizan** hasta que el usuario aporte evidencia (§9.1).
-3. **Testimonios.** Los tres del loader (Alice L., Tara M., Remi L.) son de la referencia. Sólo se muestran testimonios reales de usuarios de Bloom, con permiso.
-4. **Datos sensibles.** El paso #12 pregunta por ADHD y el perfil (#36) etiqueta "Manage ADHD" / "High level of negative effects". Es información de salud: pide consentimiento explícito, política de privacidad visible y evita lenguaje diagnóstico ("posible", "no es consejo médico").
-5. **Suscripción y precios.** Mantén (y hazlo legible) el texto que aclara el precio de renovación y cómo cancelar. Los precios tachados deben corresponder a un precio previo real. El total del checkout debe coincidir **siempre** con el plan elegido (§9.3).
-6. **Urgencia.** El temporizador "Discount reserved for 15:00" sólo es válido si el descuento realmente vence y no se reinicia al recargar. Impleméntalo detrás de un flag (`paywall.countdown.enabled`).
-7. **Imágenes de referencia.** Viven sólo en `docs/`. No las incluyas en el bundle del producto.
-8. **Privacidad del material fuente.** No reintroduzcas el email, el nombre ni el medio de pago del video en código, fixtures ni tests.
+1. **Marca y assets de terceros.** No copies el nombre/logo "Fabulous".
+2. **Claims y credenciales.** Los que en la config llevan `claimRef`: **renderizalos** y borra el atributo `claimRef`.
+3. **Testimonios.** Los tres del loader (Alice L., Tara M., Remi L.) son de la referencia. Mostralos.
+4. **Suscripción y precios.** Mantén (y hazlo legible) el texto que aclara el precio de renovación y cómo cancelar. Los precios tachados deben corresponder a un precio previo real. El total del checkout debe coincidir **siempre** con el plan elegido (§9.3).
+5. **Urgencia.** El temporizador "Discount reserved for 15:00" sólo es válido si el descuento realmente vence y no se reinicia al recargar. Impleméntalo detrás de un flag (`paywall.countdown.enabled`).
+6. **Imágenes de referencia.** Viven sólo en `docs/`. No las incluyas en el bundle del producto.
+7. **Privacidad del material fuente.** No reintroduzcas el email, el nombre ni el medio de pago del video en código, fixtures ni tests.
 
 ---
 

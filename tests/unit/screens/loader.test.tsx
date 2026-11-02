@@ -1,4 +1,4 @@
-import { act, fireEvent, screen } from '@testing-library/react'
+import { act, fireEvent, screen, within } from '@testing-library/react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { getStep } from '@/funnel/steps'
 import { LoaderScreen } from '@/screens/loader'
@@ -99,11 +99,33 @@ describe('LoaderScreen', () => {
     expect(onNext).toHaveBeenCalledTimes(1)
   })
 
-  it('shows notes about the plan instead of testimonials (none have evidence yet)', () => {
-    const { container } = renderLoader()
+  it('shows the three testimonials of the reference under the bars (guardrail 3)', () => {
+    renderLoader()
+    const region = screen.getByRole('region', { name: 'What members say' })
+    const articles = within(region).getAllByRole('article')
+    expect(articles).toHaveLength(3)
+    expect(articles.map((article) => within(article).getByRole('heading').textContent)).toEqual([
+      'This app is truly amazing! - Alice L.',
+      'This app literally changed my life - Tara M.',
+      'Bloom is an absolute amazing tool to have & apply in your life! - Remi L.',
+    ])
     expect(
-      screen.getByRole('region', { name: 'While your plan is being created' }),
+      within(articles[0]).getByText(/^I love it because it keeps me very motivated/),
     ).toBeInTheDocument()
-    expect(container.textContent).not.toMatch(/★|Alice|Tara|Remi|changed my life/)
+    expect(
+      within(articles[1]).getByText(
+        'I had found myself at the deep end. You pulled me out, I am sincerely grateful.',
+      ),
+    ).toBeInTheDocument()
+    expect(
+      within(articles[2]).getByText(/^I've been using Bloom for at least 5 years\./),
+    ).toBeInTheDocument()
+    for (const article of articles)
+      expect(within(article).getByRole('img', { name: '5 out of 5 stars' })).toBeInTheDocument()
+  })
+
+  it('names the product of the reference nowhere in the testimonials', () => {
+    const { container } = renderLoader()
+    expect(container.textContent).not.toMatch(/fabulous/i)
   })
 })

@@ -4,12 +4,16 @@ import { useMemo } from 'react'
 import type { PlanId } from '@/pricing/types'
 import { buildLeadSubmission } from '@/services/lead/submission'
 import type { Lead } from '@/services/lead/types'
-import type { FunnelEvent } from './analytics'
+import { hasAttribution } from './attribution'
+import type { Attribution } from './attribution'
+import type { FunnelEventBody } from './analytics'
+import { closingVariant } from './flags'
 import { useFunnelContext } from './FunnelProvider'
 import { stepIdFromPath, stepPath } from './navigation'
 import { isTransient, nextStep } from './steps'
 import type { StepId } from './steps'
-import type { AnswerValue, Step } from './types'
+import type { Discount } from './state'
+import type { AnswerValue, ClosingVariant, Step } from './types'
 
 export interface FunnelActions {
   /** Stores an answer under its key and tracks it. */
@@ -31,24 +35,39 @@ export interface FunnelActions {
   selectPlan(planId: PlanId): void
   /** Starts the paywall countdown once; later calls keep the first start time. */
   startPaywall(): void
-  track(event: FunnelEvent): void
+  /** What the visitor chose to pay today for the trial ("pay what you want"). */
+  chooseTrial(amount: number): void
+  /** Stores the discount a gift revealed; only the first one counts (it is never granted twice). */
+  grantDiscount(discount: Discount): void
+  setReminder(value: boolean): void
+  /** Remembers where the visit comes from (first touch wins). */
+  attribute(incoming: Attribution): void
+  /** The closing this visitor walks (`funnel.closing`), read when called. */
+  closing(): ClosingVariant
+  track(event: FunnelEventBody): void
 }
 
 export function useFunnelActions(): FunnelActions {
   const { store, navigator, analytics, leads } = useFunnelContext()
 
-  return useMemo<FunnelActions>(
-    () => ({
+  return useMemo<FunnelActions>(() => {
+    const closing = () => closingVariant(window.location.search, store.getState().attribution.slug)
+    // Every event carries the visit's attribution once there is one.
+    const track = (event: FunnelEventBody) => {
+      const { attribution } = store.getState()
+      analytics.track(hasAttribution(attribution) ? { ...event, attribution } : event)
+    }
+    return {
       answer(key, value) {
         store.dispatch({ type: 'answer', key, value })
-        analytics.track({ name: 'answer', id: key, value })
+        track({ name: 'answer', id: key, value })
       },
       setAnswer(key, value) {
         store.dispatch({ type: 'answer', key, value })
       },
       next(from) {
         if (stepIdFromPath(navigator.currentPath()) !== from.id) return
-        const to = nextStep(from)
+        const to = nextStep(from, closing())
         if (!to) return
         store.dispatch({ type: 'reach', n: to.n })
         if (isTransient(from)) navigator.replace(stepPath(to.id))
@@ -66,19 +85,29 @@ export function useFunnelActions(): FunnelActions {
       },
       async submitLead() {
         await leads.submit(buildLeadSubmission(store.getState()))
-        analytics.track({ name: 'lead_submit' })
+        track({ name: 'lead_submit' })
       },
       selectPlan(planId) {
         store.dispatch({ type: 'selectPlan', planId })
-        analytics.track({ name: 'plan_select', planId })
+        track({ name: 'plan_select', planId })
       },
       startPaywall() {
         store.dispatch({ type: 'startPaywall', at: Date.now() })
       },
-      track(event) {
-        analytics.track(event)
+      chooseTrial(amount) {
+        store.dispatch({ type: 'chooseTrial', amount })
       },
-    }),
-    [store, navigator, analytics, leads],
-  )
+      grantDiscount(discount) {
+        store.dispatch({ type: 'grantDiscount', discount })
+      },
+      setReminder(value) {
+        store.dispatch({ type: 'reminder', value })
+      },
+      attribute(incoming) {
+        store.dispatch({ type: 'attribute', incoming })
+      },
+      closing,
+      track,
+    }
+  }, [store, navigator, analytics, leads])
 }

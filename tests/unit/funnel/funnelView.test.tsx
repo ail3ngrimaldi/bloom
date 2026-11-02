@@ -1,6 +1,6 @@
 import { act, fireEvent, screen } from '@testing-library/react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { FunnelView, frameFor } from '@/funnel/FunnelView'
+import { FunnelView, frameFor, transitionKeyFor } from '@/funnel/FunnelView'
 import { getStep } from '@/funnel/steps'
 import StepPage, { generateStaticParams } from '@/app/s/[stepId]/page'
 import { renderFunnel } from '../helpers/funnel'
@@ -108,15 +108,74 @@ describe('frameFor', () => {
     expect(frameFor(getStep('drained'))).toBe('card')
     expect(frameFor(getStep('sacrifice'))).toBe('card')
     expect(frameFor(getStep('email'))).toBe('card')
-    for (const id of ['intro', 'wand', 'science', 'summary', 'loader', 'paywall'] as const)
+    for (const id of [
+      'intro',
+      'wand',
+      'science',
+      'summary',
+      'loader',
+      'paywall',
+      'pwyw',
+      'plan',
+    ] as const)
       expect(frameFor(getStep(id)), id).toBe('bare')
   })
 })
 
+describe('transitionKeyFor', () => {
+  it('keeps the page under an overlay: the checkout is the paywall, the plan sheet is pwyw', () => {
+    expect(transitionKeyFor(getStep('checkout'))).toBe('paywall')
+    expect(transitionKeyFor(getStep('plan'))).toBe('pwyw')
+    expect(transitionKeyFor(getStep('paywall'))).toBe('paywall')
+    expect(transitionKeyFor(getStep('pwyw'))).toBe('pwyw')
+    expect(transitionKeyFor(getStep('science'))).toBe('science')
+  })
+})
+
+describe('closing of the funnel (funnel.closing)', () => {
+  it('sends the visitor past the loading screen to "pay what you want" by default', () => {
+    const { navigator } = renderFunnel(<FunnelView />, {
+      path: '/s/loading',
+      state: { furthest: 40 },
+    })
+    act(() => void vi.advanceTimersByTime(1100))
+    expect(navigator.replace).toHaveBeenCalledWith('/s/pwyw')
+  })
+
+  it('sends it to the paywall with ?closing=paywall', () => {
+    const { navigator } = renderFunnel(<FunnelView />, {
+      path: '/s/loading?closing=paywall',
+      state: { furthest: 40 },
+    })
+    act(() => void vi.advanceTimersByTime(1100))
+    expect(navigator.replace).toHaveBeenCalledWith('/s/paywall')
+  })
+
+  it('sends it by the slug it arrived through', () => {
+    const { navigator } = renderFunnel(<FunnelView />, {
+      path: '/s/loading',
+      state: { furthest: 40, attribution: { slug: 'bloom-initial-paywall' } },
+    })
+    act(() => void vi.advanceTimersByTime(1100))
+    expect(navigator.replace).toHaveBeenCalledWith('/s/paywall')
+  })
+
+  it('does not let a visitor of one closing sit on a step of the other', () => {
+    const { navigator } = renderFunnel(<FunnelView />, {
+      path: '/s/paywall',
+      state: { furthest: 42 },
+    })
+    expect(navigator.replace).toHaveBeenCalledWith('/s/pwyw')
+  })
+})
+
 describe('/s/[stepId] page', () => {
-  it('prerenders every step and nothing else', () => {
-    expect(generateStaticParams()).toHaveLength(42)
-    expect(generateStaticParams()[0]).toEqual({ stepId: 'intro' })
+  it('prerenders every step of both closings and nothing else', () => {
+    const params = generateStaticParams()
+    expect(params).toHaveLength(44)
+    expect(params[0]).toEqual({ stepId: 'intro' })
+    for (const stepId of ['paywall', 'checkout', 'pwyw', 'plan'])
+      expect(params).toContainEqual({ stepId })
   })
 
   it('404s an unknown step', async () => {

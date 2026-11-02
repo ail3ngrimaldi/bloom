@@ -1,4 +1,5 @@
 import copyJson from './copy.en.json'
+import closingJson from './copy.variant-b.en.json'
 import type { StepId } from './steps'
 import type { OptionSetId } from './types'
 
@@ -20,7 +21,27 @@ export interface FunnelCopy {
   readonly steps: Readonly<Record<StepId, StepCopy>>
 }
 
-export const copy: FunnelCopy = copyJson
+/**
+ * The quiz and the paywall closing (copy.en.json) plus the "pay what you want" closing's words
+ * (copy.variant-b.en.json). JSON has no comments and everything in it is shipped to the browser, so
+ * what these files are lives here:
+ *
+ * - English copy of the funnel, kept out of the components (decision D6). Question wording is seeded
+ *   from the reference funnel (docs/feature-parity/funnel.reference.json) and is TODO(content):
+ *   Bloom's own copy must replace it before launch.
+ * - `{{brand}}` is the product name, `{{audience}}` is men, women or people (from the gender answer)
+ *   and `{{claims.users}}` is the user count of src/funnel/claims.ts.
+ * - Claims, credentials and testimonials are rendered, never gated (guardrails 2 and 3 of PLAN-B 2):
+ *   their content is in src/funnel/claims.ts and the words around them are in these files.
+ * - The pay what you want closing (#41 pwyw and #42 plan sheet) comes from
+ *   docs/feature-parity/funnel.variant-b.reference.json. Its prices are demo data (decision D4) and
+ *   the answers of four FAQ questions, which the reference never showed, are Bloom's own
+ *   TODO(content).
+ */
+export const copy: FunnelCopy = {
+  ...copyJson,
+  steps: { ...copyJson.steps, ...closingJson.steps },
+}
 
 export function stepCopy(id: StepId): StepCopy {
   return copy.steps[id]

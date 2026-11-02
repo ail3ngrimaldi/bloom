@@ -18,7 +18,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "e2e": "playwright test",
-    "shots": "playwright test -c playwright.shots.config.ts"
+    "shots": "playwright test -c playwright.shots.config.ts",
+    "check:build": "node scripts/check-build.mjs"
   },
   "dependencies": {
     "next": "^16.4.3",

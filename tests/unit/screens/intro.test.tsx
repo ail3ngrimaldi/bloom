@@ -14,14 +14,16 @@ beforeEach(() => {
   resetNextNavigation()
 })
 
+const intro = () => getStep('intro') as ScreenStep<'intro'>
+
 describe('IntroScreen', () => {
   it('shows the logo, an empty progress bar, the headline, the subtitle and the CTA', () => {
     const onNext = vi.fn()
-    renderFunnel(<IntroScreen step={getStep('intro') as ScreenStep<'intro'>} onNext={onNext} />)
+    renderFunnel(<IntroScreen step={intro()} onNext={onNext} />)
     expect(screen.getByText('Bloom')).toBeInTheDocument()
     expect(screen.getByRole('progressbar')).toHaveAttribute('aria-valuenow', '0')
     expect(
-      screen.getByRole('heading', { level: 1, name: "You're not lazy, you might be burning out." }),
+      screen.getByRole('heading', { level: 1, name: "Let's see if we're a match." }),
     ).toBeInTheDocument()
     expect(
       screen.getByText('The next questions reveal whether Bloom is the right app for you.'),
@@ -32,5 +34,23 @@ describe('IntroScreen', () => {
     expect(cta).toBeEnabled()
     fireEvent.click(cta)
     expect(onNext).toHaveBeenCalledTimes(1)
+  })
+
+  it('has the headline of each funnel variant (PLAN-B 3.2): pay what you want is the B funnel', () => {
+    renderFunnel(<IntroScreen step={intro()} onNext={vi.fn()} />, {
+      path: '/s/intro?closing=paywall',
+    })
+    expect(
+      screen.getByRole('heading', { level: 1, name: "You're not lazy, you might be burning out." }),
+    ).toBeInTheDocument()
+  })
+
+  it('follows the funnel slug the visitor arrived through', () => {
+    renderFunnel(<IntroScreen step={intro()} onNext={vi.fn()} />, {
+      state: { attribution: { slug: 'bloom-initial-paywall' } },
+    })
+    expect(
+      screen.getByRole('heading', { level: 1, name: "You're not lazy, you might be burning out." }),
+    ).toBeInTheDocument()
   })
 })

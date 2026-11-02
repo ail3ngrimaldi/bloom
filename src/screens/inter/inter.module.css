@@ -97,7 +97,8 @@
   list-style: none;
 }
 
-.practice {
+/* #30: the three university cards (claim C3): a serif wordmark in capitals over "UNIVERSITY". */
+.university {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -109,15 +110,41 @@
   background: var(--surface-option);
 }
 
-.practiceName {
+.universityName {
   font: 700 17px / 21px var(--font-serif);
+  letter-spacing: 0.08em;
   color: var(--ink-900);
 }
 
-.practiceCaption {
+.universityCaption {
   font: 500 11px / 14px var(--font-sans);
   letter-spacing: 0.08em;
   color: var(--ink-600);
+}
+
+/* #17: the map and, right under it, the press the product was featured in (claim C2). */
+.growTop {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  flex: 1 1 auto;
+  width: 100%;
+  min-height: 0;
+  padding: 10px 0 12px;
+}
+
+.featured {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}
+
+.featuredLabel {
+  font: 500 11px / 14px var(--font-sans);
+  color: var(--ink-900);
 }
 
 /* #31: art on top, 18/22 title with a violet emphasis, small grey quote. */
@@ -144,5 +171,46 @@
   max-width: 300px;
   margin-top: 12px;
   font: italic 400 13px / 17px var(--font-sans);
+  color: var(--ink-600);
+}
+
+/* The reviewer's card (claim C4): a lavender strip, then the verified badge, name and role. */
+.reviewer {
+  width: 100%;
+  max-width: 300px;
+  margin-top: 14px;
+  overflow: hidden;
+  border-radius: var(--radius-option);
+  background: var(--surface-option);
+  box-shadow: 0 1px 4px rgba(19, 23, 27, 0.08);
+  text-align: left;
+}
+
+.reviewerLabel {
+  padding: 5px 10px;
+  background: #eae8fa;
+  font: 500 10px / 13px var(--font-sans);
+  color: var(--ink-700);
+  text-align: center;
+}
+
+.reviewerRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+}
+
+.reviewerBadge {
+  flex: none;
+}
+
+.reviewerName {
+  font: 700 12px / 16px var(--font-sans);
+  color: var(--ink-900);
+}
+
+.reviewerRole {
+  font: 400 10px / 13px var(--font-sans);
   color: var(--ink-600);
 }

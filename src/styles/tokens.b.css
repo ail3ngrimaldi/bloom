@@ -1,0 +1,144 @@
+/*
+ * Design tokens of the "pay what you want" closing (PLAN-B 5.1): the pay-what-you-want page (#41)
+ * and the plan sheet (#42). They complement tokens.css; names stay brand-neutral.
+ *
+ * Colours were sampled from H.264 frames (+-3 levels per channel): starting values. Where a sampled
+ * colour fails WCAG AA on the surface it sits on, the token holds the darkened value and the
+ * sampled one is kept beside it as `-sampled` (decorative use only). tokens.b.test.ts checks every
+ * text pair at 4.5:1.
+ */
+:root {
+  /* ---- Pay what you want (#41) -------------------------------------------------------------- */
+  --pwyw-bg: #ffffff;
+  --pwyw-ink: #111719;
+  --pwyw-p1: #525e69;
+  --pwyw-p2: #68747f; /* the note under the paragraph; sampled #7f8d9c reached 3.4:1 */
+  --pwyw-p2-sampled: #7f8d9c;
+  --pwyw-tile-1: #dff0fe;
+  --pwyw-tile-1-ink: #193e66;
+  --pwyw-tile-2: #cee7ff;
+  --pwyw-tile-2-ink: #123f6e;
+  --pwyw-tile-3: #feeadf;
+  --pwyw-tile-3-ink: #b84300; /* the amount of the popular tile; sampled #fc6a0a reached 2.5:1 */
+  --pwyw-tile-3-ink-sampled: #fc6a0a;
+  --pwyw-accent: #ff6803; /* borders and art */
+  --pwyw-accent-strong: #c44a00; /* the ribbon and the CTA: white on it is 4.85:1 (on #ff6803, 2.9:1) */
+  --on-accent: #ffffff;
+  --pwyw-tree-leaf: #2f9e6a;
+  --pwyw-tree-trunk: #8a5a3c;
+  --pwyw-tree-orange: #ff8a1f;
+
+  /* ---- Plan sheet: page, header and counter ------------------------------------------------- */
+  --sheet-page-bg: #e9eaef;
+  --sheet-bg: #ffffff;
+  --sheet-header-bg: #f5f4fd;
+  --sheet-header-ink: #362c5b;
+  --timer-bg: #ffffff;
+  --timer-ink: #332e5d;
+  --sheet-progress-fill: #685ec9;
+  --sheet-progress-track: #e3e0fc;
+  --close-ink: #6762a6;
+  --skeleton-tint: #eceaf6;
+
+  /* ---- Plan sheet: NOW vs YOUR GOAL ---------------------------------------------------------- */
+  --now: #d6204f; /* white pill text: 5.0:1 (sampled #f12f5f reached 3.9:1) */
+  --now-sampled: #f12f5f;
+  --goal: #00ca9f;
+  --on-goal: #06251f; /* the sampled white on #00ca9f reached 2.1:1: the mint keeps its colour, the text is dark */
+  --goal-text: #007a63; /* mint as text on white or on the goal tint */
+  --now-text: #d6204f;
+  --now-tile: #fdf3f6;
+  --goal-tile: #effdfa;
+  --compare-label: #656268;
+  --compare-value: #121820;
+  --now-avatar-bg: #fdf6f8;
+  --goal-avatar-bg: #effdfa;
+  --flame: #f5a900;
+  --flame-off: #ece7d8;
+
+  /* ---- Plan sheet: fixed bar, coupon and plan card ------------------------------------------- */
+  --brand-teal: #00ca9f;
+  --on-teal: #06251f;
+  --sticky-ink: #0a0a0a;
+  --sticky-sub: #6b7075; /* sampled #a4a8ac reached 2.4:1 */
+  --sticky-sub-sampled: #a4a8ac;
+  --ticket-grad: linear-gradient(90deg, #fef2da 0%, #e0dbf6 50%, #fef2da 100%);
+  --ticket-timer-bg: #f0e7f7;
+  --ticket-timer-ink: #423363;
+  --green-grad: linear-gradient(90deg, #51d912 0%, #22bd6a 50%, #05aba1 100%);
+  --on-green: #0a2e1c; /* white on the lime end reached 1.7:1 */
+  --plan-title-ink: #0e181f;
+  --muted-ink: #616065;
+  --tl-check: #b1002b;
+  --tl-send: #ffa032;
+  --tl-bell: #167bfb;
+  --tl-dotted: #86d1bb;
+  --tl-thread: #dcdde2;
+  --struck-ink: #6b7075;
+
+  /* ---- Plan sheet: payment ------------------------------------------------------------------- */
+  --pay-container: #f6f7fa;
+  --pay-border: #cdd1d5;
+  --pay-field-border: #dfe3e8;
+  --paypal-gold-b: #fcc237;
+  --gpay-bg: #f0f1f4;
+  --reminder-bg: #f4f2fe;
+  --reminder-ink: #4e4a89;
+  --checkbox: #363dc7;
+  --bell-bg: #584ffc;
+  --start-disabled: #7be0cc;
+  --safe-pill-bg-b: #bef7f1;
+  --safe-pill-ink: #13574f; /* sampled #56cdaf on the mint pill reached 1.7:1 */
+  --field-error: #b3141f;
+
+  /* ---- Plan sheet: legal, FAQ, reviews, expert, letter --------------------------------------- */
+  --faq-bg: #f5f4fd;
+  --review-bg: #f4f5f8;
+  --review-ink: #5e5f62;
+  --star: #ffa034;
+  --expert-accent: #ffa032; /* icons and the banner */
+  --expert-accent-text: #8f5200; /* awards and press: the sampled tint reached 2.0:1 */
+  --expert-body: #fdf4eb;
+  --on-expert-accent: #3a2200;
+  --letter-bg: #f2f0fe;
+  --letter-ink: #292141;
+  --letter-body: #6a6092; /* sampled #72689b reached 4.48:1 */
+  --benefit-ink: #1c2a33;
+
+  /* ---- Gift modal ---------------------------------------------------------------------------- */
+  --gift-modal: #2a1d5b;
+  --gift-pill: #f0bf90;
+  --gift-lid: #5043b2;
+  --gift-body: #d3cefd;
+  --gift-ribbon: #e9ac5b;
+  --gift-halo: #f3c66a;
+  --gift-backdrop: rgba(24, 24, 28, 0.62);
+  --coupon-accent: #ed8c13;
+  --coupon-accent-text: #a85c00; /* sampled #ed8c13 on white reached 2.5:1 */
+  --coupon-ink: #16171a;
+  --coupon-border: #e3b24f;
+  --apply-grad: linear-gradient(90deg, #00b5a9 0%, #00c49c 100%);
+  --on-apply: #06251f;
+  --confetti-1: #c7c1fd;
+  --confetti-2: #5e53ad;
+  --confetti-3: #d9419e;
+  --confetti-4: #f0a33a;
+
+  /* ---- Measures (PLAN-B 5.3, video px x 1.36) ------------------------------------------------ */
+  --plan-sheet-width: 420px;
+  --plan-sheet-radius: 32px;
+  --plan-sheet-top: 42px;
+  --plan-pad: 15px;
+  --plan-bar-height: 71px;
+  --plan-close-size: 44px;
+  --gift-modal-width: 392px;
+  --pwyw-tile-width: 143px;
+  --pwyw-tile-height: 141px;
+  --pwyw-tile-gap: 18px;
+  --pwyw-cta-width: 242px;
+  --pwyw-cta-height: 54px;
+  --pay-button-height: 56px;
+
+  --radius-pwyw-tile: 14px;
+  --radius-sheet-section: 16px;
+}

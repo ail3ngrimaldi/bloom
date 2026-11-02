@@ -1,0 +1,178 @@
+/*
+ * Plan sheet (#42, b-10 and b-18), in CSS px (video x 1.36): a column 420 wide with a 32 radius,
+ * 42 below the top of a #E9EAEF page, a lavender header, content padded 15 at the sides, and a
+ * fixed bar 71 tall floating over the bottom edge. On phones the sheet fills the screen.
+ */
+.layer {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  justify-content: center;
+  padding-top: var(--plan-sheet-top);
+  background: var(--sheet-page-bg);
+  animation: layer-in var(--motion-overlay) var(--ease-out) both;
+}
+
+.sheet {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: var(--plan-sheet-width);
+  max-width: 100%;
+  height: 100%;
+  border-radius: var(--plan-sheet-radius) var(--plan-sheet-radius) 0 0;
+  background: var(--sheet-bg);
+  box-shadow: 0 0 40px rgba(34, 30, 70, 0.18);
+  overflow: hidden;
+  animation: sheet-in 260ms var(--ease-out) both;
+}
+
+/* On a phone the sheet is the screen (PLAN-B 4.2). */
+@media (max-width: 479.98px) {
+  .layer {
+    padding-top: 0;
+  }
+
+  .sheet {
+    width: 100%;
+    border-radius: 0;
+  }
+}
+
+.scroll {
+  position: relative;
+  flex: 1 1 auto;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  outline: none;
+  /* Room for the fixed bar and the safe area, so the last section is never covered. */
+  padding-bottom: calc(var(--plan-bar-height) + 28px + env(safe-area-inset-bottom, 0px));
+}
+
+.close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 6;
+  display: grid;
+  place-items: center;
+  width: var(--plan-close-size);
+  height: var(--plan-close-size);
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: var(--timer-bg);
+  color: var(--close-ink);
+  box-shadow: 0 1px 4px rgba(34, 30, 70, 0.12);
+  animation: fade-in 200ms 200ms var(--ease-out) both;
+}
+
+.close svg {
+  width: 20px;
+  height: 20px;
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 16px var(--plan-pad) 0;
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* ---- Skeleton: the frame of the sheet while it loads ---------------------------------------- */
+.skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 0 var(--plan-pad) 24px;
+}
+
+.skHeader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  margin: 0 calc(-1 * var(--plan-pad));
+  padding: 28px var(--plan-pad) 24px;
+  background: var(--sheet-header-bg);
+}
+
+.skPills {
+  display: flex;
+  justify-content: space-between;
+}
+
+.skAvatars {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 24px;
+}
+
+.skCircle {
+  width: 112px;
+  height: 112px;
+  border-radius: 50%;
+  background: var(--skeleton-tint);
+}
+
+.skTiles {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.skBar {
+  display: block;
+  border-radius: 12px;
+  background: var(--skeleton-tint);
+  animation: pulse 1.2s ease-in-out infinite alternate;
+}
+
+@keyframes pulse {
+  from {
+    opacity: 0.55;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes layer-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes sheet-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}

@@ -1,11 +1,12 @@
 import { describe, expect, it } from 'vitest'
 import { progressFor } from '@/funnel/progress'
-import { STEPS, getStep } from '@/funnel/steps'
+import { QUIZ_STEPS, getStep } from '@/funnel/steps'
 import type { StepId } from '@/funnel/steps'
 
 describe('progressFor (PLAN 3)', () => {
   it('is (n - 1) / 39 for steps 1 to 38', () => {
-    for (const step of STEPS.slice(0, 38)) expect(progressFor(step)).toBeCloseTo((step.n - 1) / 39)
+    for (const step of QUIZ_STEPS.slice(0, 38))
+      expect(progressFor(step)).toBeCloseTo((step.n - 1) / 39)
   })
 
   it('starts at 0 on the intro and gives #39 the value of #38', () => {

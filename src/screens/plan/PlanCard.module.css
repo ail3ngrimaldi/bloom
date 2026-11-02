@@ -1,0 +1,182 @@
+/* Plan card (b-11 items 4 to 8): the banner joins the top of a white card; a timeline inside. */
+.wrap {
+  display: flex;
+  flex-direction: column;
+}
+
+.banner {
+  padding: 11px 16px 18px;
+  margin-bottom: -10px;
+  border-radius: var(--radius-sheet-section) var(--radius-sheet-section) 0 0;
+  background: var(--green-grad);
+  color: var(--on-green);
+  font: 800 14px / 18px var(--font-sans);
+  letter-spacing: 0.02em;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.card {
+  position: relative;
+  padding: 18px 16px 16px;
+  border: 1px solid var(--tl-thread);
+  border-radius: var(--radius-sheet-section);
+  background: var(--sheet-bg);
+}
+
+.title {
+  font: 900 22px / 28px var(--font-sans);
+  letter-spacing: -0.01em;
+  color: var(--plan-title-ink);
+}
+
+.timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  margin: 18px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.milestone {
+  position: relative;
+  display: flex;
+  gap: 12px;
+}
+
+/* The thread that joins one milestone to the next. */
+.milestone:not(:last-child)::before {
+  content: '';
+  position: absolute;
+  top: 28px;
+  bottom: -18px;
+  left: 13px;
+  border-left: 2px dotted var(--tl-thread);
+}
+
+.icon {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+}
+
+.icon svg {
+  width: 16px;
+  height: 16px;
+}
+
+.check {
+  background: var(--tl-check);
+  color: #fff;
+}
+
+.send {
+  background: var(--tl-send);
+  color: #fff;
+}
+
+.bell {
+  background: var(--tl-bell);
+  color: #fff;
+}
+
+.dotted {
+  background: transparent;
+  color: var(--tl-dotted);
+}
+
+.dotted svg {
+  width: 28px;
+  height: 28px;
+}
+
+.milestoneBody {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.milestoneTitle {
+  font: 700 15.5px / 20px var(--font-sans);
+  color: var(--plan-title-ink);
+}
+
+.amount {
+  font: 800 15.5px / 20px var(--font-sans);
+  color: var(--plan-title-ink);
+}
+
+.text {
+  margin-top: 2px;
+  font: 400 13.5px / 19px var(--font-sans);
+  color: var(--muted-ink);
+}
+
+.afterLeft {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+}
+
+.save {
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: var(--green-grad);
+  color: var(--on-green);
+  font: 800 11px / 14px var(--font-sans);
+  letter-spacing: 0.03em;
+}
+
+.perDay {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.struck {
+  margin-right: 4px;
+  font: 400 15px / 20px var(--font-sans);
+  color: var(--struck-ink);
+}
+
+.perDayNow {
+  font: 800 15.5px / 20px var(--font-sans);
+  color: var(--plan-title-ink);
+}
+
+.billed {
+  margin-top: 4px;
+  font: 400 12.5px / 16px var(--font-sans);
+  color: var(--muted-ink);
+  text-align: right;
+}
+
+.demo {
+  margin-top: 14px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  background: var(--bg-page-warm);
+  font: 400 12px / 16px var(--font-sans);
+  color: var(--ink-600);
+  text-align: center;
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}

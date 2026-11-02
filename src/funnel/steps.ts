@@ -1,4 +1,5 @@
-import type { OptionSetId, Step } from './types'
+import { CLAIMS } from './claims'
+import type { ClosingVariant, OptionSetId, Step } from './types'
 
 /** Option ids of the shared answer sets; their labels are in copy.en.json (optionSets). */
 export const OPTION_SETS = {
@@ -42,10 +43,10 @@ function multi<const Id extends string>(n: number, id: Id, options: readonly str
 }
 
 /**
- * The 42 steps of PLAN section 3, in order. `n` is the position (1 based) and must match the
- * index; `id` is the URL segment (/s/<id>) and, for questions, the answer key.
+ * The 40 steps every visitor sees (PLAN section 3), in order. `n` is the position (1 based) and
+ * must match the index; `id` is the URL segment (/s/<id>) and, for questions, the answer key.
  */
-export const STEPS = [
+export const QUIZ_STEPS = [
   { n: 1, id: 'intro', type: 'intro', theme: 'lilac', header: true },
   single(2, 'drained', 'FREQ4'),
   single(3, 'overthink', 'FREQ4'),
@@ -79,7 +80,6 @@ export const STEPS = [
     theme: 'soft',
     header: false,
     ctaEnableDelayMs: 500,
-    claimRefs: ['press', 'users'],
   },
   single(18, 'others_needs', 'OSN'),
   single(19, 'others_expect', 'OSN'),
@@ -105,7 +105,6 @@ export const STEPS = [
     theme: 'soft',
     header: false,
     ctaEnableDelayMs: 500,
-    claimRefs: ['users'],
   },
   multi(27, 'who_for', ['myself', 'family', 'future_self', 'believer', 'not_sure']),
   choice(28, 'lose_motivation', ['yes', 'no', 'not_tried']),
@@ -118,7 +117,6 @@ export const STEPS = [
     theme: 'soft',
     header: false,
     ctaEnableDelayMs: 500,
-    claimRefs: ['universities'],
   },
   {
     n: 31,
@@ -128,7 +126,6 @@ export const STEPS = [
     theme: 'soft',
     header: false,
     ctaEnableDelayMs: 500,
-    claimRefs: ['expert'],
   },
   choice(32, 'self_discipline', ['none', 'phases', 'structured']),
   choice(33, 'need_most', ['energy', 'habits', 'focus', 'peace']),
@@ -152,23 +149,72 @@ export const STEPS = [
       { bar: 0, atProgress: 0.5, answerKey: 'rushed_mornings', options: ['yes', 'no'] },
       { bar: 1, atProgress: 0.58, answerKey: 'heard_habit_stacking', options: ['yes', 'no'] },
     ],
-    claimRefs: ['testimonials'],
   },
   { n: 38, id: 'email', type: 'capture', field: 'email', theme: 'warm', header: true },
   { n: 39, id: 'name', type: 'capture', field: 'name', theme: 'warm', header: true },
   { n: 40, id: 'loading', type: 'loading', theme: 'white', header: false },
-  { n: 41, id: 'paywall', type: 'paywall', theme: 'white', header: false },
-  { n: 42, id: 'checkout', type: 'checkout', theme: 'white', header: false },
 ] as const satisfies readonly Step[]
 
-/** One of the 42 configured steps, with its literal id and type. */
-export type FunnelStep = (typeof STEPS)[number]
+/**
+ * #41 and #42 of each closing (decision D9). Both are built and prerendered; the flag
+ * `funnel.closing` (flags.ts) picks the one a visitor walks.
+ *
+ * "Pay what you want": three amounts, the last one is the full cost to the company (claim C8) and
+ * the preselected "most popular". Demo amounts, like every price (decision D4).
+ * The plan sheet's gift: three gifts that all reveal the same discount (D11); `count: 1` offers a
+ * single gift instead, if the owner prefers not to suggest chance.
+ */
+export const CLOSINGS = {
+  paywall: [
+    { n: 41, id: 'paywall', type: 'paywall', theme: 'white', header: false },
+    { n: 42, id: 'checkout', type: 'checkout', theme: 'white', header: false },
+  ],
+  pwyw: [
+    {
+      n: 41,
+      id: 'pwyw',
+      type: 'pwyw',
+      theme: 'white',
+      header: false,
+      trialDays: 14,
+      tiles: [
+        { id: 'low', amount: 2 },
+        { id: 'mid', amount: 10 },
+        { id: 'full', amount: CLAIMS.companyCost, mostPopular: true },
+      ],
+    },
+    {
+      n: 42,
+      id: 'plan',
+      type: 'plan_sheet',
+      theme: 'white',
+      header: false,
+      gift: { count: 3, outcomes: [70, 70, 70] },
+    },
+  ],
+} as const satisfies Record<ClosingVariant, readonly Step[]>
+
+/** Length of every funnel, whichever closing it ends with. */
+export const FUNNEL_LENGTH = 42
+/** Steps before the closing (#1 to #40). */
+export const QUIZ_LENGTH = 40
+
+/** Every configured step, both closings included: what the router prerenders. */
+export const ALL_STEPS = [...QUIZ_STEPS, ...CLOSINGS.paywall, ...CLOSINGS.pwyw] as const
+
+/** One of the configured steps, with its literal id and type. */
+export type FunnelStep = (typeof ALL_STEPS)[number]
 
 export type StepId = FunnelStep['id']
 
-export const STEP_IDS: readonly StepId[] = STEPS.map((step) => step.id)
+export const STEP_IDS: readonly StepId[] = ALL_STEPS.map((step) => step.id)
 
-const BY_ID = new Map<string, FunnelStep>(STEPS.map((step) => [step.id, step]))
+const BY_ID = new Map<string, FunnelStep>(ALL_STEPS.map((step) => [step.id, step]))
+
+const SEQUENCES: Readonly<Record<ClosingVariant, readonly FunnelStep[]>> = {
+  paywall: [...QUIZ_STEPS, ...CLOSINGS.paywall],
+  pwyw: [...QUIZ_STEPS, ...CLOSINGS.pwyw],
+}
 
 export function isStepId(value: string): value is StepId {
   return BY_ID.has(value)
@@ -179,17 +225,28 @@ export function getStep(id: StepId): FunnelStep {
   return BY_ID.get(id)!
 }
 
-/** The step at position n (1 based), or undefined outside 1..42. */
-export function stepAt(n: number): FunnelStep | undefined {
-  return STEPS[n - 1]
+/** The 42 steps a visitor walks with the given closing. */
+export function stepsFor(closing: ClosingVariant): readonly FunnelStep[] {
+  return SEQUENCES[closing]
 }
 
-export function nextStep(step: Step): FunnelStep | undefined {
-  return stepAt(step.n + 1)
+/** The step at position n (1 based) of the given closing, or undefined outside 1..42. */
+export function stepAt(n: number, closing: ClosingVariant): FunnelStep | undefined {
+  return SEQUENCES[closing][n - 1]
+}
+
+export function nextStep(step: Step, closing: ClosingVariant): FunnelStep | undefined {
+  return stepAt(step.n + 1, closing)
+}
+
+/** The closing a step belongs to, or null for the steps both closings share (#1 to #40). */
+export function closingOf(step: Step): ClosingVariant | null {
+  if (step.n <= QUIZ_LENGTH) return null
+  return CLOSINGS.paywall.some((candidate) => candidate.id === step.id) ? 'paywall' : 'pwyw'
 }
 
 /**
- * Steps that hand over to the next one on their own (the plan loader, the pre-paywall loading
+ * Steps that hand over to the next one on their own (the plan loader, the pre-closing loading
  * screen). Leaving them replaces their history entry, so the browser's Back never lands on a screen
  * that would immediately move forward again.
  */

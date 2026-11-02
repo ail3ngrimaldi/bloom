@@ -1,0 +1,43 @@
+/* Confetti (b-anim-01): it falls from above the dialog and is gone after about two seconds. */
+.confetti {
+  position: absolute;
+  inset: -150px 0 auto;
+  height: 260px;
+  overflow: visible;
+  pointer-events: none;
+  z-index: 3;
+}
+
+.piece {
+  position: absolute;
+  top: 0;
+  left: var(--x);
+  width: var(--size);
+  height: var(--size);
+  background: var(--color);
+  opacity: 0;
+  animation: fall 1.9s var(--delay) cubic-bezier(0.3, 0.1, 0.5, 1) both;
+}
+
+@keyframes fall {
+  0% {
+    opacity: 0;
+    transform: translate(0, -20px) rotate(0);
+  }
+  12% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(var(--drift), 300px) rotate(var(--spin));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .confetti {
+    display: none;
+  }
+}

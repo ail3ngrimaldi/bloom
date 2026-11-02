@@ -1,7 +1,7 @@
 /*
  * Plan loader (#37, PLAN 5.8), from 14-loader-states.png in CSS px: two-line 20px title at about
  * 51, three 270 x 44 bars (radius 22, gap 12) from 115, a row of checks at about 293, then the
- * notes. Questions open in a white 375 x 648 sheet over a 50 % black backdrop.
+ * three testimonials (b-17). Questions open in a white 375 x 648 sheet over a 50 % black backdrop.
  */
 .screen {
   display: flex;
@@ -97,22 +97,30 @@
   stroke: var(--step);
 }
 
-.tips {
+/* The three testimonials (claim C6): black stars, a bold "title - author" line and the text. */
+.testimonials {
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 16px;
   max-width: 300px;
-  margin-top: 16px;
+  margin-top: 14px;
 }
 
-.tipTitle {
-  font: 700 15px / 21px var(--font-sans);
+.stars {
+  font: 400 12px / 1 var(--font-sans);
+  letter-spacing: 1px;
   color: var(--ink-900);
 }
 
-.tipBody {
+.testimonialTitle {
+  margin-top: 4px;
+  font: 700 14px / 20px var(--font-sans);
+  color: var(--ink-900);
+}
+
+.testimonialBody {
   margin-top: 2px;
-  font: 400 14px / 21px var(--font-sans);
+  font: 400 14px / 20px var(--font-sans);
   color: var(--ink-700);
 }
 

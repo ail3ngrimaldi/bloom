@@ -70,7 +70,7 @@ describe('SummaryScreen', () => {
     renderSummary({ drained: 'rarely', overthink: 'rarely', sleep: 'sometimes', adhd: 'no' })
     expect(screen.getByText('Low')).toBeInTheDocument()
     expect(screen.getByText('LOW level')).toBeInTheDocument()
-    expect(tile('Energy level:')).toBe('Good')
+    expect(tile('Energy level:')).toBe('Normal')
   })
 
   it('does not turn a suspected ADHD into a diagnosis', () => {

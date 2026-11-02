@@ -1,0 +1,57 @@
+/* Header of the sheet (b-10 items 1 to 5): lavender, the chip, a bold two-line sentence, a thin line. */
+.header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  min-height: 86px;
+  padding: 24px 64px 22px;
+  background: var(--sheet-header-bg);
+  text-align: center;
+}
+
+.timer {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 109px;
+  height: 41px;
+  padding: 0 14px;
+  border-radius: 12px;
+  background: var(--timer-bg);
+  color: var(--timer-ink);
+  font: 800 24px / 1 var(--font-sans);
+  letter-spacing: 0.01em;
+  font-variant-numeric: tabular-nums;
+}
+
+.label {
+  font: 800 18px / 24px var(--font-sans);
+  color: var(--sheet-header-ink);
+}
+
+/* Pinned to the top of the sheet's scroll area once the header has gone. */
+.line {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  height: 4px;
+  background: var(--sheet-progress-track);
+}
+
+.fill {
+  display: block;
+  height: 100%;
+  background: var(--sheet-progress-fill);
+  transition: width 1s linear;
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}

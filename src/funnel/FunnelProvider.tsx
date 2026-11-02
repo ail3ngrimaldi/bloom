@@ -4,6 +4,8 @@ import { createContext, useContext, useState, useSyncExternalStore } from 'react
 import type { ReactNode } from 'react'
 import { mockCheckoutProvider } from '@/services/checkout/mock'
 import type { CheckoutProvider } from '@/services/checkout/types'
+import { localCountdown } from '@/services/countdown/mock'
+import type { CountdownService } from '@/services/countdown/types'
 import { mockLeadService } from '@/services/lead/mock'
 import type { LeadService } from '@/services/lead/types'
 import { localAnalytics } from './analytics'
@@ -20,6 +22,7 @@ interface FunnelContextValue {
   analytics: AnalyticsAdapter
   leads: LeadService
   checkout: CheckoutProvider
+  countdown: CountdownService
 }
 
 const FunnelContext = createContext<FunnelContextValue | null>(null)
@@ -35,6 +38,8 @@ export interface FunnelProviderProps {
   leads?: LeadService
   /** Defaults to the mock, which charges nothing. */
   checkout?: CheckoutProvider
+  /** Defaults to the browser's clock (see CountdownService). */
+  countdown?: CountdownService
 }
 
 /** Holds the funnel state for every /s/* page; it lives in the layout, so it outlasts each step. */
@@ -45,6 +50,7 @@ export function FunnelProvider({
   analytics,
   leads,
   checkout,
+  countdown,
 }: FunnelProviderProps) {
   const [value] = useState<FunnelContextValue>(() => ({
     store: store ?? createFunnelStore(sessionStorageOrNull()),
@@ -52,6 +58,7 @@ export function FunnelProvider({
     analytics: analytics ?? localAnalytics,
     leads: leads ?? mockLeadService,
     checkout: checkout ?? mockCheckoutProvider,
+    countdown: countdown ?? localCountdown,
   }))
   return <FunnelContext.Provider value={value}>{children}</FunnelContext.Provider>
 }
@@ -62,9 +69,14 @@ export function useFunnelContext(): FunnelContextValue {
   return value
 }
 
-/** The payment provider of the checkout modal. */
+/** The payment provider of the checkout modal and of the plan sheet. */
 export function useCheckoutProvider() {
   return useFunnelContext().checkout
+}
+
+/** The authority of the discount countdown. */
+export function useCountdownService() {
+  return useFunnelContext().countdown
 }
 
 /** Current funnel state. While hydrating it is the server's (empty) state, then the stored one. */

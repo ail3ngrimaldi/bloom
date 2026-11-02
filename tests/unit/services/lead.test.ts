@@ -56,6 +56,12 @@ describe('buildLeadSubmission', () => {
     expect(submission.profile.mainDifficulty).toBe('procrastination')
     expect(JSON.stringify(submission)).not.toMatch(/adhd|diagnosed/i)
   })
+
+  it('carries where the visit came from when it came from an ad (PLAN-B 6.6)', () => {
+    expect(buildLeadSubmission(state)).not.toHaveProperty('attribution')
+    const attribution = { utm_source: 'facebook', utm_campaign: 'c1', slug: 'bloom-initial-pwyw' }
+    expect(buildLeadSubmission({ ...state, attribution }).attribution).toEqual(attribution)
+  })
 })
 
 describe('mockLeadService', () => {

@@ -133,6 +133,19 @@ steps of their own closing.
   `src/funnel/attribution.ts`: `bloom-initial-pwyw` and `bloom-initial-paywall`) redirects to the
   intro and keeps the UTM parameters, the placement and the slug for the session; they travel with
   the lead and with every analytics event.
+- **Sound.** Two files in `public/audio`: `background.mp3`, a music loop that starts about a second
+  after the visitor's first tap and never stops between steps (browsers refuse sound before a tap, so
+  nothing is heard or downloaded earlier; opening the audio blocks the page for 100 to 250 ms, so it
+  waits until the next step is in), and `click.mp3`, the click of an answer. It sounds when an option
+  of a single-choice question is tapped, when Continue sends in a multiple choice (ticking the boxes
+  is silent; the magic wand counts as one, so its bubbles are silent and its Continue clicks) and
+  when a question of the plan loader is answered, and nowhere else. A round switch in a corner of
+  every step turns both off; the choice is kept in `localStorage` (`bloom.sound.muted`) and a visitor
+  who turned it off downloads neither file. The music pauses while the tab is hidden. Everything
+  goes through one Web Audio context (`src/services/sound`, injected through `FunnelProvider` like
+  the other services); `src/funnel/SoundControl.tsx` starts it and draws the switch. To change a
+  sound, replace its file (same name, MP3) and tune the volumes in `src/services/sound/files.ts`;
+  browsers keep the files for a day.
 
 ### QA gallery and dev tools
 
@@ -199,10 +212,11 @@ only in `docs/`, the recording is ignored by git (see below).
 | `src/screens/`         | One module per screen type (single, multi, intro, wand, paywall, ...), `art/`     |
 | `src/profile/`         | Wellbeing profile (`derive.ts`), the #30 phrase and the sheet comparison          |
 | `src/pricing/`         | Paywall plans (`plans.ts`) and the pay what you want quote (`closing.ts`), demo   |
-| `src/services/`        | `lead/`, `checkout/` and `countdown/`: adapter interfaces with mock defaults      |
+| `src/services/`        | `lead/`, `checkout/`, `countdown/` (mock defaults) and `sound/` (browser audio)   |
 | `src/ui/`              | Design-system components (Button, OptionCard, Modal, ...) as CSS Modules          |
 | `src/styles/`          | Global design tokens (`tokens.css`) and base styles                               |
 | `src/assets/`          | Bloom's own images and illustrations (placeholders marked `TODO(content)`), fonts |
+| `public/audio/`        | The two sounds: `background.mp3` (music loop) and `click.mp3` (answers)           |
 | `tests/unit/`          | Unit and component tests (`*.test.ts(x)`), Vitest setup, `helpers/`               |
 | `tests/e2e/`           | Playwright specs                                                                  |
 | `scripts/`             | `shots.spec.ts`: the screenshot runner (`playwright.shots.config.ts`)             |

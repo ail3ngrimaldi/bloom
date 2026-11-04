@@ -48,6 +48,19 @@ const nextConfig: NextConfig = {
       { source: '/onboarding/:slug', destination: '/s/intro?slug=:slug', permanent: false },
     ]
   },
+  async headers() {
+    // The two sounds are static files whose names do not change with their content. A day in the
+    // browser keeps a reload or a second visit from downloading the music again, and a week of
+    // background revalidation lets a replaced file reach everyone.
+    return [
+      {
+        source: '/audio/:path*',
+        headers: [
+          { key: 'Cache-Control', value: 'public, max-age=86400, stale-while-revalidate=604800' },
+        ],
+      },
+    ]
+  },
   async rewrites() {
     // The QA gallery keeps the URL of the plan (/__gallery). App Router treats folders that start
     // with an underscore as private (not routable), so the real folder is src/app/gallery.

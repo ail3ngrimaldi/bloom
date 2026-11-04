@@ -97,6 +97,15 @@
   --focus-ring-color: var(--brand-indigo);
   --focus-ring-width: 3px;
   --focus-ring-offset: 2px;
+  /* Sound switch (src/funnel/SoundControl): a white disc that reads on every page background. The
+     button is always a 44px touch target; on phones the corner is only so tall above the headers
+     of the closing, so the disc drawn inside it is smaller. */
+  --sound-switch-size: 44px;
+  --sound-switch-inset: 12px;
+  --sound-switch-disc-phone: 32px;
+  --sound-switch-bg: #ffffff;
+  --sound-switch-border: rgba(19, 23, 27, 0.18);
+  --sound-switch-shadow: 0 2px 8px rgba(19, 23, 27, 0.14);
 
   /* ---- 4.3 Radii ---------------------------------------------------------------------------- */
   --radius-card: 32px;

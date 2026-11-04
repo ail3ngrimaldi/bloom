@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from 'react'
 import type { CSSProperties, MouseEvent } from 'react'
 import { copy, copyField, interpolate, stepCopy } from '@/funnel/copy'
+import { useSound } from '@/funnel/FunnelProvider'
 import { useFunnelActions } from '@/funnel/useFunnelActions'
 import { Button, prefersReducedMotion } from '@/ui'
 import { cx } from '@/ui/cx'
@@ -59,6 +60,7 @@ const translate = ([x, y]: Point) => `translate(${x.toFixed(2)}px, ${y.toFixed(2
  */
 export function WandScreen({ step, onNext }: ScreenProps<'wand'>) {
   const actions = useFunnelActions()
+  const { tap } = useSound()
   const text = stepCopy(step.id)
   const [released, setReleased] = useState<readonly string[]>([])
   const [bursts, setBursts] = useState<readonly Burst[]>([])
@@ -132,6 +134,12 @@ export function WandScreen({ step, onNext }: ScreenProps<'wand'>) {
       const rest = step.bubbles.filter((bubble) => !next.includes(bubble))
       focusNext.current = next.length >= step.pick ? 'cta' : (rest[0] ?? null)
     }
+  }
+
+  // The three bubbles are a multi-select: releasing them is silent, the click is Continue.
+  const proceed = () => {
+    tap()
+    onNext()
   }
 
   const label = (id: string) => copyField(step.id, `bubbles.${id}`) ?? id
@@ -231,7 +239,7 @@ export function WandScreen({ step, onNext }: ScreenProps<'wand'>) {
 
         {finished && (
           <div className={cx(styles.cta, motion.reveal)} style={revealStyle(0, 300)}>
-            <Button ref={ctaRef} variant="white" onClick={onNext}>
+            <Button ref={ctaRef} variant="white" onClick={proceed}>
               {text.cta ?? copy.common.continue}
             </Button>
           </div>

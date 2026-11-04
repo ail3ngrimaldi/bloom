@@ -4,7 +4,7 @@ import { useId, useState } from 'react'
 import type { ComponentType, CSSProperties } from 'react'
 import { CLAIMS } from '@/funnel/claims'
 import { copyField, stepCopy } from '@/funnel/copy'
-import { useFunnelState } from '@/funnel/FunnelProvider'
+import { useFunnelState, useSound } from '@/funnel/FunnelProvider'
 import { personalize } from '@/funnel/personalize'
 import { useFunnelActions } from '@/funnel/useFunnelActions'
 import { Modal } from '@/ui'
@@ -31,6 +31,7 @@ const QUESTION_ICONS: Record<string, ComponentType> = {
 export function LoaderScreen({ step, onNext }: ScreenProps<'loader'>) {
   const { answers } = useFunnelState()
   const actions = useFunnelActions()
+  const { tap } = useSound()
   const questionId = useId()
   const text = stepCopy(step.id)
   // The script is fixed for the visit; questions answered before (reload, Back) are not asked.
@@ -43,6 +44,7 @@ export function LoaderScreen({ step, onNext }: ScreenProps<'loader'>) {
 
   const answer = (value: string) => {
     if (!interrupt) return
+    tap()
     actions.setAnswer(interrupt.answerKey, value)
     actions.track({ name: 'loader_modal_answer', id: interrupt.answerKey, value })
     resume()

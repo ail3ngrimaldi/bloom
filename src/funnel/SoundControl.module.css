@@ -1,0 +1,82 @@
+/* Pinned to a corner of the viewport: above the steps, below the plan sheet (50) and the modals
+   (100), which cover it while they are open. The button is always a 44px touch target; what is
+   drawn is its ::before disc, so on phones the disc can be smaller than the button. */
+.switch {
+  position: fixed;
+  top: max(var(--sound-switch-inset), env(safe-area-inset-top));
+  right: max(var(--sound-switch-inset), env(safe-area-inset-right));
+  z-index: 20;
+  display: grid;
+  place-items: center;
+  width: var(--sound-switch-size);
+  height: var(--sound-switch-size);
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  color: var(--ink-900);
+}
+
+.switch[data-corner='top-left'] {
+  right: auto;
+  left: max(var(--sound-switch-inset), env(safe-area-inset-left));
+}
+
+.switch[data-corner='bottom-right'] {
+  top: auto;
+  bottom: max(var(--sound-switch-inset), env(safe-area-inset-bottom));
+}
+
+.switch::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border: 1px solid var(--sound-switch-border);
+  border-radius: 50%;
+  background: var(--sound-switch-bg);
+  box-shadow: var(--sound-switch-shadow);
+  transition: background-color var(--motion-option);
+}
+
+.switch:hover::before {
+  background: var(--surface-option-active);
+}
+
+.switch svg {
+  position: relative;
+  width: 24px;
+  height: 24px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Phones: the button sits in the very corner and its disc is smaller, clear of the logo, the user
+   chip and the buttons of the headers (nothing sits in the top 38px of the right edge). The
+   breakpoint mirrors --card-mobile-breakpoint (480px): custom properties cannot be used inside
+   media queries. */
+@media (max-width: 479.98px) {
+  .switch {
+    top: env(safe-area-inset-top, 0px);
+    right: env(safe-area-inset-right, 0px);
+  }
+
+  .switch[data-corner='top-left'] {
+    left: env(safe-area-inset-left, 0px);
+  }
+
+  .switch[data-corner='bottom-right'] {
+    bottom: env(safe-area-inset-bottom, 0px);
+  }
+
+  .switch::before {
+    inset: calc((var(--sound-switch-size) - var(--sound-switch-disc-phone)) / 2);
+  }
+
+  .switch svg {
+    width: 18px;
+    height: 18px;
+  }
+}

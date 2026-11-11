@@ -15,6 +15,14 @@ export type StepType =
   | 'loading'
   | 'paywall'
   | 'checkout'
+  | 'pwyw'
+  | 'plan_sheet'
+
+/**
+ * Which closing the funnel ends with (decision D9): the paywall of three plans plus a checkout
+ * modal, or "Pay what you want" plus the plan sheet. Both are built; `funnel.closing` picks one.
+ */
+export type ClosingVariant = 'paywall' | 'pwyw'
 
 /** Page background by screen type (PLAN 3, "Fondos"). Same names as the PageShell themes. */
 export type StepTheme = 'lilac' | 'soft' | 'dark' | 'warm' | 'white'
@@ -23,9 +31,6 @@ export type StepTheme = 'lilac' | 'soft' | 'dark' | 'warm' | 'white'
 export type OptionSetId = 'FREQ4' | 'YSN' | 'OSN'
 
 export type InterVariant = 'science' | 'match' | 'not_alone' | 'evidence' | 'expert'
-
-/** Claims that need Bloom's own evidence before they can be shown (PLAN 2, guardrail 2). */
-export type ClaimRef = 'users' | 'press' | 'universities' | 'expert' | 'testimonials'
 
 interface StepBase {
   /** Position in the funnel, 1 to 42 (PLAN 3). */
@@ -74,7 +79,6 @@ export interface InterStep extends StepBase {
   readonly variant: InterVariant
   /** The CTA is disabled this long after the screen mounts. */
   readonly ctaEnableDelayMs: number
-  readonly claimRefs?: readonly ClaimRef[]
 }
 
 export interface SummaryStep extends StepBase {
@@ -95,7 +99,6 @@ export interface LoaderStep extends StepBase {
   /** Progress bar ids in order; labels come from the copy, colours are --step-1..3. */
   readonly bars: readonly string[]
   readonly interrupts: readonly LoaderInterrupt[]
-  readonly claimRefs?: readonly ClaimRef[]
 }
 
 export interface CaptureStep extends StepBase {
@@ -115,6 +118,29 @@ export interface CheckoutStep extends StepBase {
   readonly type: 'checkout'
 }
 
+/** One of the three amounts of "Pay what you want" (PLAN-B 4.1). */
+export interface PwywTile {
+  readonly id: string
+  /** What the visitor pays today for the trial, in USD. It is the amount charged now. */
+  readonly amount: number
+  /** Carries the "MOST POPULAR" ribbon and is the tile preselected on arrival (D10). */
+  readonly mostPopular?: boolean
+}
+
+/** #41 of the "pwyw" closing: choose what to pay for the trial (PLAN-B 4.1). */
+export interface PwywStep extends StepBase {
+  readonly type: 'pwyw'
+  readonly trialDays: number
+  readonly tiles: readonly PwywTile[]
+}
+
+/** #42 of the "pwyw" closing: the plan sheet with the gift, the discount and the payment. */
+export interface PlanSheetStep extends StepBase {
+  readonly type: 'plan_sheet'
+  /** Gifts of the discount modal: how many are offered and the discount each one reveals (D11). */
+  readonly gift: { readonly count: 1 | 3; readonly outcomes: readonly number[] }
+}
+
 export type Step =
   | IntroStep
   | SingleStep
@@ -127,6 +153,8 @@ export type Step =
   | LoadingStep
   | PaywallStep
   | CheckoutStep
+  | PwywStep
+  | PlanSheetStep
 
 export type StepOfType<T extends StepType> = Extract<Step, { type: T }>
 

@@ -62,13 +62,15 @@ function points(value: unknown, table: Record<string, number>): number {
 
 /**
  * #12 first: a diagnosis reads "Manage ADHD"; a suspicion gets non-diagnostic wording ("Focus
- * and attention"); "No" or "I'd rather not say" fall through to the hardest of procrastination
- * (#09), focus (#11) and habits (#10), in that order on ties.
+ * and attention"); "No" or "I'd rather not say" fall through to the hardest of energy (#02),
+ * procrastination (#09), focus (#11) and habits (#10), in that order on ties. The reference showed
+ * "Low energy" for a visitor who answered "No" to #12 (PLAN-B 3.2), so energy leads the ties.
  */
 export function mainDifficulty(answers: Answers): MainDifficulty {
   if (answers.adhd === 'diagnosed') return 'adhd'
   if (answers.adhd === 'suspect') return 'attention'
   const candidates: Array<[MainDifficulty, number]> = [
+    ['low_energy', points(answers.drained, FREQ4)],
     ['procrastination', points(answers.procrastinate, FREQ4)],
     ['focus', points(answers.concentration, FREQ4)],
     ['habits', points(answers.restart_habit, HABIT_POINTS)],
@@ -102,16 +104,17 @@ export function trigger(answers: Answers): Trigger {
   return TRIGGER_PRIORITY.find((bubble) => released.includes(bubble)) ?? 'stress'
 }
 
+/** Always or often drained: "Low"; sometimes or rarely: "Normal" (observed: Rarely -> Normal). */
 const ENERGY: Record<string, EnergyLevel> = {
-  always: 'very_low',
+  always: 'low',
   often: 'low',
-  sometimes: 'moderate',
-  rarely: 'good',
+  sometimes: 'normal',
+  rarely: 'normal',
 }
 
 export function energyLevel(answers: Answers): EnergyLevel {
   const value = answers.drained
-  return (typeof value === 'string' && ENERGY[value]) || 'moderate'
+  return (typeof value === 'string' && ENERGY[value]) || 'normal'
 }
 
 export function deriveProfile(answers: Answers): WellbeingProfile {

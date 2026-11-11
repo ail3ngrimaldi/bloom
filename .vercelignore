@@ -1,0 +1,11 @@
+# What a deployment made with the Vercel CLI must not upload (a project connected to Git only builds
+# what is committed, so this changes nothing there). The recordings and the loose screenshots are
+# the source material of the analysis, not part of the product, and the reference images live only
+# in docs/ (guardrails 6 and 7 of docs/feature-parity/PLAN-B.md).
+*.mkv
+*.mp4
+Captura de pantalla*
+docs
+.next-*
+playwright-report
+test-results

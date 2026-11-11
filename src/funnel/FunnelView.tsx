@@ -11,14 +11,18 @@ import { allowedStep, readQaBypass, stepIdFromPath } from './navigation'
 import { getStep } from './steps'
 import type { FunnelStep, StepId } from './steps'
 import type { Step } from './types'
+import { useClosing } from './useClosing'
 import { useFunnelActions } from './useFunnelActions'
 
 /**
- * What the step transition is keyed on: the checkout is the paywall with a modal on top, so
- * moving between them changes the modal, not the page.
+ * What the step transition is keyed on: the checkout is the paywall with a modal on top, and the
+ * plan sheet is the "pay what you want" page with a sheet on top, so moving between each pair
+ * changes the overlay, not the page.
  */
 export function transitionKeyFor(step: Step): string {
-  return step.type === 'checkout' ? 'paywall' : step.id
+  if (step.type === 'checkout') return 'paywall'
+  if (step.type === 'plan_sheet') return 'pwyw'
+  return step.id
 }
 
 /** Question and capture screens sit on the quiz card; every other screen fills the page. */
@@ -66,8 +70,9 @@ export function FunnelView() {
   const hydrated = useHydrated()
   const { furthest } = useFunnelState()
   const bypass = useQaBypass()
+  const closing = useClosing()
   const actions = useFunnelActions()
-  const step = allowedStep(requested, furthest, bypass)
+  const step = allowedStep(requested, furthest, bypass, closing)
   const allowed = step === requested
 
   useEffect(() => {

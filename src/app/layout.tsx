@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next'
 import type { ReactNode } from 'react'
 import { inter, sourceSerif } from './fonts'
 import '@/styles/tokens.css'
+import '@/styles/tokens.b.css'
 import '@/styles/global.css'
 
 export const metadata: Metadata = {

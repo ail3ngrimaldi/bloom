@@ -8,11 +8,15 @@ const wait = (ms: number) => new Promise<void>((resolve) => setTimeout(resolve, 
 
 /**
  * Default checkout (decision D4): no SDK, no request, nothing charged. Paying resolves to
- * { status: 'demo' } and the modal says so.
+ * { status: 'demo' } and the screen says so.
  */
 export const mockCheckoutProvider: CheckoutProvider = {
   load: () => wait(MOCK_CHECKOUT_LOAD_MS),
   pay: async () => {
+    await wait(MOCK_CHECKOUT_PAY_MS)
+    return { status: 'demo' }
+  },
+  payCard: async () => {
     await wait(MOCK_CHECKOUT_PAY_MS)
     return { status: 'demo' }
   },

@@ -7,13 +7,16 @@ import { cx } from '../cx'
 import { lockScroll } from './scrollLock'
 import styles from './Modal.module.css'
 
-export type ModalSize = 'sheet' | 'checkout'
-export type ModalBackdrop = 'loader' | 'checkout'
+export type ModalSize = 'sheet' | 'checkout' | 'gift'
+export type ModalBackdrop = 'loader' | 'checkout' | 'gift'
 
 export interface ModalProps {
   open: boolean
   onClose?: () => void
-  /** 'sheet' is 375 x 648 like the card (loader questions); 'checkout' is up to 430 x 630. */
+  /**
+   * 'sheet' is 375 x 648 like the card (loader questions); 'checkout' is up to 430 x 630; 'gift' is
+   * the dark purple dialog of the plan sheet's gift, 392 wide and as tall as its content.
+   */
   size?: ModalSize
   /** Backdrop colour token. Defaults to the one that matches the size. */
   backdrop?: ModalBackdrop
@@ -135,11 +138,18 @@ export function Modal({
     if (closeOnBackdropClick && event.target === event.currentTarget) onCloseRef.current?.()
   }
 
-  const backdropKind: ModalBackdrop = backdrop ?? (size === 'checkout' ? 'checkout' : 'loader')
+  const backdropKind: ModalBackdrop =
+    backdrop ?? (size === 'checkout' ? 'checkout' : size === 'gift' ? 'gift' : 'loader')
+  const backdropClass = { loader: styles.loader, checkout: styles.checkout, gift: styles.gift }
+  const sizeClass = {
+    sheet: styles.sizeSheet,
+    checkout: styles.sizeCheckout,
+    gift: styles.sizeGift,
+  }
 
   return createPortal(
     <div
-      className={cx(styles.backdrop, backdropKind === 'checkout' ? styles.checkout : styles.loader)}
+      className={cx(styles.backdrop, backdropClass[backdropKind])}
       data-backdrop={backdropKind}
       onMouseDown={handleBackdropMouseDown}
     >
@@ -149,11 +159,7 @@ export function Modal({
         aria-modal="true"
         aria-labelledby={labelledBy ?? (title !== undefined ? titleId : undefined)}
         tabIndex={-1}
-        className={cx(
-          styles.dialog,
-          size === 'checkout' ? styles.sizeCheckout : styles.sizeSheet,
-          className,
-        )}
+        className={cx(styles.dialog, sizeClass[size], className)}
         data-size={size}
         onKeyDown={handleKeyDown}
       >

@@ -1,0 +1,126 @@
+/*
+ * One amount of "Pay what you want" (b-08, items 5 and 6): 143 x 141 in CSS px, radius 14, the
+ * amount in the middle; the popular tile wears a ribbon on top. The chosen tile gets a 2 px border
+ * and a check badge.
+ */
+.tile {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: var(--pwyw-tile-width);
+  height: var(--pwyw-tile-height);
+  padding: 0;
+  border: 2px solid transparent;
+  border-radius: var(--radius-pwyw-tile);
+  overflow: hidden;
+  transition:
+    border-color var(--motion-option) var(--ease-standard),
+    transform var(--motion-option) var(--ease-standard);
+}
+
+.tone1 {
+  background: var(--pwyw-tile-1);
+  color: var(--pwyw-tile-1-ink);
+}
+
+.tone2 {
+  background: var(--pwyw-tile-2);
+  color: var(--pwyw-tile-2-ink);
+}
+
+/* The popular tile keeps its orange outline even when it is not the chosen one. */
+.tone3 {
+  border-color: var(--pwyw-accent);
+  background: var(--pwyw-tile-3);
+  color: var(--pwyw-tile-3-ink);
+}
+
+.amount {
+  font: 600 24px / 1 var(--font-sans);
+  letter-spacing: -0.01em;
+}
+
+.tone3 .amount {
+  margin-top: 20px;
+}
+
+.ribbon {
+  position: absolute;
+  inset: 0 0 auto;
+  padding: 6px 0 5px;
+  background: var(--pwyw-accent-strong);
+  color: var(--on-accent);
+  font: 700 11px / 14px var(--font-sans);
+  letter-spacing: 0.04em;
+  text-align: center;
+}
+
+.checked.tone1 {
+  border-color: var(--pwyw-tile-1-ink);
+}
+
+.checked.tone2 {
+  border-color: var(--pwyw-tile-2-ink);
+}
+
+.checked.tone3 {
+  border-color: var(--pwyw-accent-strong);
+}
+
+.check {
+  position: absolute;
+  right: 8px;
+  bottom: 8px;
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0;
+  transform: scale(0.6);
+  transition:
+    opacity var(--motion-option) var(--ease-standard),
+    transform var(--motion-option) var(--ease-standard);
+}
+
+.check svg {
+  width: 14px;
+  height: 14px;
+  fill: none;
+  stroke: var(--pwyw-bg);
+  stroke-width: 2.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.checked .check {
+  opacity: 1;
+  transform: none;
+}
+
+@media (hover: hover) {
+  .tile:hover {
+    transform: translateY(-2px);
+  }
+}
+
+@media (max-width: 479.98px) {
+  .tile {
+    width: min(var(--pwyw-tile-width), calc((100vw - 2 * 20px - 2 * 10px) / 3));
+    height: 120px;
+  }
+
+  .amount {
+    font-size: 20px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tile:hover {
+    transform: none;
+  }
+}

@@ -2,7 +2,7 @@
 
 import { useEffect, useId, useState } from 'react'
 import { copyField, optionLabel, stepCopy } from '@/funnel/copy'
-import { useFunnelState } from '@/funnel/FunnelProvider'
+import { useFunnelState, useSound } from '@/funnel/FunnelProvider'
 import { personalize } from '@/funnel/personalize'
 import { progressFor } from '@/funnel/progress'
 import { ADVANCE_DELAY_MS } from '@/funnel/timing'
@@ -21,6 +21,7 @@ export function SingleSelectScreen({ step, onNext }: ScreenProps<'single'>) {
   const subtitleId = useId()
   const { answers } = useFunnelState()
   const actions = useFunnelActions()
+  const { tap } = useSound()
   const [picked, setPicked] = useState<string | null>(null)
   const text = stepCopy(step.id)
   const stored = answers[step.answerKey]
@@ -35,6 +36,7 @@ export function SingleSelectScreen({ step, onNext }: ScreenProps<'single'>) {
   const choose = (value: string) => {
     // One answer per visit: a second click while leaving would answer twice.
     if (picked !== null) return
+    tap()
     setPicked(value)
     actions.answer(step.answerKey, value)
   }

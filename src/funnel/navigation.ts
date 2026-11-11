@@ -1,6 +1,7 @@
 import { isDevToolsEnabled } from '@/lib/env'
-import { isStepId, stepAt } from './steps'
+import { closingOf, isStepId, stepAt } from './steps'
 import type { FunnelStep, StepId } from './steps'
+import type { ClosingVariant } from './types'
 
 export function stepPath(id: StepId): string {
   return `/s/${id}`
@@ -37,11 +38,22 @@ export const historyNavigator: FunnelNavigator = {
 
 /**
  * Where a visitor may be: any step up to the furthest one reached by moving forward. Later steps
- * (a shared deep link, a stale tab) are sent back there.
+ * (a shared deep link, a stale tab) are sent back there. A step of the other closing (the paywall
+ * while the funnel ends with "pay what you want", or the reverse) leads to the step at the same
+ * position of this visitor's closing.
  */
-export function allowedStep(requested: FunnelStep, furthest: number, bypass: boolean): FunnelStep {
-  if (bypass || requested.n <= furthest) return requested
-  return stepAt(furthest) ?? requested
+export function allowedStep(
+  requested: FunnelStep,
+  furthest: number,
+  bypass: boolean,
+  closing: ClosingVariant,
+): FunnelStep {
+  if (bypass) return requested
+  const owner = closingOf(requested)
+  const step =
+    owner !== null && owner !== closing ? (stepAt(requested.n, closing) ?? requested) : requested
+  if (step.n <= furthest) return step
+  return stepAt(furthest, closing) ?? step
 }
 
 /** QA bypass of the guard: `?qa` on any step URL, only where the dev tools are on (never prod). */

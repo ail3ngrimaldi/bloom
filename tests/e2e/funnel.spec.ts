@@ -37,7 +37,7 @@ test.describe('entry and routing', () => {
 test.describe('walking the funnel', () => {
   test.use({ reducedMotion: 'reduce' })
 
-  test('goes from the intro to the checkout modal: 42 steps, reference wording and progress', async ({
+  test('goes from the intro to the checkout modal (paywall closing): 42 steps, reference wording and progress', async ({
     page,
   }) => {
     test.setTimeout(180_000)
@@ -46,7 +46,7 @@ test.describe('walking the funnel', () => {
       if (message.type() === 'error') consoleErrors.push(message.text())
     })
 
-    await page.goto('/s/intro')
+    await page.goto('/s/intro?closing=paywall')
     await waitForStep(page, 'intro')
 
     for (const ref of REFERENCE.steps.filter((step) => step.n < 42)) {
@@ -108,7 +108,7 @@ test.describe('walking the funnel', () => {
     await waitForStep(page, 'age')
     await answerStep(page)
     await waitForStep(page, 'science')
-    await expect(page.getByText('Made for men like you')).toBeVisible()
+    await expect(page.getByText('Join over 30 million men')).toBeVisible()
   })
 
   test('multi-select keeps Continue disabled until a row is checked', async ({ page }) => {
@@ -164,9 +164,25 @@ test.describe('transition between questions (PLAN 4.4)', () => {
 })
 
 test.describe('intro and interstitials (phase 3)', () => {
-  // Wording of the reference's claims that Bloom has no evidence for (PLAN 2, guardrails 1 to 3).
-  const CLAIMS =
-    /million|as featured|new york times|wired|forbes|girlboss|healthline|stanford|duke|harvard|jazmin|reviewed by/i
+  // The claims, credentials and testimonials of the reference are rendered (PLAN-B 2, guardrails 2 and 3).
+  const CLAIMS: Record<string, RegExp[]> = {
+    science: [
+      /As featured on:/,
+      /The New York Times/,
+      /WIRED/,
+      /Forbes/,
+      /girlboss/,
+      /healthline/,
+      /Join over 30 million/,
+    ],
+    not_alone: [/Bloom has guided more than 30 million/],
+    evidence: [/STANFORD/, /DUKE/, /HARVARD/, /decades of research/],
+    expert: [
+      /reviewed by an expert/,
+      /Jazmin Quill, MSc/,
+      /Co-founder, Stanford Psych One Program/,
+    ],
+  }
 
   test('the intro reveals everything within about a second, CTA at the bottom', async ({
     page,
@@ -185,14 +201,15 @@ test.describe('intro and interstitials (phase 3)', () => {
   })
 
   for (const id of ['science', 'not_alone', 'evidence', 'expert']) {
-    test(`/s/${id} enables its CTA about 0.5 s after it shows and makes no claims`, async ({
+    test(`/s/${id} enables its CTA about 0.5 s after it shows and shows its claims`, async ({
       page,
     }) => {
       await page.goto(`/s/${id}?qa`)
       const cta = page.getByRole('button', { name: 'Continue' })
       await expect(cta).toBeDisabled()
       await expect(cta).toBeEnabled()
-      expect(await page.locator('main, body').first().innerText()).not.toMatch(CLAIMS)
+      const text = await page.locator('main, body').first().innerText()
+      for (const claim of CLAIMS[id]) expect(text).toMatch(claim)
       const box = await cta.boundingBox()
       expect(Math.round(box!.y + box!.height)).toBe(720 - 56)
     })
@@ -324,7 +341,7 @@ test.describe('summary and loader (phase 5)', () => {
 })
 
 test.describe('lead capture (phase 6)', () => {
-  test('email and name lead to a short brand loader and the paywall; Back skips the loader', async ({
+  test('email and name lead to a short brand loader and pay what you want; Back skips the loader', async ({
     page,
   }) => {
     await page.goto('/s/email?qa')
@@ -348,7 +365,7 @@ test.describe('lead capture (phase 6)', () => {
 
     await waitForStep(page, 'loading')
     const started = Date.now()
-    await waitForStep(page, 'paywall')
+    await waitForStep(page, 'pwyw')
     expect(Date.now() - started).toBeLessThan(2500)
     expect(
       await page.evaluate(() => JSON.parse(sessionStorage.getItem('bloom.funnel.v1')!).lead),
@@ -378,7 +395,7 @@ test.describe('paywall and checkout (phase 7)', () => {
   })
 
   test('the checkout total and legal text always follow the chosen plan', async ({ page }) => {
-    await page.goto('/s/paywall')
+    await page.goto('/s/paywall?closing=paywall')
     await waitForStep(page, 'paywall')
     await expect(page.getByRole('radio', { name: /^1 month plan/ })).toHaveAttribute(
       'aria-checked',
@@ -412,7 +429,7 @@ test.describe('paywall and checkout (phase 7)', () => {
   })
 
   test('the countdown (behind its flag) does not restart on reload', async ({ page }) => {
-    await page.goto('/s/paywall?countdown')
+    await page.goto('/s/paywall?countdown&closing=paywall')
     await waitForStep(page, 'paywall')
     await expect(page.getByRole('timer')).toContainText('Discount reserved for:')
     await page.waitForTimeout(2500)
@@ -424,7 +441,7 @@ test.describe('paywall and checkout (phase 7)', () => {
   })
 
   test('without the flag there is no countdown, only a calm status', async ({ page }) => {
-    await page.goto('/s/paywall')
+    await page.goto('/s/paywall?closing=paywall')
     await waitForStep(page, 'paywall')
     await expect(page.getByText('Sam, your plan is ready')).toBeVisible()
     await expect(page.getByRole('timer')).toHaveCount(0)
@@ -441,6 +458,7 @@ test.describe('accessibility (axe)', () => {
     'name',
     'paywall',
     'checkout',
+    'pwyw',
     'drained',
     'adhd',
     'sacrifice',

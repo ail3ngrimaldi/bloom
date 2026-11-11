@@ -1,8 +1,9 @@
 import { isDevToolsEnabled } from '@/lib/env'
+import type { Attribution } from './attribution'
 import type { AnswerValue } from './types'
 
-/** Funnel events of PLAN 6.4. Nothing is sent anywhere until a real adapter and consent exist. */
-export type FunnelEvent =
+/** Funnel events of PLAN 6.4 and PLAN-B 6.6. Nothing is sent until a real adapter and consent exist. */
+export type FunnelEventBody =
   | { name: 'funnel_start' }
   | { name: 'step_view'; n: number; id: string }
   | { name: 'answer'; id: string; value: AnswerValue }
@@ -14,6 +15,21 @@ export type FunnelEvent =
   | { name: 'checkout_open' }
   | { name: 'payment_method_click'; method: string }
   | { name: 'purchase_success' }
+  // The "pay what you want" closing.
+  | { name: 'pwyw_view' }
+  | { name: 'pwyw_select'; amount: number }
+  | { name: 'sheet_open' }
+  | { name: 'sheet_ready'; ms: number }
+  | { name: 'gift_view' }
+  | { name: 'gift_pick'; index: number }
+  | { name: 'discount_apply'; pct: number }
+  | { name: 'countdown_expire' }
+  | { name: 'start_now_click' }
+  | { name: 'card_field_focus'; field: 'number' | 'expiry' | 'cvv' }
+  | { name: 'start_membership_click' }
+
+/** Any event, with the visit's attribution (UTM, placement, slug) once it is known. */
+export type FunnelEvent = FunnelEventBody & { attribution?: Attribution }
 
 export interface AnalyticsAdapter {
   track(event: FunnelEvent): void

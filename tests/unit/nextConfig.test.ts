@@ -17,6 +17,22 @@ async function configEnv(vars: Partial<Record<(typeof KEYS)[number], string>>) {
   return config.env as Record<string, string>
 }
 
+describe('next.config headers', () => {
+  it('lets the browser keep the two sounds for a day and revalidate them for a week', async () => {
+    vi.resetModules()
+    const { default: config } = await import('../../next.config')
+    const rules = (await config.headers?.()) ?? []
+    expect(rules).toEqual([
+      {
+        source: '/audio/:path*',
+        headers: [
+          { key: 'Cache-Control', value: 'public, max-age=86400, stale-while-revalidate=604800' },
+        ],
+      },
+    ])
+  })
+})
+
 describe('next.config switches', () => {
   const saved: Record<string, string | undefined> = {}
 

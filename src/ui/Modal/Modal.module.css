@@ -17,6 +17,13 @@
   background: var(--checkout-overlay);
 }
 
+/* The plan sheet's gift: a dark, blurred veil over the sheet (tokens.b.css). */
+.gift {
+  background: var(--gift-backdrop);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+}
+
 .dialog {
   position: relative;
   display: flex;
@@ -43,6 +50,16 @@
   background: var(--bg-page-white);
   overflow-y: auto;
   overscroll-behavior: contain;
+}
+
+/* Wider than a phone, as tall as its content; it lets the confetti fall past its edges. */
+.sizeGift {
+  width: min(var(--gift-modal-width), calc(100% - 24px));
+  max-height: 100vh;
+  max-height: 100dvh;
+  border-radius: var(--radius-dialog);
+  background: var(--gift-modal);
+  overflow: visible;
 }
 
 @media (max-width: 479.98px) {

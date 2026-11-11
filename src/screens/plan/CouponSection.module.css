@@ -1,0 +1,100 @@
+/* Promo-code ticket (b-11 items 2 and 3): a warm-to-lavender gradient with notches at the sides. */
+.ticket {
+  position: relative;
+  padding: 22px 16px 16px;
+  border-radius: var(--radius-sheet-section);
+  background: var(--ticket-grad);
+  animation: pop 320ms var(--ease-out) both;
+}
+
+/* The notches of a ticket: two half circles the colour of the sheet. */
+.ticket::before,
+.ticket::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--sheet-bg);
+  transform: translateY(-50%);
+}
+
+.ticket::before {
+  left: -8px;
+}
+
+.ticket::after {
+  right: -8px;
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 26px;
+  text-align: left;
+}
+
+.seal {
+  flex: none;
+  width: 26px;
+  height: 26px;
+}
+
+.seal svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.sentence {
+  max-width: 230px;
+  font: 500 14px / 20px var(--font-sans);
+  color: var(--sheet-header-ink);
+}
+
+.strong {
+  color: #1f2fa8;
+  font-weight: 800;
+}
+
+.codeRow {
+  display: flex;
+  align-items: stretch;
+  overflow: hidden;
+  border-radius: 12px;
+  background: var(--sheet-bg);
+}
+
+.code {
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: 13px 14px;
+  font: 400 13px / 18px var(--font-sans);
+  color: var(--plan-title-ink);
+  overflow-wrap: anywhere;
+}
+
+.timer {
+  display: grid;
+  place-items: center;
+  min-width: 82px;
+  padding: 0 12px;
+  background: var(--ticket-timer-bg);
+  color: var(--ticket-timer-ink);
+  font: 800 17px / 1 var(--font-sans);
+  font-variant-numeric: tabular-nums;
+}
+
+@keyframes pop {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}

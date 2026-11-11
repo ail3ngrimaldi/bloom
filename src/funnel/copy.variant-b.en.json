@@ -1,0 +1,227 @@
+{
+  "steps": {
+    "pwyw": {
+      "title": "Pay what you want",
+      "body": "Money shouldn't stay in the way of finding a plan that finally works. Choose an amount that you think is reasonable to try us out for two weeks.",
+      "note": "It costs us {{companyCost}} to compensate our employees for the trial, but please choose the amount you are comfortable with.",
+      "tilesLabel": "Choose what you pay today for the trial",
+      "ribbon": "MOST POPULAR",
+      "cta": "See my plan",
+      "userChip": "{{name}}",
+      "userChipFallback": "My account",
+      "demoNotice": "Demo prices: Bloom is not launched yet and no payment can be taken."
+    },
+    "plan": {
+      "title": "Your personalized plan",
+      "close": "Close",
+      "loading": "Loading your plan...",
+      "header": {
+        "ready": "Your plan is ready",
+        "reserved": "Your discount has been reserved for the next 15 minutes",
+        "expired": "Your discount has ended",
+        "timerLabel": "Discount time left",
+        "timerAnnouncement": "{{minutes}} minutes left on your discount"
+      },
+      "compare": {
+        "now": "NOW",
+        "goal": "YOUR GOAL",
+        "avatarNow": "You today",
+        "avatarGoal": "You with your plan",
+        "energy": "Energy level",
+        "wellbeing": "Well-being level",
+        "selfEsteem": "Self-esteem level",
+        "levels": {
+          "low": "Low",
+          "medium": "Medium",
+          "good": "Good",
+          "high": "High",
+          "weak": "Weak",
+          "fair": "Fair",
+          "strong": "Strong"
+        },
+        "difficulty": "Difficulty",
+        "goalRow": "Goal",
+        "difficulties": {
+          "perfectionist": "Perfectionist",
+          "overthinker": "Overthinker",
+          "people_pleaser": "People pleaser",
+          "procrastinator": "Procrastinator"
+        },
+        "goals": {
+          "calm": "State of calm",
+          "energy": "High energy",
+          "focus": "Focus",
+          "healthy": "Healthy habits",
+          "routine": "Morning routine"
+        }
+      },
+      "coupon": {
+        "applied": "Your {{pct}}% Discount Promo Code Is Applied!",
+        "codeLabel": "Promo code",
+        "banner": "{{pct}}% OFF YOUR PLAN"
+      },
+      "planCard": {
+        "title": "Your personalized plan is ready!",
+        "trial": "{{trialDays}}-day trial",
+        "trialBody": "Full access to the {{brand}} app.",
+        "unlock": "Unlock lasting behavior change",
+        "unlockBody": "Daily rituals that make new habits second nature.",
+        "day": "Day {{day}}",
+        "dayBody": "A gentle nudge 2 days before your trial ends.",
+        "afterTrial": "Price after trial",
+        "save": "SAVE {{pct}}%",
+        "perDay": "{{price}}/day",
+        "perDayLabel": "{{price}} per day",
+        "perDayStruckLabel": "{{price}} per day before the discount",
+        "billed": "{{price}} billed every 2 months",
+        "demoNotice": "Demo prices: Bloom is not launched yet and no payment can be taken."
+      },
+      "payment": {
+        "title": "Payment Options",
+        "emailLabel": "Email",
+        "emailError": "Please enter a valid email address.",
+        "expressTitle": "Express checkout",
+        "expressSub": "Checkout in seconds with Apple Pay or PayPal",
+        "loadingMethods": "Loading payment options...",
+        "paypal": "Pay with PayPal",
+        "googlePay": "Pay with G Pay (Google Pay)",
+        "or": "OR",
+        "cardHeader": "Credit Card",
+        "cardBrands": "Visa, American Express, Mastercard",
+        "cardNumber": "Card Number (16 digits)",
+        "cardNumberError": "Enter the 16 digits of your card.",
+        "expiry": "MM / YY",
+        "expiryError": "Enter a valid expiry date.",
+        "cvv": "CVV",
+        "cvvHelp": "The 3 or 4 digit security code of your card",
+        "cvvError": "Enter the security code.",
+        "reminder": "We'll remind you 2 days before renewal. You're in control.",
+        "startMembership": "START MEMBERSHIP",
+        "noCommitments": "No commitments. Cancel online at anytime.",
+        "chargeSummary": "{{trialPrice}} today. Then {{renewalPrice}} every 2 months from {{trialEndDate}} until you cancel. Cancel anytime in your account settings.",
+        "safe": "Pay Safe & Secure",
+        "methodsLabel": "Accepted payment methods",
+        "processing": "Processing...",
+        "demoResult": "This is a demo checkout: no payment was taken.",
+        "demoCard": "Demo checkout: nothing is charged and card details are neither stored nor sent."
+      },
+      "legal": {
+        "bullets": [
+          "This is an auto renewing subscription.",
+          "If you don't cancel during the {{trialDays}}-day intro period, {{brand}} will charge you {{renewalPrice}} on {{trialEndDate}}.",
+          "After the intro period, you will be charged automatically {{renewalPrice}} every 2 months until you cancel.",
+          "You can cancel at any time by going through your account settings via {{domain}}.",
+          "By purchasing a subscription, you agree to our {{terms}} and that you are over 18 and acknowledge the {{privacy}}.",
+          "See our {{policy}} for details."
+        ],
+        "terms": "Terms of Use",
+        "privacy": "Privacy Statement",
+        "policy": "Subscription Policy"
+      },
+      "benefits": {
+        "title": "What you will get with {{brand}}",
+        "items": [
+          {
+            "id": "habits",
+            "title": "Healthy habits & routines",
+            "body": "The life you've always wanted, with the help of behavioral science."
+          },
+          {
+            "id": "wellbeing",
+            "title": "Improved well-being",
+            "body": "Stepwise programs to enhance health, self-esteem, relationships & more."
+          },
+          {
+            "id": "coaching",
+            "title": "Coaching sessions",
+            "body": "On-demand coaching audios & 1-on-1 personalized support (on upgrade)."
+          },
+          {
+            "id": "tools",
+            "title": "Tools that support your goals",
+            "body": "Meditations, guided workouts, deep work sessions, bedtime stories & more."
+          },
+          {
+            "id": "planners",
+            "title": "Planners & workbooks",
+            "body": "Guided journals and printable workbooks to turn your plans into daily action."
+          },
+          {
+            "id": "desktop",
+            "title": "Habitat Zero",
+            "body": "Our desktop app for focused work, built to quiet the noise on your computer."
+          }
+        ]
+      },
+      "faq": {
+        "title": "People often ask",
+        "items": [
+          {
+            "q": "How is {{brand}} different from just making a to-do list?",
+            "a": "A to-do list tells you what to do. {{brand}} builds the drive to actually do it. Every routine is backed by behavioral science and adapts to your pace, so motivation stops being the problem."
+          },
+          {
+            "q": "What results can I realistically expect?",
+            "a": "Most members notice small wins in the first two weeks: a steadier morning, fewer skipped habits, a calmer head. Lasting change takes longer, so your plan paces it to you and keeps every step doable."
+          },
+          {
+            "q": "I've tried habit apps before. Why will this be different?",
+            "a": "Most habit apps hand you a checklist and leave the rest to willpower. {{brand}} starts from how you think, feel and act and builds routines around that, so they hold on the days motivation does not."
+          },
+          {
+            "q": "How much time does it actually take?",
+            "a": "A few minutes a day. Every ritual is sized to fit the gaps of a busy day, and you choose the moments that work for you."
+          },
+          {
+            "q": "What if I fall off track?",
+            "a": "It happens to everyone. A missed day is not a reset: your plan adapts, and a gentle nudge helps you pick up where you left off, without guilt."
+          }
+        ]
+      },
+      "reviews": { "title": "Members love our plans" },
+      "expert": {
+        "banner": "Content reviewed by an expert",
+        "awardsTitle": "{{brand}} awards",
+        "pressLabel": "As featured in"
+      },
+      "letter": {
+        "illustration": "A sunset with two people looking at it",
+        "greeting": "{{firstName}}, do you copy?",
+        "greetingFallback": "Do you copy?",
+        "paragraphs": [
+          "It's me, future {{firstName}}. I'm calling from {{nextYear}} because today is an important day for you - for us.",
+          "{{todayLong}} is the day we decide to change our lives for the better.",
+          "I have excellent news: I'm healthy, in great shape, and worry-free, thanks to the choices you're making.",
+          "I'll be with you every step of the way."
+        ],
+        "paragraphsFallback": [
+          "It's me, future you. I'm calling from {{nextYear}} because today is an important day for you - for us.",
+          "{{todayLong}} is the day we decide to change our lives for the better.",
+          "I have excellent news: I'm healthy, in great shape, and worry-free, thanks to the choices you're making.",
+          "I'll be with you every step of the way."
+        ],
+        "signOff": "See you soon,",
+        "signature": "Future {{firstName}}",
+        "signatureFallback": "Future you"
+      },
+      "sticky": {
+        "label": "{{trialDays}} Day Trial - {{trialPrice}}",
+        "sub": "We'll remind you before the trial ends",
+        "cta": "Start Now"
+      },
+      "gift": {
+        "pillPicker": "ONE LAST THING",
+        "pickerTitle": "Pick a gift to reveal your discount.",
+        "pickerBody": "Your trial amount is locked in. What is inside comes off your price after the trial.",
+        "giftLabel": "Gift {{n}} of {{total}}",
+        "pillUnlocked": "DISCOUNT UNLOCKED",
+        "unlockedTitle": "{{pct}}% off is yours.",
+        "unlockedBody": "Tap below and we add it to your plan. Nothing to type in.",
+        "couponKicker": "RESERVED FOR YOU",
+        "couponValue": "{{pct}}% OFF",
+        "couponSub": "Off your price after the trial.",
+        "apply": "Apply my discount"
+      }
+    }
+  }
+}

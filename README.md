@@ -1,11 +1,14 @@
 # Bloom
 
 Bloom is a web onboarding funnel (42 steps: 28 questions, intro, interstitials, a wand interaction,
-profile summary, "creating your plan" loader, email and name capture, paywall and checkout modal).
+profile summary, "creating your plan" loader, email and name capture, and one of two closings:
+"Pay what you want" with a plan sheet, or a paywall of three plans with a checkout modal).
 It is being built to reach **functional and visual parity** with a reference funnel that was
-analysed frame by frame from a screen recording. Parity means the same screens, order, mechanics,
-layout and timings. It does not mean copying the reference's brand, illustrations, claims,
-credentials or testimonials.
+analysed frame by frame from two screen recordings. Parity means the same screens, order,
+mechanics, layout, timings and content. It does not mean copying the reference's name, logo or
+images (guardrails 1 and 6 of [`PLAN-B.md`](docs/feature-parity/PLAN-B.md) section 2); its claims,
+credentials and testimonials are rendered (guardrails 2 and 3), and their risks are written down
+in PLAN-B section 2.4.
 
 The plan, the step catalogue and the annotated reference screenshots live in
 [`docs/feature-parity/`](docs/feature-parity/). Start with
@@ -22,7 +25,8 @@ Unit tests use Vitest, Testing Library and jsdom; e2e tests use Playwright (Chro
 ## Requirements
 
 - Node.js 20.9 or newer for the app (`next dev`, `next build`, `next start`; Vercel runs 20, 22 or
-  24). The unit-test runner (Vitest 5) needs Node 22.12 or newer. Developed on Node 22.22. npm.
+  24). The unit-test runner (Vitest 5) needs Node 22.12 or newer. Developed and verified on Node
+  22.23. npm.
 - Chromium for the e2e tests. Playwright is pinned to exactly `1.63.0`; never run
   `playwright install` here, the browser is expected to be provided by the environment
   (`PLAYWRIGHT_BROWSERS_PATH`).
@@ -44,6 +48,7 @@ Unit tests use Vitest, Testing Library and jsdom; e2e tests use Playwright (Chro
 | `npm run test:watch`   | Vitest in watch mode                                                       |
 | `npm run e2e`          | Playwright end-to-end tests against `next dev` (Chromium, 1280x720)        |
 | `npm run shots`        | One 1280x720 screenshot per step in `docs/feature-parity/shots/NN.png`     |
+| `npm run check:build`  | After `npm run build`: fails if `.next/` holds reference material          |
 
 ### Dev server, ports and `NEXT_DIST_DIR`
 
@@ -73,19 +78,28 @@ that extends another is left alone, so `tsconfig.json` is never touched, whateve
 ### The funnel
 
 All 42 steps of the plan are built: intro, 28 questions, the magic wand, five interstitials, the
-wellbeing summary, the plan loader, email and name capture, a short brand loader, the paywall and
-the checkout modal. Every integration is a mock until real credentials and the open decisions of
-`docs/feature-parity/DECISIONS.md` exist: nothing is sent anywhere and nothing can be charged.
+wellbeing summary, the plan loader, email and name capture, a short brand loader and a closing.
+There are two closings, chosen by the `funnel.closing` flag: **`pwyw`** (the default), "Pay what you
+want" (`/s/pwyw`) followed by the plan sheet (`/s/plan`) with the gift and discount, the payment
+block, the legal text, the FAQ, the reviews and the letter; and **`paywall`**, the paywall of three
+plans (`/s/paywall`) and its checkout modal (`/s/checkout`). The flag is, in order: `?closing=` (only
+where the dev tools are on), the funnel slug of the ad the visitor came through
+(`/onboarding/<slug>`), `NEXT_PUBLIC_FUNNEL_CLOSING` and `pwyw`. Every integration is a mock until
+real credentials and the open decisions of `docs/feature-parity/DECISIONS.md` exist: nothing is sent
+anywhere and nothing can be charged.
 
 `/` redirects to the first step, `/s/intro` (307, the query string is kept). Every step has its own
 URL, `/s/<stepId>` (ids in `src/funnel/steps.ts`), prerendered at build time; any other id is a 404.
 Moving between steps changes the URL with the History API (`pushState`), which Next.js syncs with
 `usePathname`, so there is no request per step, the browser's Back goes one step back and a reload
-resumes in place. Self-advancing steps (the plan loader, the pre-paywall loading screen) replace
+resumes in place. Self-advancing steps (the plan loader, the pre-closing loading screen) replace
 their history entry instead, so Back never lands on them. The checkout is the paywall with a modal
-on top; closing it returns to the paywall.
+on top, and the plan sheet is "Pay what you want" with a sheet on top; closing either (×, Escape or
+Back) returns to the page under it. Both closings are prerendered, and a visitor is kept on the
+steps of their own closing.
 
-- **State** (answers, lead, chosen plan, paywall start, furthest step reached) lives in a small
+- **State** (answers, lead, chosen plan, paywall start, furthest step reached, the amount chosen
+  for the trial, the discount, the renewal reminder and where the visit came from) lives in a small
   external store persisted to `sessionStorage` (`bloom.funnel.v1`): it survives a reload, is gone
   when the tab closes and is never sent anywhere. Steps that read stored answers appear once those
   are back (the server renders their empty frame); the intro, which reads none, is rendered on the
@@ -93,19 +107,45 @@ on top; closing it returns to the paywall.
 - **Guard.** A visitor can only be on a step up to the furthest one reached by moving forward; a
   deep link past it (shared URL, stale tab) is sent back there. `?qa` on any step URL skips the
   guard for QA, only where the dev tools are on (`next dev`, Vercel previews), never in production.
-- **Copy** is in `src/funnel/copy.en.json` (`{{brand}}`, `{{audience}}` placeholders), separate from
-  the step structure in `src/funnel/steps.ts`. Claims that need evidence (user numbers, press,
-  universities, expert, testimonials) are off in `src/funnel/claims.ts` and never rendered; the
-  screens use claim-free copy instead.
+- **Copy** is in `src/funnel/copy.en.json` and, for the pay what you want closing,
+  `src/funnel/copy.variant-b.en.json` (`{{brand}}`, `{{audience}}` placeholders), separate from the
+  step structure in `src/funnel/steps.ts`. The claims, credentials and testimonials of the
+  reference (user numbers, press, universities, the expert, awards, testimonials, reviews) are
+  rendered, never gated: their content lives in `src/funnel/claims.ts`, so it can be edited or
+  replaced in one place. They describe the reference's product, not Bloom's: read PLAN-B section
+  2.4 before real payments are turned on.
 - **Health data.** The ADHD question (#12) is optional ("I'd rather not say") with a privacy note;
   its answer is never part of what the lead service receives (`src/services/lead/submission.ts`).
-- **Mocks.** `LeadService` (`src/services/lead`), `CheckoutProvider` (`src/services/checkout`) and
-  the analytics adapter (`src/funnel/analytics.ts`) are interfaces with mock defaults, injected
+- **Mocks.** `LeadService` (`src/services/lead`), `CheckoutProvider` (`src/services/checkout`),
+  `CountdownService` (`src/services/countdown`) and the analytics adapter
+  (`src/funnel/analytics.ts`) are interfaces with mock defaults, injected
   through `FunnelProvider`. With the dev tools on, analytics events are recorded in
   `window.__bloomEvents` for QA.
-- **Prices** (`src/pricing/plans.ts`) are the reference's, as demo data, and the paywall says so.
-  The discount countdown only exists with `NEXT_PUBLIC_PAYWALL_COUNTDOWN=1` (or `?countdown` where
-  the dev tools are on): it must only be turned on for a discount that really ends.
+- **Prices** (`src/pricing/plans.ts` for the paywall, `src/pricing/closing.ts` for pay what you
+  want) are the reference's, as demo data, and both closings say so. The discount countdown
+  (`paywall.countdown.enabled`) only exists with `NEXT_PUBLIC_PAYWALL_COUNTDOWN=1` (or `?countdown`
+  where the dev tools are on): it must only be turned on for a discount that really ends. On the
+  plan sheet it starts when the gift is applied, the discount really stops applying when it ends,
+  and a reload never restarts it. The amount chosen on "Pay what you want" is the one the plan
+  sheet shows in its fixed bar, its plan card and the charge summary, and the one the payment
+  provider is asked to charge.
+- **Where visits come from.** `/onboarding/<slug>?utm_source=...` (the slugs are in
+  `src/funnel/attribution.ts`: `bloom-initial-pwyw` and `bloom-initial-paywall`) redirects to the
+  intro and keeps the UTM parameters, the placement and the slug for the session; they travel with
+  the lead and with every analytics event.
+- **Sound.** Two files in `public/audio`: `background.mp3`, a music loop that starts about a second
+  after the visitor's first tap and never stops between steps (browsers refuse sound before a tap, so
+  nothing is heard or downloaded earlier; opening the audio blocks the page for 100 to 250 ms, so it
+  waits until the next step is in), and `click.mp3`, the click of an answer. It sounds when an option
+  of a single-choice question is tapped, when Continue sends in a multiple choice (ticking the boxes
+  is silent; the magic wand counts as one, so its bubbles are silent and its Continue clicks) and
+  when a question of the plan loader is answered, and nowhere else. A round switch in a corner of
+  every step turns both off; the choice is kept in `localStorage` (`bloom.sound.muted`) and a visitor
+  who turned it off downloads neither file. The music pauses while the tab is hidden. Everything
+  goes through one Web Audio context (`src/services/sound`, injected through `FunnelProvider` like
+  the other services); `src/funnel/SoundControl.tsx` starts it and draws the switch. To change a
+  sound, replace its file (same name, MP3) and tune the volumes in `src/services/sound/files.ts`;
+  browsers keep the files for a day.
 
 ### QA gallery and dev tools
 
@@ -113,8 +153,9 @@ on top; closing it returns to the paywall.
 component. They exist while `isGalleryEnabled()` (`src/lib/env.ts`) is true: under `next dev` and on
 every Vercel deployment, Production included, while the site is pre-launch (see "Deploy on Vercel").
 A production build anywhere else returns 404. The riskier QA tooling (the `?qa` step-guard bypass,
-the analytics event log) follows the separate `isDevToolsEnabled()`, which is limited to `next dev`
-and Vercel previews and never opens on Production.
+the `?closing=` and `?countdown` switches, the analytics event log) follows the separate
+`isDevToolsEnabled()`, which is limited to `next dev` and Vercel previews and never opens on
+Production.
 
 ## Deploy on Vercel
 
@@ -123,14 +164,36 @@ and Vercel previews and never opens on Production.
    (`next build`) and output settings. No `vercel.json` is needed. Node 20, 22 or 24 all work.
 3. No environment variable is required. Nothing is deployed from this repository by itself, and the
    code holds no credentials: payments and every other integration are mocks until real
-   credentials are supplied. `NEXT_PUBLIC_PAYWALL_COUNTDOWN=1` turns the paywall countdown on; leave
-   it off unless the discount really ends.
+   credentials are supplied. `NEXT_PUBLIC_FUNNEL_CLOSING=paywall` makes the paywall the default
+   closing (otherwise it is "Pay what you want"); `NEXT_PUBLIC_PAYWALL_COUNTDOWN=1` turns the
+   discount countdown on, and must stay off unless the discount really ends.
 4. **Pre-launch: the gallery is visible everywhere on Vercel.** Every deployment (Preview and
    Production) serves the funnel at `/` and the UI gallery at `/__gallery` (`next.config.ts` turns
    `NEXT_PUBLIC_SHOW_GALLERY` on for every Vercel build; nothing has to be configured). **At
    launch**, set `NEXT_PUBLIC_SHOW_GALLERY=0` on the Production environment and redeploy so real
    users never see the gallery. The other QA tooling (`?qa`, the event log) is stricter: previews
    only (`NEXT_PUBLIC_ENABLE_DEV_TOOLS=0` hides it there too), never Production.
+
+### Reviewing a branch on a Vercel Preview
+
+Every push to a branch other than the Production Branch (for example `v2`) gets its own Preview URL
+with no setting to change, and a Preview has the dev tools on, so a reviewer does not have to answer
+the quiz to see the closing:
+
+| URL                                                  | What it shows                                                        |
+| ---------------------------------------------------- | -------------------------------------------------------------------- |
+| `/`                                                  | The funnel from the intro, with the default closing                  |
+| `/s/pwyw?qa`, `/s/plan?qa`                           | "Pay what you want" and the plan sheet (`?qa` skips the guard)       |
+| `/s/plan?qa&countdown`                               | The plan sheet with the 15-minute countdown (starts at the gift)     |
+| `/s/intro?closing=paywall`                           | The paywall funnel (`/s/paywall?qa` and `/s/checkout?qa` jump to it) |
+| `/onboarding/bloom-initial-pwyw?utm_source=facebook` | An ad's entry URL: the UTM parameters are kept for the session       |
+
+The same URLs work on Production except `?qa`, `?closing=` and `?countdown`, which only exist where
+the dev tools are on (Previews and `next dev`); to see the countdown on Production, set
+`NEXT_PUBLIC_PAYWALL_COUNTDOWN=1` there. Before deploying, `npm run build` then `npm run check:build`
+confirms that none of the reference material (images, recordings) is in the build output, and the
+`.vercelignore` keeps recordings, loose captures and `docs/` out of deployments made with the Vercel
+CLI (a Git-connected project only builds what is committed).
 
 The app is a normal Next.js server app (no `output: 'export'`), so route handlers such as
 `/api/leads` can be added later. Reference images and the `.mkv` recording never ship: images live
@@ -141,18 +204,19 @@ only in `docs/`, the recording is ignored by git (see below).
 | Path                   | Contents                                                                          |
 | ---------------------- | --------------------------------------------------------------------------------- |
 | `src/app/`             | App Router: `layout.tsx` (fonts, metadata, global CSS), `icon.svg`                |
-| `src/app/s/`           | The funnel: `layout.tsx` (state provider) and `[stepId]/page.tsx` (42 steps)      |
+| `src/app/s/`           | The funnel: `layout.tsx` (state provider) and `[stepId]/page.tsx` (44 ids)        |
 | `src/app/legal/`       | Placeholder Terms, Privacy Policy and Subscription Policy (`TODO(content)`)       |
 | `src/app/gallery/`     | QA gallery pages (served as `/__gallery` through a rewrite); 404 in production    |
 | `src/lib/`             | Small shared modules (`env.ts`: the two switches)                                 |
 | `src/funnel/`          | Funnel engine: step config and copy, store, navigation, progress, `FunnelView`    |
 | `src/screens/`         | One module per screen type (single, multi, intro, wand, paywall, ...), `art/`     |
-| `src/profile/`         | Wellbeing profile of the summary (PLAN 6.5): `derive.ts`                          |
-| `src/pricing/`         | Paywall plans and their per-day prices and savings (demo data)                    |
-| `src/services/`        | `lead/` and `checkout/`: adapter interfaces with mock defaults                    |
+| `src/profile/`         | Wellbeing profile (`derive.ts`), the #30 phrase and the sheet comparison          |
+| `src/pricing/`         | Paywall plans (`plans.ts`) and the pay what you want quote (`closing.ts`), demo   |
+| `src/services/`        | `lead/`, `checkout/`, `countdown/` (mock defaults) and `sound/` (browser audio)   |
 | `src/ui/`              | Design-system components (Button, OptionCard, Modal, ...) as CSS Modules          |
 | `src/styles/`          | Global design tokens (`tokens.css`) and base styles                               |
 | `src/assets/`          | Bloom's own images and illustrations (placeholders marked `TODO(content)`), fonts |
+| `public/audio/`        | The two sounds: `background.mp3` (music loop) and `click.mp3` (answers)           |
 | `tests/unit/`          | Unit and component tests (`*.test.ts(x)`), Vitest setup, `helpers/`               |
 | `tests/e2e/`           | Playwright specs                                                                  |
 | `scripts/`             | `shots.spec.ts`: the screenshot runner (`playwright.shots.config.ts`)             |
@@ -176,8 +240,12 @@ environment checks (always as literal `process.env.NAME` so Next can inline them
 
 - **Never commit the `.mkv`** screen recording of the reference funnel. It is ignored by
   `.gitignore` and is not part of the repository.
-- **Reference images live only in `docs/`.** Never import or copy them into `src/` or `public/`.
-- The product is called Bloom. Do not use the reference product's name, logo, illustrations,
-  claims, credentials or testimonials (PLAN section 2).
+- **Reference images live only in `docs/`.** Never import or copy them into `src/` or `public/`
+  (`tests/unit/referenceAssets.test.ts` and `npm run check:build` enforce it).
+- The product is called Bloom. Do not use the reference product's name or logo (guardrail 1).
+  Claims, credentials and testimonials are rendered (guardrails 2 and 3; content in
+  `src/funnel/claims.ts`, risks in PLAN-B section 2.4). Never put the email, name or payment method
+  of the recordings in code, fixtures or tests (guardrail 7; `tests/unit/sourcePrivacy.test.ts`
+  enforces it).
 - No real payments and no data sent to third parties: integrations are mocks until credentials
   and the open decisions in DECISIONS.md are provided.

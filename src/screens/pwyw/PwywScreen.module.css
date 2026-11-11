@@ -1,0 +1,194 @@
+/*
+ * "Pay what you want" (#41, b-08), in CSS px (video x 1.36): a white page, content centred; a
+ * header with the logo and the visitor's name; a 40/48 title, an 18/28 paragraph, a 15/22 note;
+ * three tiles 143 x 141 (gap 18); a 242 x 54 CTA; orange trees cut off by the bottom edge.
+ */
+.page {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
+  background: var(--pwyw-bg);
+  color: var(--pwyw-ink);
+}
+
+.content {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  overflow: hidden;
+}
+
+.header {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 18px 24px;
+}
+
+.user {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.userAvatar {
+  display: block;
+  flex: none;
+  width: 28px;
+  height: 28px;
+}
+
+.userAvatar svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.userName {
+  min-width: 0;
+  overflow: hidden;
+  font: italic 400 14px / 20px var(--font-sans);
+  color: var(--pwyw-p1);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.main {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 940px;
+  margin: 0 auto;
+  padding: 56px 24px 220px;
+  text-align: center;
+}
+
+.title {
+  font: 700 40px / 48px var(--font-sans);
+  letter-spacing: -0.015em;
+  color: var(--pwyw-ink);
+}
+
+.body {
+  max-width: 900px;
+  margin-top: 18px;
+  font: 400 18px / 28px var(--font-sans);
+  color: var(--pwyw-p1);
+}
+
+.note {
+  max-width: 780px;
+  margin-top: 12px;
+  font: 400 15px / 22px var(--font-sans);
+  color: var(--pwyw-p2);
+}
+
+.tiles {
+  justify-content: center;
+  gap: var(--pwyw-tile-gap);
+  margin-top: 28px;
+}
+
+.cta {
+  width: var(--pwyw-cta-width);
+  max-width: 100%;
+  height: var(--pwyw-cta-height);
+  margin-top: 32px;
+  border: 0;
+  border-radius: 10px;
+  background: var(--pwyw-accent-strong);
+  color: var(--on-accent);
+  font: 600 16px / 1 var(--font-sans);
+  transition:
+    transform var(--motion-option) var(--ease-standard),
+    filter var(--motion-option) var(--ease-standard);
+}
+
+@media (hover: hover) {
+  .cta:hover {
+    filter: brightness(1.06);
+  }
+}
+
+.cta:active {
+  transform: scale(0.98);
+}
+
+.demo {
+  margin-top: 14px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  background: var(--bg-page-warm);
+  font: var(--type-legal);
+  color: var(--ink-600);
+}
+
+.trees {
+  position: absolute;
+  inset: auto 0 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  pointer-events: none;
+}
+
+.treeLeft,
+.treeRight {
+  display: block;
+  width: min(32vw, 400px);
+  margin-bottom: -30px;
+}
+
+.treeLeft {
+  margin-left: -18px;
+}
+
+.treeRight {
+  margin-right: -18px;
+}
+
+.treeLeft svg,
+.treeRight svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+@media (max-width: 639.98px) {
+  .main {
+    padding: 36px 20px 190px;
+  }
+
+  .title {
+    font-size: 32px;
+    line-height: 38px;
+  }
+
+  .body {
+    font-size: 16px;
+    line-height: 25px;
+  }
+
+  .treeLeft,
+  .treeRight {
+    width: 46vw;
+  }
+
+  .header {
+    padding: 14px 20px;
+  }
+}

@@ -51,6 +51,9 @@ export async function answerStep(page: Page, choice = 0) {
     // Moves on by itself.
   } else if (from === 'paywall') {
     await page.getByRole('button', { name: 'Continue' }).click()
+  } else if (from === 'pwyw') {
+    // The tiles are radios: the page moves on with its own button, whatever is chosen.
+    await page.getByRole('button', { name: 'See my plan' }).click()
   } else if (await radios.count()) {
     await radios.nth(choice).click()
   } else if (await checkboxes.count()) {

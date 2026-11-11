@@ -20,16 +20,17 @@ export function audienceFor(answers: Answers): Audience {
   return (typeof gender === 'string' && AUDIENCE_BY_GENDER[gender]) || 'people'
 }
 
-/** Placeholder values every funnel text can use: {{brand}}, {{audience}} and the claim figures. */
+/**
+ * Placeholder values every funnel text can use: {{brand}}, {{audience}} and the claim figures
+ * ({{claims.users}}). Claims are never withheld (guardrail 2 of PLAN-B 2).
+ */
 export function templateVars(answers: Answers, extra: TemplateVars = {}): TemplateVars {
-  const vars: Record<string, string | number> = {
+  return {
     brand: copy.brand,
     audience: copy.audience[audienceFor(answers)],
+    'claims.users': CLAIMS.users.value,
+    ...extra,
   }
-  for (const [name, claim] of Object.entries(CLAIMS)) {
-    if (claim.evidence && claim.value !== undefined) vars[`claims.${name}`] = claim.value
-  }
-  return { ...vars, ...extra }
 }
 
 /** Interpolates a funnel text with the answers so far. */

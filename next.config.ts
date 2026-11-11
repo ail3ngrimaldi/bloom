@@ -37,11 +37,28 @@ const nextConfig: NextConfig = {
     tsconfigPath: 'tsconfig.next.json',
   },
   async redirects() {
-    // The funnel is the site: the root and the bare /s go to its first step. Temporary (307), and
-    // the query string (campaign parameters) is passed through.
+    // The funnel is the site: the root, the bare /s and the ad entry URLs go to its first step.
+    // Temporary (307), and the query string (campaign parameters) is passed through.
     return [
       { source: '/', destination: '/s/intro', permanent: false },
       { source: '/s', destination: '/s/intro', permanent: false },
+      // An ad's destination URL (PLAN-B 3.1): /onboarding/<slug>?utm_source=... Each slug is one
+      // funnel variant and language (src/funnel/attribution.ts); it travels as ?slug= and the UTM
+      // parameters are passed through, so the funnel can remember them.
+      { source: '/onboarding/:slug', destination: '/s/intro?slug=:slug', permanent: false },
+    ]
+  },
+  async headers() {
+    // The two sounds are static files whose names do not change with their content. A day in the
+    // browser keeps a reload or a second visit from downloading the music again, and a week of
+    // background revalidation lets a replaced file reach everyone.
+    return [
+      {
+        source: '/audio/:path*',
+        headers: [
+          { key: 'Cache-Control', value: 'public, max-age=86400, stale-while-revalidate=604800' },
+        ],
+      },
     ]
   },
   async rewrites() {

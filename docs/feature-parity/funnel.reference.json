@@ -1,5 +1,5 @@
 {
-  "$comment": "Catalogo de pasos observados en la grabacion (funnel web de referencia). El copy es de REFERENCIA (en ingles, tal cual se ve en pantalla): sirve para sembrar el motor y comparar paridad; antes de publicar hay que reemplazarlo por copy propio de Bloom. {{brand}} = nombre del producto (en la referencia: 'Fabulous'). {{audience}} = 'men' | 'women' | 'people' segun la respuesta de genero. Los claims marcados con claimRef requieren evidencia propia antes de mostrarse. Los tiempos 't' son aproximados (+-1 s) sobre la grabacion de 6:33.",
+  "$comment": "Catalogo de pasos observados en la grabacion (funnel web de referencia). El copy es de REFERENCIA (en ingles, tal cual se ve en pantalla): sirve para sembrar el motor y comparar paridad; antes de publicar hay que reemplazarlo por copy propio de Bloom. {{brand}} = nombre del producto (en la referencia: 'Fabulous'). {{audience}} = 'men' | 'women' | 'people' segun la respuesta de genero. Guardrails v2 (PLAN.md sec. 2): los claims, credenciales y testimonios se renderizan; ya no hay atributo claimRef (inventario exacto en PLAN-B.md sec. 3.3 y en funnel.variant-b.reference.json > claims). Los tiempos 't' son aproximados (+-1 s) sobre la grabacion de 6:33.",
   "meta": {
     "source": "2026-10-29 01-53-06.mkv",
     "referenceProduct": "Fabulous (funnel web de onboarding, entrada desde anuncio de Meta)",
@@ -21,12 +21,13 @@
     "audience": { "Male": "men", "Female": "women", "Non-binary": "people" },
     "note": "Solo se observo 'men' tras elegir 'Male' (pasos 17 y 26). La asignacion Female/Non-binary es inferida; confirmar con el usuario."
   },
-  "claimRefs": {
-    "users": { "reference": "30 million", "usedIn": [17, 26], "requiresEvidence": true },
-    "press": { "reference": ["The New York Times", "WIRED", "Forbes", "girlboss", "healthline"], "usedIn": [17], "requiresEvidence": true },
-    "universities": { "reference": ["Stanford University", "Duke University", "Harvard University"], "usedIn": [30], "requiresEvidence": true },
-    "expert": { "reference": { "name": "Jazmin Quill, MSc", "role": "Co-founder, Stanford Psych One Program" }, "usedIn": [31], "requiresEvidence": true },
-    "testimonials": { "reference": ["Alice L.", "Tara M.", "Remi L."], "usedIn": [37], "requiresEvidence": true }
+  "claims": {
+    "$comment": "Se renderizan, sin compuertas (guardrails v2). Texto exacto, premios, resenas y ubicaciones: funnel.variant-b.reference.json > claims.",
+    "users": { "reference": "30 million", "usedIn": [17, 26] },
+    "press": { "reference": ["The New York Times", "WIRED", "Forbes", "girlboss", "healthline"], "usedIn": [17] },
+    "universities": { "reference": ["Stanford University", "Duke University", "Harvard University"], "usedIn": [30] },
+    "expert": { "reference": { "name": "Jazmin Quill, MSc", "role": "Co-founder, Stanford Psych One Program" }, "usedIn": [31] },
+    "testimonials": { "reference": ["Alice L.", "Tara M.", "Remi L."], "usedIn": [37] }
   },
   "steps": [
     {
@@ -82,7 +83,7 @@
     {
       "n": 17, "id": "science", "type": "inter", "variant": "science", "t": "2:51", "theme": "soft", "header": false,
       "title": "The Science of a Better You",
-      "label": "As featured on:", "claimRef": ["press", "users"],
+      "label": "As featured on:",
       "headline": "Join over {{claims.users}} {{audience}}",
       "body": "Who transformed their lives using science-backed behaviour change techniques.",
       "cta": "Continue", "ctaEnableDelayMs": 500,
@@ -119,7 +120,7 @@
     },
     {
       "n": 26, "id": "not_alone", "type": "inter", "variant": "not_alone", "t": "3:58", "theme": "soft", "header": false,
-      "title": "You are not alone", "claimRef": ["users"],
+      "title": "You are not alone",
       "body": "{{brand}} has guided more than {{claims.users}} {{audience}} towards a happier healthier life using simple behavioral science techniques.",
       "cta": "Continue", "images": ["10-interstitial-not-alone.png"]
     },
@@ -131,14 +132,14 @@
     { "n": 28, "id": "lose_motivation", "type": "single", "t": "4:04", "theme": "quiz", "header": true, "answerKey": "lose_motivation", "title": "Do you tend to lose motivation easily?", "options": ["Yes", "No", "I haven't tried yet"] },
     { "n": 29, "id": "expert_referral", "type": "single", "t": "4:06", "theme": "quiz", "header": true, "answerKey": "expert_referral", "title": "Did you hear about {{brand}} from an expert?", "options": ["Yes", "No"] },
     {
-      "n": 30, "id": "evidence", "type": "inter", "variant": "evidence", "t": "4:11", "theme": "soft", "header": false, "claimRef": ["universities"],
+      "n": 30, "id": "evidence", "type": "inter", "variant": "evidence", "t": "4:11", "theme": "soft", "header": false,
       "title": "{{brand}} was developed using evidence-based psychological practices", "subtitle": "Your plan is based on decades of research",
       "logos": ["STANFORD UNIVERSITY", "DUKE UNIVERSITY", "HARVARD UNIVERSITY"],
       "body": "Your habit building plan will also help you overcome anxiety and neutralize your procrastination tendencies.",
       "cta": "Continue", "ctaEnableDelayMs": 500, "images": ["11-interstitial-evidence.png"]
     },
     {
-      "n": 31, "id": "expert", "type": "inter", "variant": "expert", "t": "4:13", "theme": "soft", "header": false, "claimRef": ["expert"],
+      "n": 31, "id": "expert", "type": "inter", "variant": "expert", "t": "4:13", "theme": "soft", "header": false,
       "title": "Your plan will be reviewed by an expert", "emphasis": "an expert",
       "chips": ["Thoughts", "Feelings", "Behavior"],
       "quote": "\"{{brand}} carefully uses a proven approach to provide personalized guidance and resources that support emotional resilience.\"",
@@ -181,7 +182,7 @@
       "derivation": "NO observable en el video; ver PLAN.md seccion 6.5 (reglas propuestas)"
     },
     {
-      "n": 37, "id": "loader", "type": "loader", "t": "4:46", "theme": "soft", "header": false, "claimRef": ["testimonials"],
+      "n": 37, "id": "loader", "type": "loader", "t": "4:46", "theme": "soft", "header": false,
       "title": "Creating your Personalized Plan",
       "progressSteps": [
         { "label": "Setting goals", "color": "#35BA9C" },

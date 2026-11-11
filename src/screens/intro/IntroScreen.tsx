@@ -4,6 +4,7 @@ import { copy, copyField, stepCopy } from '@/funnel/copy'
 import { useFunnelState } from '@/funnel/FunnelProvider'
 import { personalize } from '@/funnel/personalize'
 import { progressFor } from '@/funnel/progress'
+import { useClosing } from '@/funnel/useClosing'
 import { Button, Logo, ProgressBar } from '@/ui'
 import { cx } from '@/ui/cx'
 import { BrandOrb, YouBubble } from '../art'
@@ -19,11 +20,14 @@ const SECOND = revealStyle(700, 400)
 
 /**
  * Intro (#01): no card, logo and an empty progress bar on top, "You" and Bloom's orb with a "?"
- * between them, a serif headline, a subtitle and the CTA anchored at the bottom.
+ * between them, a serif headline, a subtitle and the CTA anchored at the bottom. The headline
+ * depends on the funnel variant (PLAN-B 3.2): "pay what you want" is the B funnel.
  */
 export function IntroScreen({ step, onNext }: ScreenProps<'intro'>) {
   const { answers } = useFunnelState()
+  const closing = useClosing()
   const text = stepCopy(step.id)
+  const title = (closing === 'pwyw' && copyField(step.id, 'titlePwyw')) || text.title
   return (
     <div className={styles.screen}>
       <header className={styles.header}>
@@ -43,7 +47,7 @@ export function IntroScreen({ step, onNext }: ScreenProps<'intro'>) {
           <BrandOrb />
         </div>
         <h1 className={cx(styles.title, motion.reveal)} style={FIRST}>
-          {text.title}
+          {title}
         </h1>
         {text.subtitle && (
           <p className={cx(styles.subtitle, motion.reveal)} style={SECOND}>

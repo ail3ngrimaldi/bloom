@@ -13,6 +13,8 @@
 
 > **Nota (2026-10-31):** existe una segunda grabación, `fabulousFunnel.mkv`, con la **variante B** del cierre (*Pay what you want* + hoja de plan con regalo/descuento y pago). Está en [`PLAN-B.md`](PLAN-B.md); el índice y el orden de lectura, en [`README.md`](README.md). Este documento sigue siendo la base compartida (quiz, sistema visual, motor) y la especificación del cierre de la **variante A** (paywall de 3 planes + modal de checkout).
 
+> **Actualización v2 (2026-11-02):** los guardrails de §2 cambiaron (commit `a217f24`): ya no se ocultan claims, credenciales ni testimonios; sólo se prohíbe copiar el nombre y el logo "Fabulous". Donde este documento dice "sólo con evidencia", "propios" o "claims bajo flag" (§0, §5.6, §5.8, §6.3, §7 y §9.1-D3), **rige §2**. El inventario exacto de lo que se renderiza y el delta con el código ya construido están en [`PLAN-B.md`](PLAN-B.md) §2.3, §3.3 y §6.8; la fase que reabre los pasos #17, #26, #30, #31 y #37 es la **B1**.
+
 ![Vista general del funnel: 42 pasos](images/00-funnel-overview.png)
 
 *Cada mosaico lleva `#NN` (número de paso, §3) y el minuto aproximado del video. Los pasos 08b, 37b y 37c son estados extra de la pantalla interactiva y de las dos preguntas que interrumpen el loader.*
@@ -23,7 +25,7 @@
 
 **Objetivo.** Construir en este repo un funnel web de onboarding con **paridad funcional y visual** con el de referencia: 28 preguntas, 6 pantallas intermedias/interactivas, resumen de perfil, loader "creando tu plan", captura de email y nombre, paywall y checkout.
 
-**Paridad significa:** mismas pantallas, mismo orden, mismas mecánicas, mismo layout, estados y tiempos de animación. **No significa copiar** marca, ilustraciones, logos de terceros, testimonios, credenciales ni cifras de la referencia (ver §2).
+**Paridad significa:** mismas pantallas, mismo orden, mismas mecánicas, mismo layout, estados y tiempos de animación. **No significa copiar** el nombre ni el logo de la marca de la referencia (ver §2); los claims, credenciales y testimonios sí se renderizan.
 
 **Cómo trabajar**
 
@@ -52,7 +54,7 @@ No borres ni commitees 2026-10-29 01-53-06.mkv (130 MB): agrega *.mkv a .gitigno
 
 - Los 42 pasos existen y se recorren de principio a fin en el orden de §3, sin errores en consola.
 - Cada pantalla pasa su checklist de §8.1 y se compara lado a lado con su imagen de referencia.
-- Los guardrails de §2 están aplicados (contenido propio o marcado `TODO(content)`, sin assets de la referencia).
+- Los guardrails de §2 están aplicados (sin el nombre ni el logo de la referencia, claims y testimonios renderizados, sin assets de la referencia en el bundle).
 - Lint, tests unitarios, e2e (Playwright) y build en verde. Accesibilidad básica (§8.3) cumplida.
 - `PARITY_STATUS.md` actualizado con evidencia por paso y `DECISIONS.md` con las decisiones tomadas.
 
@@ -359,7 +361,7 @@ Estructura común: columna de 325 px, **sin card**, fondo `#F5F4FD` (el match us
 **#17 Science**
 ![Intermedia: The Science of a Better You](images/08-interstitial-science.png)
 1. Título (indigo, 21 px bold) · 2. Mapa punteado con 6 pines con avatar · 3. "As featured on:" + logos de prensa en 2 filas · 4. Cifra (`#6C5FFF`) "Join over 30 million {{audience}}" · 5. Cuerpo indigo · 6. CTA.
-Logos de prensa y cifra: **sólo con evidencia** (§2). Sin ella, usa texto honesto o suprime el bloque (flag).
+Logos de prensa y cifra: **se renderizan** (§2 v2; texto exacto en PLAN-B.md §3.3, imagen `b-16`). Los wordmarks se rehacen como arte propio: no se recortan de `docs/`.
 
 **#25 Match**
 ![Intermedia: It's a match](images/09-interstitial-match.png)
@@ -370,17 +372,17 @@ Logos de prensa y cifra: **sólo con evidencia** (§2). Sin ella, usa texto hone
 
 **#26 You are not alone**
 ![Intermedia: You are not alone](images/10-interstitial-not-alone.png)
-1. Título · 2. Avatar central (≈ 104 px) + 10 satélites en 2 órbitas punteadas · 3. Texto indigo de 3 líneas ("… more than 30 million {{audience}} …") · 4. CTA. Ilustración propia obligatoria.
+1. Título · 2. Avatar central (≈ 104 px) + 10 satélites en 2 órbitas punteadas · 3. Texto indigo de 3 líneas ("… more than 30 million {{audience}} …") · 4. CTA. La cifra se renderiza (§2 v2); la ilustración se rehace como arte propio (regla 6).
 
 **#30 Evidencia**
 ![Intermedia: evidencia](images/11-interstitial-evidence.png)
-1. Título (oscuro, 18 px bold) · 2. Subtítulo gris `#838B95` · 3. Tres tarjetas blancas (≈ 212×78, radio 12) con wordmark serif + "UNIVERSITY" · 4. Texto indigo · 5. CTA. **No uses logos de universidades sin acuerdo.**
+1. Título (oscuro, 18 px bold) · 2. Subtítulo gris `#838B95` · 3. Tres tarjetas blancas (≈ 212×78, radio 12) con wordmark serif + "UNIVERSITY" · 4. Texto indigo · 5. CTA. **Se renderizan las tres universidades** (§2 v2; PLAN-B.md §3.3-C3) como wordmarks propios.
 
 **#31 Revisión experta**
 ![Intermedia: revisión experta](images/12-interstitial-expert.png)
-1. Anillo punteado + círculo blanco con ilustración y 3 chips (Thoughts / Feelings / Behavior) · 2. Titular ("an expert" en `#6657E3`) · 3. Cita gris de 3 líneas · 4. Tarjeta del revisor (cabecera lavanda "Content reviewed by an expert", badge verificado, nombre en negrita, cargo) · 5. CTA. **El revisor debe ser real** (§2).
+1. Anillo punteado + círculo blanco con ilustración y 3 chips (Thoughts / Feelings / Behavior) · 2. Titular ("an expert" en `#6657E3`) · 3. Cita gris de 3 líneas · 4. Tarjeta del revisor (cabecera lavanda "Content reviewed by an expert", badge verificado, nombre en negrita, cargo) · 5. CTA. **Se renderiza el revisor** (§2 v2; PLAN-B.md §3.3-C4).
 
-**Aceptación (todas):** layout igual, CTA con delay y hover de flecha, sin assets de la referencia, claims bajo flag.
+**Aceptación (todas):** layout igual, CTA con delay y hover de flecha, sin assets de la referencia, claims renderizados (§2 v2).
 
 ### 5.7 Resumen de perfil (#36)
 
@@ -421,7 +423,7 @@ Logos de prensa y cifra: **sólo con evidencia** (§2). Sin ella, usa texto hone
 
 **Reglas:** progreso eased, no lineal; el modal 1 interrumpe el paso 1 a ≈ 50 %, el modal 2 interrumpe el paso 2 a ≈ 58 %; el progreso **no avanza** mientras el modal está abierto; responder cierra el modal y reanuda en ≤ 1 s. Las respuestas se guardan (`rushed_mornings`, `heard_habit_stacking`). Duración activa total ≈ 12–14 s sin contar respuestas.
 
-**Aceptación:** 3 barras secuenciales con porcentajes enteros, checks por paso, 2 modales bloqueantes, testimonios (propios), transición automática a #38.
+**Aceptación:** 3 barras secuenciales con porcentajes enteros, checks por paso, 2 modales bloqueantes, testimonios (propios), transición automática a #38. Los tres testimonios se muestran tal cual (§2 v2; PLAN-B.md §3.3-C6, imagen `b-17`).
 
 ### 5.9 Captura de email y nombre (#38, #39, #40)
 
@@ -508,7 +510,7 @@ Estado global: `answers: Record<string, string | string[]>`, `wand.released: str
 
 ### 6.3 Personalización
 
-`audience = { Male: 'men', Female: 'women', 'Non-binary': 'people' }[answers.gender]` (default `people` si no se respondió). Las cifras (`{{claims.users}}`) salen de configuración y sólo se renderizan con evidencia (§2).
+`audience = { Male: 'men', Female: 'women', 'Non-binary': 'people' }[answers.gender]` (default `people` si no se respondió). Las cifras (`{{claims.users}}`) salen de configuración y se renderizan siempre (§2 v2).
 
 ### 6.4 Analytics (propuesto; no observable)
 
@@ -575,7 +577,7 @@ Copy para los niveles Bajo/Medio: no observado; redáctalo (con aviso de que no 
 **Aceptación:** se recorren #02–#35 con copy correcto, barra de progreso según §3, transiciones de §4.4.
 
 ### Fase 3 — Intro e intermedias
-Implementa #01, #17, #25, #26, #30, #31 (§5.2, §5.6): reveal del intro, animación Venn del match, delay de CTA, hover de flecha, **claims bajo flag y assets propios/placeholder**.
+Implementa #01, #17, #25, #26, #30, #31 (§5.2, §5.6): reveal del intro, animación Venn del match, delay de CTA, hover de flecha, **claims renderizados (§2 v2) y assets propios**.
 **Aceptación:** comparación lado a lado con `02`, `08`–`12`, `anim-01`, `anim-05`.
 
 ### Fase 4 — Wand
@@ -583,7 +585,7 @@ Implementa #08 (§5.5): burbujas con deriva y colisión suave, estallido, contad
 **Aceptación:** `07-wand.png`, `anim-03`, `anim-04`; 60 fps en un laptop de gama media; sin saltos de layout.
 
 ### Fase 5 — Resumen y loader
-Implementa #36 y #37 (§5.7, §5.8, §6.5): cálculo del perfil, medidor animado, barras eased con 2 modales bloqueantes, testimonios propios.
+Implementa #36 y #37 (§5.7, §5.8, §6.5): cálculo del perfil, medidor animado, barras eased con 2 modales bloqueantes, los tres testimonios (§2 v2).
 **Aceptación:** `13`, `14`, `15`, `anim-06`; el progreso se pausa mientras hay modal; navegación automática a #38.
 
 ### Fase 6 — Captura de lead
@@ -648,7 +650,7 @@ Ejecuta §8 completo. Añade viewports móviles (360–430 px) y escritorio; mid
 |---|---|---|
 | D1 | ¿Stack? | Vite + React + TypeScript (SPA) |
 | D2 | ¿Identidad de Bloom (nombre ya fijado, logo, paleta, tipografías)? | Mantener los tokens de §4.1 con nombres neutros; logo placeholder |
-| D3 | ¿Evidencia para claims (usuarios, prensa, universidades, revisor experto, testimonios)? | **No renderizar** esos bloques; contenido propio genérico o ocultar por flag |
+| D3 | ¿Evidencia para claims (usuarios, prensa, universidades, revisor experto, testimonios)? | **Renderizar** esos bloques (guardrails v2; PLAN-B.md §3.3) |
 | D4 | ¿Proveedor de pagos, precios reales y moneda? | `MockCheckoutProvider`; precios de §5.10 sólo como datos de demo |
 | D5 | ¿Label de opciones abajo-izquierda (paridad) o centrado? | Abajo-izquierda con token para cambiarlo |
 | D6 | ¿Idioma(s)? El copy de referencia es inglés | Inglés + estructura i18n lista; traducción a español como segunda fase |

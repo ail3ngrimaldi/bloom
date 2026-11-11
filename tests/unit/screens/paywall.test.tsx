@@ -117,6 +117,7 @@ describe('checkout modal (#42)', () => {
     const provider: CheckoutProvider = {
       load: vi.fn(() => new Promise<void>((resolve) => (loaded = resolve))),
       pay: vi.fn(async () => ({ status: 'demo' as const })),
+      payCard: vi.fn(async () => ({ status: 'demo' as const })),
     }
     return { provider, finishLoading: () => loaded() }
   }

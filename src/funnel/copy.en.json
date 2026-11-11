@@ -1,11 +1,11 @@
 {
-  "$comment": "English copy of the funnel, kept out of the components (decision D6). Question wording is seeded from the reference funnel (docs/feature-parity/funnel.reference.json) and is TODO(content): Bloom's own copy must replace it before launch. {{brand}} = product name, {{audience}} = men | women | people (from the gender answer). Keys ending in 'Claim' are only shown once Bloom has evidence for the claim (src/funnel/claims.ts); every other text must stay true without it.",
   "brand": "Bloom",
   "common": {
     "continue": "Continue",
     "pleaseWait": "Please wait...",
     "chooseAllThatApply": "Choose all that apply",
     "progressLabel": "Quiz progress",
+    "sound": "Sound",
     "privacyPolicy": "Privacy Policy",
     "termsAndConditions": "Terms and Conditions",
     "subscriptionPolicy": "Subscription Policy",
@@ -25,6 +25,7 @@
   "steps": {
     "intro": {
       "title": "You're not lazy, you might be burning out.",
+      "titlePwyw": "Let's see if we're a match.",
       "subtitle": "The next questions reveal whether {{brand}} is the right app for you.",
       "you": "You",
       "cta": "Continue"
@@ -106,11 +107,9 @@
     },
     "science": {
       "title": "The Science of a Better You",
-      "featuredLabelClaim": "As featured on:",
-      "headlineClaim": "Join over {{claims.users}} {{audience}}",
-      "bodyClaim": "Who transformed their lives using science-backed behaviour change techniques.",
-      "headline": "Made for {{audience}} like you",
-      "body": "Your plan uses well-studied behaviour change techniques, one small habit at a time.",
+      "featuredLabel": "As featured on:",
+      "headline": "Join over {{claims.users}} {{audience}}",
+      "body": "Who transformed their lives using science-backed behaviour change techniques.",
       "cta": "Continue"
     },
     "others_needs": { "title": "Do you tend to put others' needs before your own?" },
@@ -162,8 +161,7 @@
     },
     "not_alone": {
       "title": "You are not alone",
-      "bodyClaim": "{{brand}} has guided more than {{claims.users}} {{audience}} towards a happier healthier life using simple behavioral science techniques.",
-      "body": "Many {{audience}} feel just like you. {{brand}} guides you towards a happier, healthier life with simple behavioural science.",
+      "body": "{{brand}} has guided more than {{claims.users}} {{audience}} towards a happier healthier life using simple behavioral science techniques.",
       "cta": "Continue"
     },
     "who_for": {
@@ -185,25 +183,23 @@
       "options": { "yes": "Yes", "no": "No" }
     },
     "evidence": {
-      "title": "{{brand}} is built on evidence-based psychological practices",
-      "subtitle": "Your plan draws on decades of behavioural research",
-      "practices": {
-        "habits": "Habit formation",
-        "cbt": "Cognitive reframing",
-        "mindfulness": "Mindfulness"
+      "title": "{{brand}} was developed using evidence-based psychological practices",
+      "subtitle": "Your plan is based on decades of research",
+      "body": "Your habit building plan will also help you {{outcome}}.",
+      "outcomes": {
+        "burnout": "overcome burnout",
+        "anxiety": "overcome anxiety",
+        "motivation": "neutralize your procrastination tendencies",
+        "generic": "keep going on the days it feels hard"
       },
-      "practiceCaption": "PRACTICE",
-      "body": "Your habit building plan also gives you tools to manage stress and ease your procrastination tendencies.",
       "cta": "Continue"
     },
     "expert": {
-      "titleClaim": "Your plan will be reviewed by {{emphasis}}",
-      "emphasisClaim": "an expert",
-      "title": "Your plan is shaped by how you {{emphasis}}",
-      "emphasis": "think, feel and act",
+      "title": "Your plan will be reviewed by {{emphasis}}",
+      "emphasis": "an expert",
       "chips": { "thoughts": "Thoughts", "feelings": "Feelings", "behavior": "Behavior" },
-      "quote": "\"{{brand}} uses a structured approach to give you personalised guidance and resources that support emotional resilience.\"",
-      "reviewerLabelClaim": "Content reviewed by an expert",
+      "quote": "\"{{brand}} carefully uses a proven approach to provide personalized guidance and resources that support emotional resilience.\"",
+      "reviewerLabel": "Content reviewed by an expert",
       "cta": "Continue"
     },
     "self_discipline": {
@@ -269,14 +265,15 @@
       "mainDifficulty": {
         "adhd": "Manage ADHD",
         "attention": "Focus and attention",
+        "low_energy": "Low energy",
         "procrastination": "Procrastination",
         "focus": "Staying focused",
         "habits": "Sticking to habits"
       },
       "challengingPeriod": {
-        "days": "Few days",
+        "days": "Last Week",
         "weeks": "Few weeks",
-        "months": "Several months",
+        "months": "Few months",
         "long": "A long time"
       },
       "trigger": {
@@ -288,10 +285,8 @@
         "stress": "Everyday stress"
       },
       "energyLevel": {
-        "very_low": "Very low",
         "low": "Low",
-        "moderate": "Moderate",
-        "good": "Good"
+        "normal": "Normal"
       },
       "meterLabel": "Negative effects level: {{level}}",
       "disclaimer": "Based on your answers. Not a medical assessment.",
@@ -309,21 +304,7 @@
         "heard_habit_stacking": "Have you heard of habit stacking?"
       },
       "options": { "yes": "Yes", "no": "No" },
-      "tipsLabel": "While your plan is being created",
-      "tips": {
-        "small": {
-          "title": "Small steps, real change",
-          "body": "Your plan starts with habits that take a few minutes, so they fit even your busiest days."
-        },
-        "you": {
-          "title": "Built around you",
-          "body": "Each step follows what you told us about your energy, focus and goals."
-        },
-        "restart": {
-          "title": "Progress, not perfection",
-          "body": "Missing a day is part of the process. Your plan helps you pick up again without guilt."
-        }
-      }
+      "testimonialsLabel": "What members say"
     },
     "email": {
       "title": "Please enter your email",

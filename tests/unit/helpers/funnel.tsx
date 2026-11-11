@@ -9,6 +9,7 @@ import type { FunnelState } from '@/funnel/state'
 import { STORAGE_KEY, createFunnelStore } from '@/funnel/store'
 import type { CheckoutProvider } from '@/services/checkout/types'
 import type { LeadService } from '@/services/lead/types'
+import type { SoundService } from '@/services/sound'
 import { navigationState } from './nextNavigation'
 
 /**
@@ -23,11 +24,13 @@ export function renderFunnel(
     state,
     leads,
     checkout,
+    sound,
   }: {
     path?: string
     state?: Partial<FunnelState>
     leads?: LeadService
     checkout?: CheckoutProvider
+    sound?: SoundService
   } = {},
 ) {
   navigationState.pathname = path.split('?')[0]
@@ -64,6 +67,7 @@ export function renderFunnel(
       analytics={analytics}
       leads={leads}
       checkout={checkout}
+      sound={sound}
     >
       {node}
     </FunnelProvider>

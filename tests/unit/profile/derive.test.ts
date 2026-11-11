@@ -97,7 +97,7 @@ describe('main difficulty', () => {
     expect(mainDifficulty({ adhd: 'suspect' })).toBe('attention')
   })
 
-  it('without ADHD, picks the hardest of procrastination, focus and habits', () => {
+  it('without ADHD, picks the hardest of energy, procrastination, focus and habits', () => {
     expect(mainDifficulty({ adhd: 'no', procrastinate: 'rarely', concentration: 'often' })).toBe(
       'focus',
     )
@@ -105,6 +105,14 @@ describe('main difficulty', () => {
     expect(mainDifficulty({ procrastinate: 'often', concentration: 'often' })).toBe(
       'procrastination',
     )
+    expect(mainDifficulty({ adhd: 'no', drained: 'always', procrastinate: 'often' })).toBe(
+      'low_energy',
+    )
+  })
+
+  it('leans to "Low energy" on a tie, as the reference did for a visitor who said No to #12', () => {
+    expect(mainDifficulty({ adhd: 'no', drained: 'rarely' })).toBe('low_energy')
+    expect(mainDifficulty({ adhd: 'no' })).toBe('low_energy')
   })
 })
 
@@ -121,9 +129,36 @@ describe('period, trigger and energy', () => {
     expect(trigger({})).toBe('stress')
   })
 
-  it('reads energy from how often the user feels drained', () => {
-    expect(energyLevel({ drained: 'always' })).toBe('very_low')
-    expect(energyLevel({ drained: 'rarely' })).toBe('good')
-    expect(energyLevel({})).toBe('moderate')
+  it('reads energy from how often the user feels drained: Low or Normal', () => {
+    expect(energyLevel({ drained: 'always' })).toBe('low')
+    expect(energyLevel({ drained: 'often' })).toBe('low')
+    expect(energyLevel({ drained: 'sometimes' })).toBe('normal')
+    expect(energyLevel({ drained: 'rarely' })).toBe('normal')
+    expect(energyLevel({})).toBe('normal')
+  })
+})
+
+describe('profile of the pay-what-you-want recording (PLAN-B 3.2)', () => {
+  // What the second recording showed: Rarely drained, No to #12, This week in control, and the
+  // bubbles Self-doubt, Burnout and Anxiety. "Main difficulty: Low energy" is the reference's value
+  // for these answers; the rules are inferred, so only what they derive is asserted.
+  const RECORDED_B = {
+    drained: 'rarely',
+    adhd: 'no',
+    untapped: 'not_really',
+    control_life: 'this_week',
+    gender: 'male',
+    need_most: 'habits',
+    wand: ['self_doubt', 'burnout', 'anxiety'],
+  }
+
+  it('shows what the reference showed: Low energy, Last Week, Anxiety, Normal', () => {
+    const profile = deriveProfile(RECORDED_B)
+    expect(profile).toMatchObject({
+      mainDifficulty: 'low_energy',
+      challengingPeriod: 'days',
+      trigger: 'anxiety',
+      energyLevel: 'normal',
+    })
   })
 })

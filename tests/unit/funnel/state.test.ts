@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest'
 import { INITIAL_STATE, funnelReducer, parseState, toggleOption } from '@/funnel/state'
-import type { FunnelState } from '@/funnel/state'
+import type { Discount, FunnelState } from '@/funnel/state'
+
+const DISCOUNT: Discount = { pct: 70, code: 'off_70_october', grantedAt: 1000, expiresAt: 901_000 }
 
 describe('funnelReducer', () => {
   it('stores answers by key without touching the others', () => {
@@ -32,6 +34,46 @@ describe('funnelReducer', () => {
     expect(funnelReducer(a, { type: 'startPaywall', at: 5000 })).toBe(a)
   })
 
+  it('keeps the amount chosen for the trial', () => {
+    const a = funnelReducer(INITIAL_STATE, { type: 'chooseTrial', amount: 10 })
+    expect(a.trialAmount).toBe(10)
+    expect(funnelReducer(a, { type: 'chooseTrial', amount: 10 })).toBe(a)
+    expect(funnelReducer(a, { type: 'chooseTrial', amount: 2 }).trialAmount).toBe(2)
+  })
+
+  it('grants the discount once: a second gift never replaces it or restarts its countdown', () => {
+    const a = funnelReducer(INITIAL_STATE, { type: 'grantDiscount', discount: DISCOUNT })
+    expect(a.discount).toEqual(DISCOUNT)
+    const later = { ...DISCOUNT, grantedAt: 99_999, expiresAt: 999_999 }
+    expect(funnelReducer(a, { type: 'grantDiscount', discount: later })).toBe(a)
+  })
+
+  it('remembers the renewal reminder choice, on by default', () => {
+    expect(INITIAL_STATE.reminderOptIn).toBe(true)
+    const a = funnelReducer(INITIAL_STATE, { type: 'reminder', value: false })
+    expect(a.reminderOptIn).toBe(false)
+    expect(funnelReducer(a, { type: 'reminder', value: false })).toBe(a)
+  })
+
+  it('keeps the first attribution of the visit and only adds what is missing', () => {
+    const a = funnelReducer(INITIAL_STATE, {
+      type: 'attribute',
+      incoming: { utm_source: 'facebook', slug: 'bloom-initial-pwyw' },
+    })
+    expect(a.attribution).toEqual({ utm_source: 'facebook', slug: 'bloom-initial-pwyw' })
+    const b = funnelReducer(a, {
+      type: 'attribute',
+      incoming: { utm_source: 'other', utm_campaign: '1' },
+    })
+    expect(b.attribution).toEqual({
+      utm_source: 'facebook',
+      slug: 'bloom-initial-pwyw',
+      utm_campaign: '1',
+    })
+    expect(funnelReducer(b, { type: 'attribute', incoming: { utm_source: 'x' } })).toBe(b)
+    expect(funnelReducer(b, { type: 'attribute', incoming: {} })).toBe(b)
+  })
+
   it('restores and resets', () => {
     const saved: FunnelState = { ...INITIAL_STATE, furthest: 7 }
     expect(funnelReducer(INITIAL_STATE, { type: 'restore', state: saved })).toBe(saved)
@@ -57,8 +99,30 @@ describe('parseState', () => {
     furthest: 12,
   }
 
-  it('accepts a well-formed state', () => {
-    expect(parseState(valid)).toEqual(valid)
+  it('accepts a well-formed state and fills in what an older session did not have', () => {
+    expect(parseState(valid)).toEqual({
+      ...valid,
+      trialAmount: null,
+      discount: null,
+      reminderOptIn: true,
+      attribution: {},
+    })
+  })
+
+  it('accepts the state of the pay-what-you-want closing', () => {
+    const full = {
+      ...valid,
+      furthest: 42,
+      trialAmount: 10,
+      discount: DISCOUNT,
+      reminderOptIn: false,
+      attribution: { utm_source: 'facebook', slug: 'bloom-initial-pwyw' },
+    }
+    expect(parseState(full)).toEqual(full)
+    expect(parseState({ ...full, discount: { ...DISCOUNT, expiresAt: null } })?.discount).toEqual({
+      ...DISCOUNT,
+      expiresAt: null,
+    })
   })
 
   it.each([
@@ -72,7 +136,24 @@ describe('parseState', () => {
     ['a fractional furthest step', { ...valid, furthest: 2.5 }],
     ['a furthest step past the end', { ...valid, furthest: 43 }],
     ['a furthest step of zero', { ...valid, furthest: 0 }],
+    ['a negative trial amount', { ...valid, trialAmount: -1 }],
+    ['a string trial amount', { ...valid, trialAmount: '2' }],
+    ['a discount of 100 %', { ...valid, discount: { ...DISCOUNT, pct: 100 } }],
+    ['a discount without a code', { ...valid, discount: { ...DISCOUNT, code: '' } }],
+    ['a discount with a text time', { ...valid, discount: { ...DISCOUNT, grantedAt: 'now' } }],
+    ['a non-boolean reminder', { ...valid, reminderOptIn: 'yes' }],
+    ['an attribution list', { ...valid, attribution: ['utm_source'] }],
+    ['a numeric attribution value', { ...valid, attribution: { utm_source: 1 } }],
+    ['an attribution with a control character', { ...valid, attribution: { utm_source: 'a\nb' } }],
   ])('rejects %s', (_, raw) => {
     expect(parseState(raw)).toBeNull()
+  })
+
+  it('drops unknown attribution keys and a slug that no longer exists instead of keeping them', () => {
+    const parsed = parseState({
+      ...valid,
+      attribution: { utm_source: 'x', secret: 'y', slug: 'not-a-funnel' },
+    })
+    expect(parsed?.attribution).toEqual({ utm_source: 'x' })
   })
 })

@@ -1,3 +1,4 @@
+import type { Attribution } from '@/funnel/attribution'
 import type { Answers } from '@/funnel/types'
 import type { WellbeingProfile } from '@/profile/types'
 
@@ -13,6 +14,8 @@ export interface LeadSubmission {
   /** The answers, minus health data, which never leaves the browser (copy of #12). */
   answers: Answers
   profile: WellbeingProfile
+  /** UTM parameters, placement and funnel slug of the visit, when it came from an ad. */
+  attribution?: Attribution
 }
 
 export interface LeadService {

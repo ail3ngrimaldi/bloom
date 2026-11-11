@@ -2,7 +2,7 @@
 
 import { useId } from 'react'
 import { copy, optionLabel, stepCopy } from '@/funnel/copy'
-import { useFunnelState } from '@/funnel/FunnelProvider'
+import { useFunnelState, useSound } from '@/funnel/FunnelProvider'
 import { personalize } from '@/funnel/personalize'
 import { toggleOption } from '@/funnel/state'
 import { useFunnelActions } from '@/funnel/useFunnelActions'
@@ -18,12 +18,15 @@ export function MultiSelectScreen({ step, onNext }: ScreenProps<'multi'>) {
   const subtitleId = useId()
   const { answers } = useFunnelState()
   const actions = useFunnelActions()
+  const { tap } = useSound()
   const text = stepCopy(step.id)
   const stored = answers[step.answerKey]
   const selected = Array.isArray(stored) ? stored : []
   const ready = selected.length >= step.minSelected
 
+  // Ticking an option is silent; the click is the answer going in.
   const submit = () => {
+    tap()
     actions.answer(step.answerKey, selected)
     onNext()
   }

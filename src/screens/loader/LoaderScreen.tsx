@@ -2,8 +2,10 @@
 
 import { useId, useState } from 'react'
 import type { ComponentType, CSSProperties } from 'react'
+import { CLAIMS } from '@/funnel/claims'
 import { copyField, stepCopy } from '@/funnel/copy'
-import { useFunnelState } from '@/funnel/FunnelProvider'
+import { useFunnelState, useSound } from '@/funnel/FunnelProvider'
+import { personalize } from '@/funnel/personalize'
 import { useFunnelActions } from '@/funnel/useFunnelActions'
 import { Modal } from '@/ui'
 import { cx } from '@/ui/cx'
@@ -13,7 +15,6 @@ import { loaderScript } from './script'
 import { useLoaderRun } from './useLoaderRun'
 import styles from './LoaderScreen.module.css'
 
-const TIPS = ['small', 'you', 'restart'] as const
 const QUESTION_ICONS: Record<string, ComponentType> = {
   rushed_mornings: MountainFlagIcon,
   heard_habit_stacking: QuillInkIcon,
@@ -24,12 +25,13 @@ const QUESTION_ICONS: Record<string, ComponentType> = {
  * eased curve; two questions stop the first and the second bar until they are answered; a check
  * in the bar's colour marks each finished bar; then the funnel moves on by itself.
  *
- * The reference shows three testimonials under the bars. Bloom has none yet (claims.ts,
- * 'testimonials'), so the same place holds three short notes about the plan.
+ * Under the bars sit the three testimonials of the reference (claim C6, guardrail 3), with the
+ * product's name in place of the reference's.
  */
 export function LoaderScreen({ step, onNext }: ScreenProps<'loader'>) {
   const { answers } = useFunnelState()
   const actions = useFunnelActions()
+  const { tap } = useSound()
   const questionId = useId()
   const text = stepCopy(step.id)
   // The script is fixed for the visit; questions answered before (reload, Back) are not asked.
@@ -42,6 +44,7 @@ export function LoaderScreen({ step, onNext }: ScreenProps<'loader'>) {
 
   const answer = (value: string) => {
     if (!interrupt) return
+    tap()
     actions.setAnswer(interrupt.answerKey, value)
     actions.track({ name: 'loader_modal_answer', id: interrupt.answerKey, value })
     resume()
@@ -98,12 +101,21 @@ export function LoaderScreen({ step, onNext }: ScreenProps<'loader'>) {
         ))}
       </div>
 
-      <section className={styles.tips} aria-label={copyField(step.id, 'tipsLabel')}>
-        {TIPS.map((tip) => (
-          <div key={tip} className={styles.tip}>
-            <h2 className={styles.tipTitle}>{copyField(step.id, `tips.${tip}.title`)}</h2>
-            <p className={styles.tipBody}>{copyField(step.id, `tips.${tip}.body`)}</p>
-          </div>
+      <section className={styles.testimonials} aria-label={copyField(step.id, 'testimonialsLabel')}>
+        {CLAIMS.testimonials.map((testimonial) => (
+          <article key={testimonial.author} className={styles.testimonial}>
+            <p
+              className={styles.stars}
+              role="img"
+              aria-label={`${testimonial.stars} out of 5 stars`}
+            >
+              {'★'.repeat(testimonial.stars)}
+            </p>
+            <h2 className={styles.testimonialTitle}>
+              {personalize(testimonial.title, answers)} - {testimonial.author}
+            </h2>
+            <p className={styles.testimonialBody}>{personalize(testimonial.body, answers)}</p>
+          </article>
         ))}
       </section>
 

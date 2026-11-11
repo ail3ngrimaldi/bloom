@@ -39,6 +39,7 @@ const SCREENS = [
   'email',
   'paywall',
   'checkout',
+  'pwyw',
 ]
 
 for (const width of [360, 390, 430]) {
@@ -85,9 +86,7 @@ test.describe('without JavaScript', () => {
 
   test('the intro is fully rendered on the server', async ({ page }) => {
     await page.goto('/s/intro')
-    await expect(
-      page.getByRole('heading', { name: "You're not lazy, you might be burning out." }),
-    ).toBeVisible()
+    await expect(page.getByRole('heading', { name: "Let's see if we're a match." })).toBeVisible()
     await expect(page.getByRole('button', { name: 'Continue' })).toBeVisible()
   })
 
